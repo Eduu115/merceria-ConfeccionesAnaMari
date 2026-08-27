@@ -26,7 +26,9 @@ services:
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER:-anamari}:${POSTGRES_PASSWORD:-anamari}@postgres:5432/${POSTGRES_DB:-anamari}
       ORIGEN_PUBLICO: http://localhost:5173
-      PUERTO: 3001
+      PUERTO: "3001"
+      RUTA_SUBIDAS: /app/apps/api/datos/subidas
+      RUTA_COPIAS: /app/apps/api/datos/copias
     volumes:
       - ./apps/api:/app/apps/api
       - ./paquetes/compartido:/app/paquetes/compartido
@@ -45,6 +47,7 @@ services:
     restart: unless-stopped
     environment:
       API_INTERNO: http://api:3001
+      CHOKIDAR_USEPOLLING: "true"
     volumes:
       - ./apps/web:/app/apps/web
       - ./paquetes/compartido:/app/paquetes/compartido
