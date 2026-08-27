@@ -1,0 +1,42 @@
+{
+  "name": "@anamari/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "build": "tsc -p tsconfig.json --noEmit",
+    "semilla": "tsx src/db/semilla.ts",
+    "migrar": "tsx src/db/migrar.ts",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@anamari/compartido": "*",
+    "argon2": "^0.41.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.39.3",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.10.0",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0",
+    "postgres": "^3.4.5",
+    "sharp": "^0.33.5",
+    "socket.io": "^4.8.1",
+    "tsx": "^4.19.3",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.13.10",
+    "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^6.4.17",
+    "typescript": "^5.8.2"
+  }
+}
