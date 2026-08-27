@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  html,
+  body,
+  #raiz {
+    @apply min-h-full;
+  }
+
+  body {
+    @apply bg-white font-cuerpo text-cuerpo text-tinta-2 antialiased;
+  }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-acento;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .envoltorio {
+    @apply mx-auto w-full max-w-contenido px-4 md:px-6 lg:px-8;
+  }
+}
