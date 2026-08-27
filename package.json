@@ -1,0 +1,28 @@
+{
+  "name": "confecciones-ana-mari",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "paquetes/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
+    "dev:db": "docker compose up postgres",
+    "dev:docker": "docker compose up --build",
+    "build": "npm run build -w paquetes/compartido && npm run build -w apps/web && npm run build -w apps/api",
+    "start": "npm run start -w apps/api",
+    "semilla": "npm run semilla -w apps/api",
+    "migrar": "npm run migrar -w apps/api",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
