@@ -1,0 +1,15 @@
+node_modules
+dist
+.env
+.env.local
+.env.production
+*.log
+.DS_Store
+.vite
+coverage
+apps/api/datos/subidas/*
+!apps/api/datos/subidas/.gitkeep
+apps/api/datos/copias/
+.idea
+.vscode/*
+!.vscode/extensions.json
