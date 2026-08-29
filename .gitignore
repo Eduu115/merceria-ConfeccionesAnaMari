@@ -6,6 +6,7 @@ dist
 *.log
 .DS_Store
 .vite
+*.tsbuildinfo
 coverage
 apps/api/datos/subidas/*
 !apps/api/datos/subidas/.gitkeep
