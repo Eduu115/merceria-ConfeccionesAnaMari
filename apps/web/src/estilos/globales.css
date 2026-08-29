@@ -17,6 +17,11 @@
     @apply bg-white font-cuerpo text-cuerpo text-tinta-2 antialiased;
   }
 
+  h1,
+  h2 {
+    @apply font-titular font-semibold text-tinta;
+  }
+
   :focus-visible {
     @apply outline outline-2 outline-offset-2 outline-acento;
   }
@@ -38,5 +43,21 @@
 @layer components {
   .envoltorio {
     @apply mx-auto w-full max-w-contenido px-4 md:px-6 lg:px-8;
+  }
+
+  .trama {
+    background-image: repeating-linear-gradient(
+      45deg,
+      #e6e2da 0 7px,
+      #efece6 7px 14px
+    );
+  }
+
+  .trama-macro {
+    background-image: repeating-linear-gradient(
+      45deg,
+      #dad5c9 0 7px,
+      #e3ded2 7px 14px
+    );
   }
 }
