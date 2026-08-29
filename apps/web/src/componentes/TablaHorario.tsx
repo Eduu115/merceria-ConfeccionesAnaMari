@@ -12,7 +12,7 @@ function celda(d: DiaHorario): string {
 
 export function TablaHorario({ dias }: { dias: DiaHorario[] }) {
   return (
-    <table className="w-full border-collapse text-sm">
+    <table className="w-full border-collapse border border-borde text-sm">
       <caption className="sr-only">Horario de la tienda</caption>
       <tbody>
         {dias.map((d, i) => (
@@ -26,10 +26,10 @@ export function TablaHorario({ dias }: { dias: DiaHorario[] }) {
                   : undefined
             }
           >
-            <th scope="row" className="border-b border-borde py-2 pr-4 text-left font-medium">
+            <th scope="row" className="border-b border-borde px-3 py-3 text-left font-medium">
               {NOMBRES[d.dia]}
             </th>
-            <td className="border-b border-borde py-2 text-right">{celda(d)}</td>
+            <td className="border-b border-borde px-3 py-3 text-right">{celda(d)}</td>
           </tr>
         ))}
       </tbody>

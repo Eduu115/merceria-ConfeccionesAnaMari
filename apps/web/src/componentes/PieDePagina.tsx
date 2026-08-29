@@ -23,7 +23,7 @@ export function PieDePagina() {
     <footer className="mt-auto bg-arena-2">
       <div className="envoltorio grid gap-10 py-10 md:grid-cols-[1.4fr_1fr]">
         <div>
-          <p className="font-titular text-xl text-tinta">{copys.negocio}</p>
+          <p className="font-titular text-2xl text-tinta">{copys.negocio}</p>
           <p className="mt-2 max-w-md text-tinta-3">{ajustes.negocio_descripcion}</p>
           <p className="mt-4 text-tinta-2">
             {ajustes.direccion} · {ajustes.poblacion}

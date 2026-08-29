@@ -6,11 +6,8 @@ import { cx } from '../lib/cx';
 
 export function TarjetaProducto({ producto }: { producto: ProductoTarjeta }) {
   return (
-    <Link
-      to={`/producto/${producto.slug}`}
-      className="group flex flex-col border border-borde bg-white"
-    >
-      <div className="relative aspect-[3/4] overflow-hidden bg-crema">
+    <Link to={`/producto/${producto.slug}`} className="group flex flex-col">
+      <div className="relative aspect-[3/4] overflow-hidden border border-borde">
         {producto.imagen ? (
           <img
             src={producto.imagen.ruta}
@@ -21,7 +18,7 @@ export function TarjetaProducto({ producto }: { producto: ProductoTarjeta }) {
             className="h-full w-full object-cover"
           />
         ) : (
-          <MarcadorSinFoto />
+          <MarcadorSinFoto etiqueta="" className="h-full border-0" />
         )}
         {producto.agotado && (
           <span className="absolute left-0 top-0 bg-boton px-2 py-1 text-xs font-semibold text-white">
@@ -29,25 +26,23 @@ export function TarjetaProducto({ producto }: { producto: ProductoTarjeta }) {
           </span>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-2 p-3">
-        <h3 className="line-clamp-2 min-h-[2.8em] font-medium leading-snug text-tinta group-hover:text-acento">
-          {producto.nombre}
-        </h3>
-        {producto.tipo === 'ropa' ? (
-          <p className="flex flex-wrap gap-1 text-xs text-tinta-apagada">
-            {producto.tallas
-              .filter((t) => t.disponible)
-              .map((t) => (
-                <span key={t.talla} className="border border-borde px-1.5 py-0.5">
-                  {t.talla}
-                </span>
-              ))}
-          </p>
-        ) : (
-          <p className="text-sm text-tinta-apagada">{producto.caracteristica}</p>
-        )}
-        <div className="h-5" aria-hidden />
-      </div>
+      <h3 className="mt-2 line-clamp-2 min-h-[2.6em] font-cuerpo text-[0.95rem] font-semibold leading-snug text-tinta group-hover:text-acento">
+        {producto.nombre}
+      </h3>
+      {producto.tipo === 'ropa' ? (
+        <p className="mt-1.5 flex flex-wrap gap-1 text-xs text-tinta-apagada">
+          {producto.tallas
+            .filter((t) => t.disponible)
+            .map((t) => (
+              <span key={t.talla} className="border border-[#cfc9be] px-1.5 py-0.5 font-semibold">
+                {t.talla}
+              </span>
+            ))}
+        </p>
+      ) : (
+        <p className="mt-1.5 text-sm text-tinta-apagada">{producto.caracteristica}</p>
+      )}
+      <div className="h-5" aria-hidden />
     </Link>
   );
 }

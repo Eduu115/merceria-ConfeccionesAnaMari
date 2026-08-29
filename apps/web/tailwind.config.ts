@@ -27,8 +27,8 @@ const config: Config = {
         whatsapp: '#25D366',
       },
       fontFamily: {
-        titular: ['Fraunces', 'Georgia', 'serif'],
-        cuerpo: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+        titular: ['Caveat', 'cursive'],
+        cuerpo: ['Archivo', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         cuerpo: ['1.0625rem', { lineHeight: '1.55' }],

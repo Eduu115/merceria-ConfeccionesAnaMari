@@ -12,7 +12,7 @@ export function NoEncontrada() {
         <p className="text-rotulo font-semibold uppercase tracking-[0.2em] text-tinta-apagada">
           {copys.error404.rotulo}
         </p>
-        <h1 className="mt-3 font-titular text-3xl text-tinta md:text-4xl">{copys.error404.titular}</h1>
+        <h1 className="mt-3 font-titular text-[2.4rem] leading-[1.12] text-tinta md:text-[2.75rem]">{copys.error404.titular}</h1>
         <p className="mt-4 max-w-md text-tinta-3">{copys.error404.texto}</p>
         <div className="mt-6 flex flex-col gap-3 md:flex-row">
           <Boton to="/">{copys.botones.volverInicio}</Boton>
@@ -36,7 +36,11 @@ export function NoEncontrada() {
         </div>
       </div>
       <div className="hidden md:block">
-        <MarcadorSinFoto className="h-full min-h-[340px] border-0" />
+        <MarcadorSinFoto
+          variante="bloque"
+          etiqueta="Foto del taller"
+          className="h-full min-h-[340px]"
+        />
       </div>
     </section>
   );
