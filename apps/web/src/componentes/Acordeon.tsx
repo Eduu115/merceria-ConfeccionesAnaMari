@@ -62,13 +62,13 @@ function Fila({
   const id = useId();
   return (
     <div>
-      <h3>
+      <h3 className="font-cuerpo">
         <button
           type="button"
           aria-expanded={abierto}
           aria-controls={id}
           onClick={onToggle}
-          className="flex min-h-12 w-full items-center justify-between gap-3 py-3 text-left font-medium text-tinta"
+          className="flex min-h-12 w-full items-center justify-between gap-3 py-3 text-left font-cuerpo font-medium text-tinta"
         >
           <span>{item.pregunta}</span>
           <span className={cx('text-xl', abierto ? 'text-acento' : 'text-tinta-apagada')} aria-hidden>

@@ -31,7 +31,9 @@ export function CabeceraDePagina({
             </span>
           ))}
         </nav>
-        <h1 className="font-titular text-3xl font-semibold text-tinta md:text-4xl">{titulo}</h1>
+        <h1 className="font-titular text-[2.15rem] font-semibold leading-[1.15] text-tinta md:text-[2.5rem]">
+          {titulo}
+        </h1>
         {fecha && <p className="mt-2 text-sm text-tinta-tenue">{fecha}</p>}
         {intro && <p className={cx('mt-3 max-w-2xl text-tinta-3')}>{intro}</p>}
       </div>
