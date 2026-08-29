@@ -43,7 +43,7 @@ export function PreguntasFrecuentes() {
       </section>
       <section className="bg-arena-2">
         <div className="envoltorio flex flex-col items-start gap-4 py-10 md:flex-row md:items-center md:justify-between">
-          <p className="font-titular text-xl text-tinta">{copys.faq.cierre}</p>
+          <p className="font-titular text-[1.85rem] text-tinta">{copys.faq.cierre}</p>
           <Boton
             href={enlaceWhatsApp(a.whatsapp_telefono, 'faq')}
             externo

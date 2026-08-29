@@ -63,8 +63,12 @@ export function Contacto() {
           </div>
           <div className="mt-6 hidden md:block">{botones}</div>
         </div>
-        <div className="order-3 md:order-none">
-          <Mapa url={a.mapa_embed_url} titulo="Mapa de Confecciones Ana Mari en Getafe" />
+        <div className="relative order-3 min-h-[280px] md:order-none">
+          <Mapa
+            url={a.mapa_embed_url}
+            titulo="Mapa de Confecciones Ana Mari en Getafe"
+            className="absolute inset-0 h-full min-h-[280px] w-full"
+          />
         </div>
         <div className="order-2 md:col-span-2">
           <FormularioContacto telefono={a.whatsapp_telefono} />

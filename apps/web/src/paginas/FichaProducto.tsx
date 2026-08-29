@@ -70,7 +70,7 @@ export function FichaProducto() {
             {' · '}
             <span>{data.nombre}</span>
           </nav>
-          <h1 className="font-titular text-3xl text-tinta">{data.nombre}</h1>
+          <h1 className="font-titular text-[2.15rem] leading-[1.15] text-tinta md:text-[2.4rem]">{data.nombre}</h1>
           <div className="h-6" aria-hidden />
           {data.tipo === 'ropa' ? (
             <div className="mt-4">
