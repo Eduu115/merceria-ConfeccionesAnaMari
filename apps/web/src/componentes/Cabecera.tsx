@@ -18,7 +18,7 @@ const ENLACES = [
 
 const ROPA = [
   { to: '/catalogo?categoria=ropa-de-mujer', label: 'Ropa de mujer' },
-  { to: '/catalogo?categoria=ropa-interior', label: 'Ropa interior' },
+  { to: '/catalogo?categoria=ropa-de-hombre', label: 'Ropa de hombre' },
   { to: '/catalogo?categoria=infantil-y-bebe', label: 'Infantil y bebé' },
 ];
 
@@ -122,7 +122,7 @@ export function Cabecera() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Escríbenos por WhatsApp"
-              className="inline-flex min-h-10 items-center gap-2 rounded-md bg-boton px-3.5 text-sm font-semibold text-white hover:bg-neutral-800"
+              className="inline-flex min-h-10 items-center gap-2 rounded-md bg-whatsapp px-3.5 text-sm font-semibold text-white hover:bg-whatsapp-oscuro"
             >
               <IconoWhatsApp className="h-4 w-4" />
               {copys.botones.whatsapp}

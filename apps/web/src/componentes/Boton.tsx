@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { cx } from '../lib/cx';
 
 type Props = {
-  variante?: 'primario' | 'secundario';
+  variante?: 'primario' | 'secundario' | 'whatsapp';
   to?: string;
   href?: string;
   externo?: boolean;
@@ -29,11 +29,12 @@ export function Boton({
   ...rest
 }: Props) {
   const clases = cx(
-    'inline-flex items-center justify-center text-[0.95rem] font-semibold transition-colors',
+    'inline-flex items-center justify-center gap-2 text-[0.95rem] font-semibold transition-colors',
     'min-h-12 w-full rounded-lg px-4 md:min-h-0 md:w-auto md:rounded-md md:px-3.5 md:py-2.5',
     variante === 'primario' && 'bg-boton text-white hover:bg-neutral-800',
     variante === 'secundario' &&
       'border-[1.5px] border-boton bg-transparent text-tinta hover:bg-crema',
+    variante === 'whatsapp' && 'bg-whatsapp text-white hover:bg-whatsapp-oscuro',
     (disabled || cargando) && 'pointer-events-none opacity-60',
     className,
   );

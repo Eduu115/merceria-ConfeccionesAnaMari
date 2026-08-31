@@ -11,6 +11,7 @@ import { CabeceraDePagina } from '../componentes/CabeceraDePagina';
 import { TablaHorario } from '../componentes/TablaHorario';
 import { Mapa } from '../componentes/Mapa';
 import { Boton } from '../componentes/Boton';
+import { IconoWhatsApp } from '../componentes/BurbujaWhatsApp';
 import { enlaceWhatsApp, mapsDir, telHref } from '../lib/whatsapp';
 import { cx } from '../lib/cx';
 
@@ -23,7 +24,8 @@ export function Contacto() {
   const wa = enlaceWhatsApp(a.whatsapp_telefono, 'cabecera');
   const botones = (
     <div className="flex flex-col gap-3 md:flex-row">
-      <Boton href={wa} externo aria-label="WhatsApp" className="md:flex-none">
+      <Boton variante="whatsapp" href={wa} externo aria-label="WhatsApp" className="md:flex-none">
+        <IconoWhatsApp className="h-4 w-4" />
         {copys.botones.whatsapp}
       </Boton>
       <div className="grid grid-cols-2 gap-3 md:contents">
@@ -92,7 +94,8 @@ function FormularioContacto({ telefono }: { telefono: string }) {
         <h2 className="font-titular text-2xl text-tinta">{copys.contacto.exitoTitulo}</h2>
         <p className="mt-2 text-tinta-3">{copys.contacto.exitoTexto}</p>
         <div className="mt-4">
-          <Boton href={enlaceWhatsApp(telefono, 'cabecera')} externo>
+          <Boton variante="whatsapp" href={enlaceWhatsApp(telefono, 'cabecera')} externo>
+            <IconoWhatsApp className="h-4 w-4" />
             {copys.botones.whatsapp}
           </Boton>
         </div>
