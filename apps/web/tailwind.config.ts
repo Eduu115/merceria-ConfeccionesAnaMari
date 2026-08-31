@@ -25,6 +25,7 @@ const config: Config = {
         boton: '#3a3a3a',
         error: '#a6432f',
         whatsapp: '#25D366',
+        'whatsapp-oscuro': '#1ea952',
       },
       fontFamily: {
         titular: ['Caveat', 'cursive'],

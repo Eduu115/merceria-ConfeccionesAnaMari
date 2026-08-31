@@ -5,6 +5,7 @@ import { usarSeo } from '../lib/seo';
 import { CabeceraDePagina } from '../componentes/CabeceraDePagina';
 import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
 import { Boton } from '../componentes/Boton';
+import { IconoWhatsApp } from '../componentes/BurbujaWhatsApp';
 import { enlaceWhatsApp } from '../lib/whatsapp';
 
 export function Nosotros() {
@@ -56,7 +57,8 @@ export function Nosotros() {
             <Boton variante="secundario" to="/catalogo">
               {copys.botones.verCatalogo}
             </Boton>
-            <Boton href={wa} externo aria-label="Escríbenos por WhatsApp">
+            <Boton variante="whatsapp" href={wa} externo aria-label="Escríbenos por WhatsApp">
+              <IconoWhatsApp className="h-4 w-4" />
               {copys.botones.escribenos}
             </Boton>
           </div>

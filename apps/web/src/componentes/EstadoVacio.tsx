@@ -1,5 +1,6 @@
 import { Search } from 'lucide-react';
 import { Boton } from './Boton';
+import { IconoWhatsApp } from './BurbujaWhatsApp';
 
 export function EstadoVacio({
   titulo,
@@ -18,7 +19,13 @@ export function EstadoVacio({
       <h2 className="font-titular text-2xl text-tinta">{titulo}</h2>
       <p className="mt-3 max-w-md text-tinta-3">{texto}</p>
       <div className="mt-6 flex w-full max-w-md flex-col gap-3">
-        <Boton href={primario.href} externo aria-label={primario.aria ?? primario.label}>
+        <Boton
+          variante="whatsapp"
+          href={primario.href}
+          externo
+          aria-label={primario.aria ?? primario.label}
+        >
+          <IconoWhatsApp className="h-4 w-4" />
           {primario.label}
         </Boton>
         <Boton variante="secundario" to={secundario.to}>

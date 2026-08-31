@@ -3,6 +3,7 @@ import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
 import { Boton } from '../componentes/Boton';
+import { IconoWhatsApp } from '../componentes/BurbujaWhatsApp';
 import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
 import { enlaceWhatsApp } from '../lib/whatsapp';
 
@@ -91,7 +92,8 @@ export function Arreglos() {
           <p className="border-l-2 border-acento pl-4 font-titular text-[1.85rem] leading-[1.2] text-tinta md:text-[2.1rem]">
             {copys.arreglos.cierre}
           </p>
-          <Boton href={wa} externo aria-label="Escríbenos por WhatsApp">
+          <Boton variante="whatsapp" href={wa} externo aria-label="Escríbenos por WhatsApp">
+            <IconoWhatsApp className="h-4 w-4" />
             {copys.botones.escribenos}
           </Boton>
         </div>

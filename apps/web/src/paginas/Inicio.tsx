@@ -4,6 +4,7 @@ import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
 import { Boton } from '../componentes/Boton';
+import { IconoWhatsApp } from '../componentes/BurbujaWhatsApp';
 import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
 import { RejillaProductos } from '../componentes/TarjetaProducto';
 import { TablaHorario } from '../componentes/TablaHorario';
@@ -28,7 +29,8 @@ export function Inicio() {
             </h1>
             <p className="mt-4 max-w-md text-tinta-3">{a.inicio_subtitulo}</p>
             <div className="mt-7 flex flex-col gap-3 md:flex-row md:items-center">
-              <Boton href={wa} externo aria-label="Escríbenos por WhatsApp">
+              <Boton variante="whatsapp" href={wa} externo aria-label="Escríbenos por WhatsApp">
+                <IconoWhatsApp className="h-4 w-4" />
                 {copys.botones.escribenos}
               </Boton>
               <Boton variante="secundario" to="/catalogo">
@@ -96,7 +98,8 @@ export function Inicio() {
             ))}
           </ol>
           <div className="mt-6">
-            <Boton href={waArr} externo aria-label="Consúltanos por WhatsApp">
+            <Boton variante="whatsapp" href={waArr} externo aria-label="Consúltanos por WhatsApp">
+              <IconoWhatsApp className="h-4 w-4" />
               {copys.botones.consultanos}
             </Boton>
           </div>
