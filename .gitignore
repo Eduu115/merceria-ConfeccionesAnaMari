@@ -15,3 +15,7 @@ apps/api/datos/copias/
 .vscode/*
 !.vscode/extensions.json
 design_handoff_confecciones_ana_mari/
+
+# Operativa local (infraestructura, proveedor, servidor). No versionar.
+privado/
+
