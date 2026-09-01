@@ -10,8 +10,7 @@ import { usarSeo } from '../lib/seo';
 import { CabeceraDePagina } from '../componentes/CabeceraDePagina';
 import { TablaHorario } from '../componentes/TablaHorario';
 import { Mapa } from '../componentes/Mapa';
-import { Boton } from '../componentes/Boton';
-import { IconoWhatsApp } from '../componentes/BurbujaWhatsApp';
+import { Boton, BotonesContacto, BotonWhatsApp } from '../componentes/Boton';
 import { enlaceWhatsApp, mapsDir, telHref } from '../lib/whatsapp';
 import { cx } from '../lib/cx';
 
@@ -24,10 +23,7 @@ export function Contacto() {
   const wa = enlaceWhatsApp(a.whatsapp_telefono, 'cabecera');
   const botones = (
     <div className="flex flex-col gap-3 md:flex-row">
-      <Boton variante="whatsapp" href={wa} externo aria-label="WhatsApp" className="md:flex-none">
-        <IconoWhatsApp className="h-4 w-4" />
-        {copys.botones.whatsapp}
-      </Boton>
+      <BotonWhatsApp href={wa} className="md:flex-none" />
       <div className="grid grid-cols-2 gap-3 md:contents">
         <Boton variante="secundario" href={telHref(a.telefono)}>
           {copys.botones.llamar}
@@ -73,14 +69,14 @@ export function Contacto() {
           />
         </div>
         <div className="order-2 md:col-span-2">
-          <FormularioContacto telefono={a.whatsapp_telefono} />
+          <FormularioContacto whatsapp={a.whatsapp_telefono} telefono={a.telefono} />
         </div>
       </section>
     </>
   );
 }
 
-function FormularioContacto({ telefono }: { telefono: string }) {
+function FormularioContacto({ whatsapp, telefono }: { whatsapp: string; telefono: string }) {
   const [ok, setOk] = useState(false);
   const form = useForm<DatosContacto>({
     resolver: zodResolver(esquemaContacto),
@@ -94,10 +90,10 @@ function FormularioContacto({ telefono }: { telefono: string }) {
         <h2 className="font-titular text-2xl text-tinta">{copys.contacto.exitoTitulo}</h2>
         <p className="mt-2 text-tinta-3">{copys.contacto.exitoTexto}</p>
         <div className="mt-4">
-          <Boton variante="whatsapp" href={enlaceWhatsApp(telefono, 'cabecera')} externo>
-            <IconoWhatsApp className="h-4 w-4" />
-            {copys.botones.whatsapp}
-          </Boton>
+          <BotonesContacto
+            whatsapp={enlaceWhatsApp(whatsapp, 'cabecera')}
+            telefono={telHref(telefono)}
+          />
         </div>
       </div>
     );

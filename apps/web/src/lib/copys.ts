@@ -21,9 +21,12 @@ export const copys = {
     copyright: '© 2026 Confecciones Ana Mari',
   },
   botones: {
+    contactaWas: 'Contacta por WhatsApp',
+    contactaTel: 'Contacta por teléfono',
     whatsapp: 'WhatsApp',
     escribenos: 'Escríbenos por WhatsApp',
     verCatalogo: 'Ver catálogo',
+    verArreglos: 'Ver arreglos →',
     consultanos: 'Consúltanos por WhatsApp',
     conocenos: 'Conócenos',
     comoLlegar: 'Cómo llegar',

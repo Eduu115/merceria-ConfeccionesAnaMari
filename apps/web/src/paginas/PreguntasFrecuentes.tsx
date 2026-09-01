@@ -5,9 +5,8 @@ import { copys, metas } from '../lib/copys';
 import { JsonLd, usarSeo } from '../lib/seo';
 import { CabeceraDePagina } from '../componentes/CabeceraDePagina';
 import { Acordeon } from '../componentes/Acordeon';
-import { Boton } from '../componentes/Boton';
-import { IconoWhatsApp } from '../componentes/BurbujaWhatsApp';
-import { enlaceWhatsApp } from '../lib/whatsapp';
+import { BotonesContacto } from '../componentes/Boton';
+import { enlaceWhatsApp, telHref } from '../lib/whatsapp';
 
 const ORDEN: GrupoPregunta[] = ['tienda', 'arreglos', 'comprar'];
 
@@ -45,15 +44,10 @@ export function PreguntasFrecuentes() {
       <section className="bg-arena-2">
         <div className="envoltorio flex flex-col items-start gap-4 py-10 md:flex-row md:items-center md:justify-between">
           <p className="font-titular text-[1.85rem] text-tinta">{copys.faq.cierre}</p>
-          <Boton
-            variante="whatsapp"
-            href={enlaceWhatsApp(a.whatsapp_telefono, 'faq')}
-            externo
-            aria-label="Escríbenos por WhatsApp"
-          >
-            <IconoWhatsApp className="h-4 w-4" />
-            {copys.botones.escribenos}
-          </Boton>
+          <BotonesContacto
+            whatsapp={enlaceWhatsApp(a.whatsapp_telefono, 'faq')}
+            telefono={telHref(a.telefono)}
+          />
         </div>
       </section>
     </>
