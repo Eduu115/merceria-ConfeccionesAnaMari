@@ -15,9 +15,9 @@ export function Arreglos() {
 
   return (
     <>
-      <section className="grid md:min-h-[340px] md:grid-cols-[1.1fr_0.9fr]">
-        <div className="order-2 flex flex-col justify-center bg-crema px-4 py-8 md:order-1 md:px-10">
-          <div className="mx-auto w-full max-w-xl">
+      <section className="grid md:min-h-[420px] md:grid-cols-[1.1fr_0.9fr]">
+        <div className="order-2 flex flex-col justify-center bg-crema px-5 py-10 md:order-1 md:px-10 lg:px-12">
+          <div className="w-full max-w-2xl">
             <p className="mb-3 text-sm text-tinta-apagada">Inicio · {copys.arreglos.migas}</p>
             <h1 className="font-titular text-[2.4rem] font-semibold leading-[1.12] text-tinta md:text-[2.75rem]">
               {copys.arreglos.titular}
@@ -29,7 +29,7 @@ export function Arreglos() {
           <MarcadorSinFoto
             variante="bloque"
             etiqueta="Foto del taller"
-            className="h-52 min-h-[200px] md:h-full md:min-h-[340px]"
+            className="h-52 min-h-[200px] md:h-full md:min-h-[420px]"
           />
         </div>
       </section>
@@ -91,7 +91,7 @@ export function Arreglos() {
           <p className="border-l-2 border-acento pl-4 font-titular text-[1.85rem] leading-[1.2] text-tinta md:text-[2.1rem]">
             {copys.arreglos.cierre}
           </p>
-          <BotonesContacto whatsapp={wa} telefono={telHref(ajustes.telefono)} />
+          <BotonesContacto whatsapp={wa} telefono={telHref(ajustes.telefono)} conArreglos={false} />
         </div>
       </section>
     </>

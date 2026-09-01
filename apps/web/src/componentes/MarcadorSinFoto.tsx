@@ -38,8 +38,8 @@ export function MarcadorSinFoto({ variante = 'tarjeta', etiqueta, className }: P
 export function Logo({ className }: { className?: string }) {
   return (
     <Link to="/" className={cx('block leading-none text-tinta', className)} aria-label="Inicio">
-      <span className="block font-titular text-[1.25rem] font-semibold leading-none">Confecciones</span>
-      <span className="block font-titular text-[1.55rem] font-semibold leading-none">Ana Mari</span>
+      <span className="block font-titular text-[1.4rem] font-semibold leading-none">Confecciones</span>
+      <span className="block font-titular text-[1.75rem] font-semibold leading-none">Ana Mari</span>
     </Link>
   );
 }
