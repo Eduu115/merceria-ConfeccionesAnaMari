@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
@@ -21,6 +21,7 @@ const ORDEN = [
 export function CatalogoMerceria() {
   usarSeo(metas['/catalogo/merceria'].title, metas['/catalogo/merceria'].description);
   const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
   const tipos = (params.get('tipo_merceria') ?? '').split(',').filter(Boolean);
   const color = params.get('color') ?? '';
   const orden = params.get('orden') ?? 'novedades';
@@ -45,7 +46,10 @@ export function CatalogoMerceria() {
 
   const [abierto, setAbierto] = useState<'tipo' | 'color' | 'orden' | null>(null);
   const opcionesTipo = useMemo(
-    () => (tiposAttr ?? []).map((t) => ({ valor: t.slug, etiqueta: t.nombre })),
+    () => [
+      ...(tiposAttr ?? []).map((t) => ({ valor: t.slug, etiqueta: t.nombre })),
+      { valor: 'ropa', etiqueta: copys.catalogo.tituloRopa },
+    ],
     [tiposAttr],
   );
   const opcionesColor = useMemo(
@@ -57,6 +61,10 @@ export function CatalogoMerceria() {
   );
 
   function setLista(clave: string, valor: string) {
+    if (clave === 'tipo_merceria' && valor === 'ropa') {
+      navigate('/catalogo');
+      return;
+    }
     const n = new URLSearchParams(params);
     if (clave === 'tipo_merceria') {
       const set = new Set(tipos);
