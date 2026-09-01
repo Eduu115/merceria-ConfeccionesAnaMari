@@ -1,12 +1,12 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, Mail, Phone, X } from 'lucide-react';
 import { Logo } from './MarcadorSinFoto';
-import { IconoWhatsApp } from './BurbujaWhatsApp';
+import { IconoWhatsApp } from './IconoWhatsApp';
 import { usarAjustes } from '../hooks/usar-ajustes';
 import { usarWhatsAppPagina } from '../hooks/whatsapp-pagina';
 import { copys } from '../lib/copys';
-import { enlaceWhatsApp } from '../lib/whatsapp';
+import { enlaceWhatsApp, telHref } from '../lib/whatsapp';
 import { cx } from '../lib/cx';
 
 const ENLACES = [
@@ -21,6 +21,9 @@ const ROPA = [
   { to: '/catalogo?categoria=ropa-de-hombre', label: 'Ropa de hombre' },
   { to: '/catalogo?categoria=infantil-y-bebe', label: 'Infantil y bebé' },
 ];
+
+const OPCION_CAT =
+  '-mx-1 block rounded-md px-2 py-1.5 text-sm text-tinta transition-colors hover:bg-arena-2 hover:text-acento';
 
 export function Cabecera() {
   const { data } = usarAjustes();
@@ -93,7 +96,7 @@ export function Cabecera() {
                   <ul className="mb-3 space-y-1">
                     {ROPA.map((l) => (
                       <li key={l.to}>
-                        <NavLink to={l.to} className="block py-1 text-sm hover:text-acento">
+                        <NavLink to={l.to} className={OPCION_CAT}>
                           {l.label}
                         </NavLink>
                       </li>
@@ -102,7 +105,7 @@ export function Cabecera() {
                   <p className="mb-2 text-rotulo font-semibold uppercase text-tinta-apagada">
                     {copys.catalogoBloques.merceria}
                   </p>
-                  <NavLink to="/catalogo/merceria" className="block py-1 text-sm hover:text-acento">
+                  <NavLink to="/catalogo/merceria" className={OPCION_CAT}>
                     Mercería y costura
                   </NavLink>
                 </div>
@@ -115,18 +118,21 @@ export function Cabecera() {
             </Item>
           ))}
         </nav>
-        <div className="ml-auto hidden lg:block">
+        <div className="ml-auto hidden items-center gap-0.5 lg:flex">
+          {data?.telefono && (
+            <IconoContacto href={telHref(data.telefono)} etiqueta="Llamar a la tienda">
+              <Phone className="h-5 w-5" strokeWidth={1.75} />
+            </IconoContacto>
+          )}
+          {data?.email && (
+            <IconoContacto href={`mailto:${data.email}`} etiqueta="Enviar un correo">
+              <Mail className="h-5 w-5" strokeWidth={1.75} />
+            </IconoContacto>
+          )}
           {wa && (
-            <a
-              href={wa}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Escríbenos por WhatsApp"
-              className="inline-flex min-h-10 items-center gap-2 rounded-md bg-whatsapp px-3.5 text-sm font-semibold text-white hover:bg-whatsapp-oscuro"
-            >
-              <IconoWhatsApp className="h-4 w-4" />
-              {copys.botones.whatsapp}
-            </a>
+            <IconoContacto href={wa} etiqueta="Escríbenos por WhatsApp">
+              <IconoWhatsApp className="h-5 w-5" />
+            </IconoContacto>
           )}
         </div>
         <button
@@ -177,7 +183,27 @@ export function Cabecera() {
   );
 }
 
-function Item({ to, end, children }: { to: string; end?: boolean; children: React.ReactNode }) {
+function IconoContacto({
+  href,
+  etiqueta,
+  children,
+}: {
+  href: string;
+  etiqueta: string;
+  children: ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      aria-label={etiqueta}
+      className="grid h-10 w-10 place-items-center rounded-md text-tinta hover:bg-arena-2"
+    >
+      {children}
+    </a>
+  );
+}
+
+function Item({ to, end, children }: { to: string; end?: boolean; children: ReactNode }) {
   return (
     <NavLink
       to={to}
