@@ -32,11 +32,11 @@ const config: Config = {
         cuerpo: ['Archivo', 'system-ui', 'sans-serif'],
       },
       fontSize: {
-        cuerpo: ['1.0625rem', { lineHeight: '1.55' }],
-        rotulo: ['0.75rem', { lineHeight: '1.2', letterSpacing: '0.06em' }],
+        cuerpo: ['1.125rem', { lineHeight: '1.6' }],
+        rotulo: ['0.8125rem', { lineHeight: '1.2', letterSpacing: '0.06em' }],
       },
       maxWidth: {
-        contenido: '1200px',
+        contenido: '88rem',
         medida: '42rem',
       },
       boxShadow: {

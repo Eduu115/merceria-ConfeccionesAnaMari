@@ -58,9 +58,9 @@ export function Cabecera() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-borde bg-crema">
-      <div className="envoltorio flex h-[4.25rem] items-center gap-6">
+      <div className="envoltorio flex h-[4.75rem] items-center gap-8 lg:h-[5.25rem]">
         <Logo />
-        <nav className="hidden flex-1 items-center gap-5 lg:flex" aria-label="Principal">
+        <nav className="hidden flex-1 items-center gap-7 lg:flex" aria-label="Principal">
           <Item to="/" end>
             {copys.menu.inicio}
           </Item>
@@ -78,7 +78,7 @@ export function Cabecera() {
             <NavLink
               to="/catalogo"
               className={cx(
-                'text-[0.95rem] text-tinta',
+                'text-[1.05rem] text-tinta',
                 catalogoActivo && 'border-b-2 border-acento pb-0.5',
               )}
               aria-expanded={cat}
@@ -209,7 +209,7 @@ function Item({ to, end, children }: { to: string; end?: boolean; children: Reac
       to={to}
       end={end}
       className={({ isActive }) =>
-        cx('text-[0.95rem] text-tinta', isActive && 'border-b-2 border-acento pb-0.5')
+        cx('text-[1.05rem] text-tinta', isActive && 'border-b-2 border-acento pb-0.5')
       }
     >
       {children}

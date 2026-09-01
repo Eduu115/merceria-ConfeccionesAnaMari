@@ -16,8 +16,8 @@ export function CabeceraDePagina({
 }) {
   return (
     <header className="border-b border-borde bg-crema">
-      <div className="envoltorio py-6 md:py-8">
-        <nav aria-label="Migas de pan" className="mb-3 text-sm text-tinta-apagada">
+      <div className="envoltorio py-7 md:py-10">
+        <nav aria-label="Migas de pan" className="mb-3 text-[0.95rem] text-tinta-apagada">
           {migas.map((m, i) => (
             <span key={`${m.label}-${i}`}>
               {i > 0 && <span className="mx-1.5">·</span>}
@@ -31,7 +31,7 @@ export function CabeceraDePagina({
             </span>
           ))}
         </nav>
-        <h1 className="font-titular text-[2.15rem] font-semibold leading-[1.15] text-tinta md:text-[2.5rem]">
+        <h1 className="font-titular text-[2.35rem] font-semibold leading-[1.15] text-tinta md:text-[2.7rem]">
           {titulo}
         </h1>
         {fecha && <p className="mt-2 text-sm text-tinta-tenue">{fecha}</p>}
