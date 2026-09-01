@@ -66,6 +66,7 @@ export const copysAdmin = {
     tipoMerceria: 'Mercería y costura',
     seccionCategoria: 'Categoría',
     seccionTallas: 'Tallas disponibles',
+    seccionTipoMerceria: 'Tipo de artículo',
     seccionAtributos: 'Colores del producto',
     campoVisible: 'Publicado',
     campoVisibleAyuda: 'Se ve en la web',
