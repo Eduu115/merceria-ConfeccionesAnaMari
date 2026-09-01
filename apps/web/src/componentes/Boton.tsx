@@ -137,19 +137,48 @@ export function BotonTelefono({
   );
 }
 
+export function EnlaceTexto({
+  to,
+  className,
+  children,
+}: {
+  to: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <Link
+      to={to}
+      className={cx(
+        'inline-flex shrink-0 items-center font-semibold text-acento',
+        'origin-left transition-transform duration-200 ease-out motion-safe:hover:scale-[1.06]',
+        className,
+      )}
+    >
+      {children}
+    </Link>
+  );
+}
 export function BotonesContacto({
   whatsapp,
   telefono,
   className,
+  conArreglos = true,
 }: {
   whatsapp: string;
   telefono: string;
   className?: string;
+  conArreglos?: boolean;
 }) {
   return (
     <div className={cx('flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center', className)}>
       <BotonWhatsApp href={whatsapp} />
       <BotonTelefono href={telefono} />
+      {conArreglos && (
+        <EnlaceTexto to="/arreglos" className="min-h-12 justify-center md:min-h-11">
+          {copys.botones.verArreglos}
+        </EnlaceTexto>
+      )}
     </div>
   );
 }

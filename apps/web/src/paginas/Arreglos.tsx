@@ -91,7 +91,7 @@ export function Arreglos() {
           <p className="border-l-2 border-acento pl-4 font-titular text-[1.85rem] leading-[1.2] text-tinta md:text-[2.1rem]">
             {copys.arreglos.cierre}
           </p>
-          <BotonesContacto whatsapp={wa} telefono={telHref(ajustes.telefono)} />
+          <BotonesContacto whatsapp={wa} telefono={telHref(ajustes.telefono)} conArreglos={false} />
         </div>
       </section>
     </>

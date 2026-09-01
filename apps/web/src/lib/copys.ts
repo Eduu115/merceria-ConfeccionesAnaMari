@@ -26,6 +26,7 @@ export const copys = {
     whatsapp: 'WhatsApp',
     escribenos: 'Escríbenos por WhatsApp',
     verCatalogo: 'Ver catálogo',
+    verArreglos: 'Ver arreglos →',
     consultanos: 'Consúltanos por WhatsApp',
     conocenos: 'Conócenos',
     comoLlegar: 'Cómo llegar',

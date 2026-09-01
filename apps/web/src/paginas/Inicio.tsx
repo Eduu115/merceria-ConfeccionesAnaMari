@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
-import { Boton, BotonesContacto, BotonWhatsApp } from '../componentes/Boton';
+import { Boton, BotonesContacto, BotonWhatsApp, EnlaceTexto } from '../componentes/Boton';
 import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
 import { RejillaProductos } from '../componentes/TarjetaProducto';
 import { TablaHorario } from '../componentes/TablaHorario';
@@ -105,9 +105,9 @@ export function Inicio() {
             <h2 className="font-titular text-[2rem] text-tinta md:text-[2.35rem]">
               {copys.inicio.seleccion}
             </h2>
-            <Link to="/catalogo" className="hidden shrink-0 text-sm font-semibold text-acento md:inline">
+            <EnlaceTexto to="/catalogo" className="hidden text-sm md:inline-flex">
               {copys.inicio.verTodo}
-            </Link>
+            </EnlaceTexto>
           </div>
           <RejillaProductos productos={data.destacados} />
           <Link
