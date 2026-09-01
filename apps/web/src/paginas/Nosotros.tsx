@@ -4,9 +4,8 @@ import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
 import { CabeceraDePagina } from '../componentes/CabeceraDePagina';
 import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
-import { Boton } from '../componentes/Boton';
-import { IconoWhatsApp } from '../componentes/BurbujaWhatsApp';
-import { enlaceWhatsApp } from '../lib/whatsapp';
+import { Boton, BotonTelefono, BotonWhatsApp } from '../componentes/Boton';
+import { enlaceWhatsApp, telHref } from '../lib/whatsapp';
 
 export function Nosotros() {
   usarSeo(metas['/nosotros'].title, metas['/nosotros'].description);
@@ -53,14 +52,12 @@ export function Nosotros() {
       <section className="bg-arena-2">
         <div className="envoltorio py-10">
           <p className="font-titular text-[1.85rem] leading-[1.2] text-tinta md:text-[2.1rem]">{copys.nosotros.cierre}</p>
-          <div className="mt-6 flex flex-col-reverse gap-3 md:flex-row">
-            <Boton variante="secundario" to="/catalogo">
+          <div className="mt-6 flex flex-col gap-3 md:flex-row">
+            <Boton variante="secundario" to="/catalogo" className="order-last md:order-first">
               {copys.botones.verCatalogo}
             </Boton>
-            <Boton variante="whatsapp" href={wa} externo aria-label="Escríbenos por WhatsApp">
-              <IconoWhatsApp className="h-4 w-4" />
-              {copys.botones.escribenos}
-            </Boton>
+            <BotonWhatsApp href={wa} />
+            <BotonTelefono href={telHref(a.telefono)} />
           </div>
         </div>
       </section>
