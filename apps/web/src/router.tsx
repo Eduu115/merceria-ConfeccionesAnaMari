@@ -29,4 +29,76 @@ export const router = createBrowserRouter([
       { path: '*', element: <NoEncontrada /> },
     ],
   },
+  {
+    path: '/admin',
+    children: [
+      {
+        lazy: async () => {
+          const { GuardiaAdmin } = await import('./admin/GuardiaAdmin');
+          return { Component: GuardiaAdmin };
+        },
+        children: [
+          {
+            lazy: async () => {
+              const { LayoutAdmin } = await import('./admin/layouts/LayoutAdmin');
+              return { Component: LayoutAdmin };
+            },
+            children: [
+              {
+                index: true,
+                lazy: async () => {
+                  const { Listado } = await import('./admin/paginas/Listado');
+                  return { Component: Listado };
+                },
+              },
+              {
+                path: 'productos/nuevo',
+                lazy: async () => {
+                  const { Nuevo } = await import('./admin/paginas/Nuevo');
+                  return { Component: Nuevo };
+                },
+              },
+              {
+                path: 'productos/:id',
+                lazy: async () => {
+                  const { Editar } = await import('./admin/paginas/Editar');
+                  return { Component: Editar };
+                },
+              },
+              {
+                path: 'cuenta',
+                lazy: async () => {
+                  const { Cuenta } = await import('./admin/paginas/Cuenta');
+                  return { Component: Cuenta };
+                },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        lazy: async () => {
+          const { LayoutAdminAuth } = await import('./admin/layouts/LayoutAdminAuth');
+          return { Component: LayoutAdminAuth };
+        },
+        children: [
+          {
+            lazy: async () => {
+              const { GuardiaInvitado } = await import('./admin/GuardiaInvitado');
+              return { Component: GuardiaInvitado };
+            },
+            children: [
+              {
+                path: 'entrar',
+                lazy: async () => {
+                  const { Acceso } = await import('./admin/paginas/Acceso');
+                  return { Component: Acceso };
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ]);

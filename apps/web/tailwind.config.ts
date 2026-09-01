@@ -6,6 +6,8 @@ const config: Config = {
     screens: {
       md: '768px',
       lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
     },
     extend: {
       colors: {
@@ -26,6 +28,21 @@ const config: Config = {
         error: '#a6432f',
         whatsapp: '#25D366',
         'whatsapp-oscuro': '#1ea952',
+        // Panel de administración: piel de herramienta propia, no comparte tokens con la web pública.
+        'admin-fondo': '#f5f5f4',
+        'admin-borde': '#e0dedb',
+        'admin-borde-2': '#f0efec',
+        'admin-borde-campo': '#c9c6c0',
+        'admin-borde-campo-2': '#d4d1cc',
+        'admin-texto': '#1f1f1e',
+        'admin-texto-2': '#3a3934',
+        'admin-texto-3': '#6b6a66',
+        'admin-texto-tenue': '#98968f',
+        'admin-acento': '#2f5d8c',
+        'admin-acento-fondo': '#eef2f6',
+        'admin-error': '#a6432f',
+        'admin-error-fondo': '#fbeeea',
+        'admin-exito': '#2f7a52',
       },
       fontFamily: {
         titular: ['Caveat', 'cursive'],
