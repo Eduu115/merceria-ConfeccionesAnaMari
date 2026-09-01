@@ -45,10 +45,10 @@ export function FichaProducto() {
           description: data.descripcion,
         }}
       />
-      <article className="envoltorio grid gap-8 py-8 md:grid-cols-2">
+      <article className="envoltorio grid items-stretch gap-8 py-8 md:grid-cols-2">
         <Galeria fotos={fotos} nombre={data.nombre} />
-        <div>
-          <nav className="mb-3 text-sm text-tinta-apagada" aria-label="Migas de pan">
+        <div className="flex h-full flex-col">
+          <nav className="mb-4 text-[0.95rem] text-tinta-apagada" aria-label="Migas de pan">
             <Link to="/" className="hover:underline">
               Inicio
             </Link>
@@ -70,11 +70,12 @@ export function FichaProducto() {
             {' · '}
             <span>{data.nombre}</span>
           </nav>
-          <h1 className="font-titular text-[2.15rem] leading-[1.15] text-tinta md:text-[2.4rem]">{data.nombre}</h1>
-          <div className="h-6" aria-hidden />
+          <h1 className="font-titular text-[2.35rem] leading-[1.12] text-tinta md:text-[2.65rem]">
+            {data.nombre}
+          </h1>
           {data.tipo === 'ropa' ? (
-            <div className="mt-4">
-              <p className="mb-2 text-rotulo font-semibold uppercase text-tinta-apagada">
+            <div className="mt-6">
+              <p className="mb-2.5 text-[0.8rem] font-semibold uppercase tracking-[0.06em] text-tinta-apagada">
                 {copys.ficha.tallas}
               </p>
               <ul className="flex flex-wrap gap-2">
@@ -82,7 +83,7 @@ export function FichaProducto() {
                   <li
                     key={t.talla}
                     className={cx(
-                      'grid h-11 w-11 place-items-center border text-sm md:h-[34px] md:w-10',
+                      'grid h-11 min-w-11 place-items-center border px-1.5 text-[0.95rem] md:h-10 md:min-w-10',
                       t.disponible
                         ? 'border-borde text-tinta'
                         : 'border-borde text-tinta-tenue line-through',
@@ -94,21 +95,21 @@ export function FichaProducto() {
               </ul>
             </div>
           ) : (
-            <div className="mt-4">
-              <p className="mb-2 text-rotulo font-semibold uppercase text-tinta-apagada">
+            <div className="mt-6">
+              <p className="mb-2.5 text-[0.8rem] font-semibold uppercase tracking-[0.06em] text-tinta-apagada">
                 {copys.ficha.caracteristicas}
               </p>
-              <table className="w-full text-sm">
+              <table className="w-full text-[1.05rem]">
                 <tbody>
                   {data.caracteristica && (
                     <tr className="border-b border-borde">
-                      <th className="py-2 pr-4 text-left font-medium">Detalle</th>
+                      <th className="py-2.5 pr-4 text-left font-medium">Detalle</th>
                       <td>{data.caracteristica}</td>
                     </tr>
                   )}
                   {tipos.map((t) => (
                     <tr key={t.slug} className="border-b border-borde">
-                      <th className="py-2 pr-4 text-left font-medium">Tipo</th>
+                      <th className="py-2.5 pr-4 text-left font-medium">Tipo</th>
                       <td>{t.nombre}</td>
                     </tr>
                   ))}
@@ -116,7 +117,7 @@ export function FichaProducto() {
               </table>
               {coloresAttr.length > 0 && (
                 <div className="mt-4">
-                  <p className="mb-2 text-rotulo font-semibold uppercase text-tinta-apagada">
+                  <p className="mb-2.5 text-[0.8rem] font-semibold uppercase tracking-[0.06em] text-tinta-apagada">
                     {copys.ficha.carta}
                   </p>
                   <ul className="flex flex-wrap gap-1.5">
@@ -124,12 +125,12 @@ export function FichaProducto() {
                       <li
                         key={c.slug}
                         title={c.nombre}
-                        className="h-[22px] w-[22px] border border-borde md:h-[22px] md:w-[22px]"
+                        className="h-6 w-6 border border-borde"
                         style={{ background: c.hex ?? '#ccc' }}
                       />
                     ))}
                     {coloresAttr.length > 12 && (
-                      <li className="grid h-[22px] w-[22px] place-items-center border border-dashed border-borde-fuerte text-[10px] text-tinta-apagada">
+                      <li className="grid h-6 w-6 place-items-center border border-dashed border-borde-fuerte text-[11px] text-tinta-apagada">
                         +{coloresAttr.length - 12}
                       </li>
                     )}
@@ -138,33 +139,38 @@ export function FichaProducto() {
               )}
             </div>
           )}
-          {data.descripcion && <p className="mt-6 whitespace-pre-line text-tinta-3">{data.descripcion}</p>}
+          {data.descripcion && (
+            <p className="mt-6 whitespace-pre-line text-[1.125rem] leading-relaxed text-tinta-3">
+              {data.descripcion}
+            </p>
+          )}
+          <section className="mt-auto pt-8">
+            <h2 className="mb-4 font-titular text-[1.65rem] text-tinta md:text-[1.85rem]">
+              {copys.ficha.detalles}
+            </h2>
+            <table className="w-full text-[1.05rem]">
+              <tbody>
+                <tr className="border-b border-borde">
+                  <th className="py-2.5 pr-6 text-left font-medium">{copys.ficha.categoria}</th>
+                  <td>{data.categoria.nombre}</td>
+                </tr>
+                {data.composicion && (
+                  <tr className="border-b border-borde">
+                    <th className="py-2.5 pr-6 text-left font-medium">{copys.ficha.composicion}</th>
+                    <td>{data.composicion}</td>
+                  </tr>
+                )}
+                {data.colores && (
+                  <tr className="border-b border-borde">
+                    <th className="py-2.5 pr-6 text-left font-medium">{copys.ficha.colores}</th>
+                    <td>{data.colores}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </section>
         </div>
       </article>
-
-      <section className="envoltorio pb-8">
-        <h2 className="mb-3 font-titular text-xl text-tinta">{copys.ficha.detalles}</h2>
-        <table className="max-w-xl text-sm">
-          <tbody>
-            <tr className="border-b border-borde">
-              <th className="py-2 pr-6 text-left font-medium">{copys.ficha.categoria}</th>
-              <td>{data.categoria.nombre}</td>
-            </tr>
-            {data.composicion && (
-              <tr className="border-b border-borde">
-                <th className="py-2 pr-6 text-left font-medium">{copys.ficha.composicion}</th>
-                <td>{data.composicion}</td>
-              </tr>
-            )}
-            {data.colores && (
-              <tr className="border-b border-borde">
-                <th className="py-2 pr-6 text-left font-medium">{copys.ficha.colores}</th>
-                <td>{data.colores}</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </section>
 
       {data.relacionados.length > 0 && (
         <section className="envoltorio pb-14">
