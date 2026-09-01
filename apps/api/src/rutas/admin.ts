@@ -115,7 +115,7 @@ admin.get('/productos', async (req, res) => {
       slug: f.productos.slug,
       nombre: f.productos.nombre,
       tipo: f.productos.tipo,
-      categoria: f.categorias.slug,
+      categoria: f.categorias.nombre,
       visible: f.productos.visible,
       agotado: f.productos.agotado,
       destacado: f.productos.destacado,

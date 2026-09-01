@@ -77,6 +77,17 @@ export function FormularioProducto(props: Props) {
     queryFn: () => apiAdmin.atributos('color'),
     enabled: tipo === 'merceria',
   });
+  const atributosTipoMerceria = useQuery({
+    queryKey: ['admin', 'atributos', 'tipo_merceria'],
+    queryFn: () => apiAdmin.atributos('tipo_merceria'),
+    enabled: tipo === 'merceria',
+  });
+
+  useEffect(() => {
+    if (tipo === 'merceria' && !categoriaId && categorias.data?.length === 1) {
+      setCategoriaId(categorias.data[0].id);
+    }
+  }, [tipo, categorias.data, categoriaId]);
 
   function alternarTalla(talla: string) {
     setTallas((prev) => {
@@ -266,29 +277,31 @@ export function FormularioProducto(props: Props) {
             </div>
           </section>
 
-          <section className="flex flex-col gap-2">
-            <h2 className="text-[0.9rem] font-semibold text-admin-texto">{c.seccionCategoria}</h2>
-            <div className="flex flex-col gap-2">
-              {categorias.data?.map((cat) => {
-                const activa = categoriaId === cat.id;
-                return (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => setCategoriaId(cat.id)}
-                    className={`flex min-h-11 items-center justify-between rounded-md border px-3.5 text-[0.88rem] font-medium transition-colors ${
-                      activa
-                        ? 'border-admin-acento bg-admin-acento-fondo text-admin-acento'
-                        : 'border-admin-borde-campo bg-white text-admin-texto-2'
-                    }`}
-                  >
-                    {cat.nombre}
-                    {activa && <Check className="h-4 w-4" aria-hidden />}
-                  </button>
-                );
-              })}
-            </div>
-          </section>
+          {tipo === 'ropa' && (
+            <section className="flex flex-col gap-2">
+              <h2 className="text-[0.9rem] font-semibold text-admin-texto">{c.seccionCategoria}</h2>
+              <div className="flex flex-col gap-2">
+                {categorias.data?.map((cat) => {
+                  const activa = categoriaId === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setCategoriaId(cat.id)}
+                      className={`flex min-h-11 items-center justify-between rounded-md border px-3.5 text-[0.88rem] font-medium transition-colors ${
+                        activa
+                          ? 'border-admin-acento bg-admin-acento-fondo text-admin-acento'
+                          : 'border-admin-borde-campo bg-white text-admin-texto-2'
+                      }`}
+                    >
+                      {cat.nombre}
+                      {activa && <Check className="h-4 w-4" aria-hidden />}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          )}
 
           {tipo === 'ropa' && (
             <section className="flex flex-col gap-2">
@@ -309,6 +322,32 @@ export function FormularioProducto(props: Props) {
                     >
                       {t}
                     </button>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {tipo === 'merceria' && (
+            <section className="flex flex-col gap-2">
+              <h2 className="text-[0.9rem] font-semibold text-admin-texto">{c.seccionTipoMerceria}</h2>
+              <div className="flex flex-col divide-y divide-admin-borde-2 rounded-md border border-admin-borde-campo bg-white">
+                {atributosTipoMerceria.data?.map((a) => {
+                  const activo = atributosSel.includes(a.id);
+                  return (
+                    <label
+                      key={a.id}
+                      className="flex min-h-11 cursor-pointer items-center gap-3 px-3.5 text-[0.88rem] text-admin-texto-2"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={activo}
+                        onChange={() => alternarAtributo(a.id)}
+                        style={{ accentColor: '#2f5d8c' }}
+                        className="h-4 w-4"
+                      />
+                      {a.nombre}
+                    </label>
                   );
                 })}
               </div>

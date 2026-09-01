@@ -34,42 +34,42 @@ function BarraLateral() {
   }
 
   return (
-    <aside className="hidden w-[220px] flex-none flex-col border-r border-admin-borde bg-white lg:flex xl:w-[260px]">
-      <div className="border-b border-admin-borde-2 px-3.5 py-3.5 leading-tight">
-        <p className="text-[0.8rem] font-bold text-admin-texto">{copysAdmin.armazon.marcaLinea1}</p>
-        <p className="text-[0.8rem] font-bold text-admin-texto">{copysAdmin.armazon.marcaLinea2}</p>
-        <p className="mt-0.5 text-[0.6rem] text-admin-texto-tenue">{copysAdmin.armazon.marcaSufijo}</p>
+    <aside className="hidden w-[240px] flex-none flex-col border-r border-admin-borde bg-white lg:flex xl:w-[280px]">
+      <div className="border-b border-admin-borde-2 px-4 py-4 leading-tight">
+        <p className="text-[0.95rem] font-bold text-admin-texto">{copysAdmin.armazon.marcaLinea1}</p>
+        <p className="text-[0.95rem] font-bold text-admin-texto">{copysAdmin.armazon.marcaLinea2}</p>
+        <p className="mt-1 text-[0.72rem] text-admin-texto-tenue">{copysAdmin.armazon.marcaSufijo}</p>
       </div>
       <nav className="flex-1 space-y-0.5 p-2">
         <NavLink
           to="/admin"
           end
           className={({ isActive }) =>
-            `flex min-h-11 items-center gap-2.5 rounded-md px-3 text-[0.8rem] font-bold ${
+            `flex min-h-11 items-center gap-2.5 rounded-md px-3 text-[0.95rem] font-bold ${
               isActive ? 'bg-admin-acento-fondo text-admin-acento' : 'text-admin-texto-2'
             }`
           }
         >
-          <LayoutGrid className="h-4 w-4" aria-hidden />
+          <LayoutGrid className="h-5 w-5" aria-hidden />
           {copysAdmin.armazon.navProductos}
         </NavLink>
       </nav>
-      <div className="space-y-1.5 border-t border-admin-borde-2 px-3.5 py-3.5">
+      <div className="space-y-2 border-t border-admin-borde-2 px-4 py-4">
         <a
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className="block text-[0.75rem] font-bold text-admin-acento"
+          className="block text-[0.88rem] font-bold text-admin-acento"
         >
           {copysAdmin.armazon.verLaWeb}
         </a>
-        <p className="text-[0.8rem] font-bold text-admin-texto">{sesion?.nombre ?? copysAdmin.armazon.nombreUsuaria}</p>
-        <NavLink to="/admin/cuenta" className="block text-[0.75rem] text-admin-texto-3">
+        <p className="text-[0.95rem] font-bold text-admin-texto">{sesion?.nombre ?? copysAdmin.armazon.nombreUsuaria}</p>
+        <NavLink to="/admin/cuenta" className="block text-[0.88rem] text-admin-texto-3">
           {copysAdmin.armazon.miCuenta}
         </NavLink>
         <button
           type="button"
-          className="block text-left text-[0.75rem] text-admin-texto-3"
+          className="block text-left text-[0.88rem] text-admin-texto-3"
           onClick={() => setConfirmandoSalir(true)}
         >
           {copysAdmin.armazon.salir}
