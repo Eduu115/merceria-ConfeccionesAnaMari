@@ -1,4 +1,5 @@
 import {
+  type AnyPgColumn,
   boolean,
   integer,
   pgEnum,
@@ -70,6 +71,9 @@ export const categorias = pgTable('categorias', {
   tipo: tipoCatalogo('tipo').notNull(),
   imagenId: integer('imagen_id').references(() => imagenes.id, {
     onDelete: 'set null',
+  }),
+  padreId: integer('padre_id').references((): AnyPgColumn => categorias.id, {
+    onDelete: 'cascade',
   }),
   orden: integer('orden').notNull().default(0),
   visible: boolean('visible').notNull().default(true),

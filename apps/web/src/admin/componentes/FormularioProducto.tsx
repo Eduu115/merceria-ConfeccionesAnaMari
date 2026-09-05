@@ -31,6 +31,7 @@ export function FormularioProducto(props: Props) {
   const [nombre, setNombre] = useState('');
   const [tipo, setTipo] = useState<'ropa' | 'merceria'>('ropa');
   const [categoriaId, setCategoriaId] = useState<number | ''>('');
+  const [categoriaPadreId, setCategoriaPadreId] = useState<number | ''>('');
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
   const [composicion, setComposicion] = useState('');
@@ -88,6 +89,23 @@ export function FormularioProducto(props: Props) {
       setCategoriaId(categorias.data[0].id);
     }
   }, [tipo, categorias.data, categoriaId]);
+
+  // Al cargar un producto de ropa existente, deducimos qué categoría "padre"
+  // (Mujer/Hombre/Niños) tenía seleccionada a partir de la subcategoría guardada.
+  useEffect(() => {
+    if (tipo === 'ropa' && categoriaId && categorias.data && !categoriaPadreId) {
+      const cat = categorias.data.find((c) => c.id === categoriaId);
+      if (cat) setCategoriaPadreId(cat.padreId ?? cat.id);
+    }
+  }, [tipo, categoriaId, categorias.data, categoriaPadreId]);
+
+  const categoriasRaiz = categorias.data?.filter((c) => !c.padreId) ?? [];
+
+  function seleccionarCategoriaPadre(cat: { id: number }) {
+    setCategoriaPadreId(cat.id);
+    const hijas = categorias.data?.filter((c) => c.padreId === cat.id) ?? [];
+    setCategoriaId(hijas.length ? '' : cat.id);
+  }
 
   function alternarTalla(talla: string) {
     setTallas((prev) => {
@@ -264,6 +282,7 @@ export function FormularioProducto(props: Props) {
                   onClick={() => {
                     setTipo(t);
                     setCategoriaId('');
+                    setCategoriaPadreId('');
                   }}
                   className={`min-h-16 rounded-md border px-3 text-[0.85rem] font-semibold transition-colors ${
                     tipo === t
@@ -281,22 +300,46 @@ export function FormularioProducto(props: Props) {
             <section className="flex flex-col gap-2">
               <h2 className="text-[0.9rem] font-semibold text-admin-texto">{c.seccionCategoria}</h2>
               <div className="flex flex-col gap-2">
-                {categorias.data?.map((cat) => {
-                  const activa = categoriaId === cat.id;
+                {categoriasRaiz.map((cat) => {
+                  const activa = categoriaPadreId === cat.id;
+                  const hijas = categorias.data?.filter((h) => h.padreId === cat.id) ?? [];
                   return (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => setCategoriaId(cat.id)}
-                      className={`flex min-h-11 items-center justify-between rounded-md border px-3.5 text-[0.88rem] font-medium transition-colors ${
-                        activa
-                          ? 'border-admin-acento bg-admin-acento-fondo text-admin-acento'
-                          : 'border-admin-borde-campo bg-white text-admin-texto-2'
-                      }`}
-                    >
-                      {cat.nombre}
-                      {activa && <Check className="h-4 w-4" aria-hidden />}
-                    </button>
+                    <div key={cat.id}>
+                      <button
+                        type="button"
+                        onClick={() => seleccionarCategoriaPadre(cat)}
+                        className={`flex min-h-11 w-full items-center justify-between rounded-md border px-3.5 text-[0.88rem] font-medium transition-colors ${
+                          activa
+                            ? 'border-admin-acento bg-admin-acento-fondo text-admin-acento'
+                            : 'border-admin-borde-campo bg-white text-admin-texto-2'
+                        }`}
+                      >
+                        {cat.nombre}
+                        {activa && hijas.length === 0 && <Check className="h-4 w-4" aria-hidden />}
+                      </button>
+                      {activa && hijas.length > 0 && (
+                        <div className="ml-3 mt-2 flex flex-col gap-2 border-l-2 border-admin-borde-campo pl-3">
+                          {hijas.map((hija) => {
+                            const activaHija = categoriaId === hija.id;
+                            return (
+                              <button
+                                key={hija.id}
+                                type="button"
+                                onClick={() => setCategoriaId(hija.id)}
+                                className={`flex min-h-11 items-center justify-between rounded-md border px-3.5 text-[0.88rem] font-medium transition-colors ${
+                                  activaHija
+                                    ? 'border-admin-acento bg-admin-acento-fondo text-admin-acento'
+                                    : 'border-admin-borde-campo bg-white text-admin-texto-2'
+                                }`}
+                              >
+                                {hija.nombre}
+                                {activaHija && <Check className="h-4 w-4" aria-hidden />}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>

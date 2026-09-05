@@ -6,6 +6,7 @@ import {
   desc,
   eq,
   inArray,
+  isNull,
   sql as dsql,
 } from 'drizzle-orm';
 import {
@@ -65,8 +66,8 @@ publicas.get('/categorias', async (req, res) => {
     .from(categorias)
     .where(
       tipo
-        ? and(eq(categorias.visible, true), eq(categorias.tipo, tipo))
-        : eq(categorias.visible, true),
+        ? and(eq(categorias.visible, true), isNull(categorias.padreId), eq(categorias.tipo, tipo))
+        : and(eq(categorias.visible, true), isNull(categorias.padreId)),
     )
     .orderBy(asc(categorias.orden));
   res.json(filas.map(catPublica));
@@ -128,7 +129,7 @@ publicas.get('/inicio', async (_req, res) => {
     db
       .select()
       .from(categorias)
-      .where(eq(categorias.visible, true))
+      .where(and(eq(categorias.visible, true), isNull(categorias.padreId)))
       .orderBy(asc(categorias.orden)),
     db
       .select()
@@ -186,7 +187,20 @@ publicas.get('/productos', async (req, res) => {
   const filtros = [eq(productos.visible, true), eq(productos.tipo, q.tipo)];
 
   if (q.categoria) {
-    filtros.push(eq(categorias.slug, q.categoria));
+    const [cat] = await db
+      .select({ id: categorias.id })
+      .from(categorias)
+      .where(eq(categorias.slug, q.categoria))
+      .limit(1);
+    if (!cat) {
+      res.json({ productos: [], total: 0, pagina: q.pagina, paginas: 0, por_pagina: q.por_pagina });
+      return;
+    }
+    const hijas = await db
+      .select({ id: categorias.id })
+      .from(categorias)
+      .where(eq(categorias.padreId, cat.id));
+    filtros.push(inArray(productos.categoriaId, [cat.id, ...hijas.map((h) => h.id)]));
   }
 
   let idsPorAtributo: number[] | null = null;

@@ -44,8 +44,21 @@ export async function sembrar(forzar = false): Promise<void> {
 
   await asegurarPropietario();
 
-  const cats = await db.insert(categorias).values(CATEGORIAS).returning();
-  const porSlug = Object.fromEntries(cats.map((c) => [c.slug, c]));
+  const catsRaiz = CATEGORIAS.filter((c) => !('padre' in c));
+  const catsHijas = CATEGORIAS.filter((c): c is typeof CATEGORIAS[number] & { padre: string } => 'padre' in c);
+
+  const insertadasRaiz = await db.insert(categorias).values(catsRaiz).returning();
+  const porSlug: Record<string, (typeof insertadasRaiz)[number]> = Object.fromEntries(
+    insertadasRaiz.map((c) => [c.slug, c]),
+  );
+
+  if (catsHijas.length) {
+    const insertadasHijas = await db
+      .insert(categorias)
+      .values(catsHijas.map(({ padre, ...resto }) => ({ ...resto, padreId: porSlug[padre]!.id })))
+      .returning();
+    for (const c of insertadasHijas) porSlug[c.slug] = c;
+  }
 
   const tiposIns = await db
     .insert(atributos)

@@ -2,24 +2,64 @@ import type { GrupoPregunta } from '@anamari/compartido';
 
 export const CATEGORIAS = [
   {
-    slug: 'ropa-de-mujer',
-    nombre: 'Ropa de mujer',
+    slug: 'mujer',
+    nombre: 'Mujer',
     tipo: 'ropa' as const,
     descripcion: 'Batas, camisones, vestidos y prendas cómodas para el día a día.',
     orden: 1,
   },
   {
-    slug: 'ropa-de-hombre',
-    nombre: 'Ropa de hombre',
+    slug: 'mujer-lenceria',
+    nombre: 'Lencería',
+    tipo: 'ropa' as const,
+    descripcion: 'Camisones, batas y pijamas.',
+    orden: 1,
+    padre: 'mujer',
+  },
+  {
+    slug: 'mujer-ropa',
+    nombre: 'Ropa',
+    tipo: 'ropa' as const,
+    descripcion: 'Vestidos, faldas, blusas, pantalones y punto.',
+    orden: 2,
+    padre: 'mujer',
+  },
+  {
+    slug: 'mujer-ropa-interior',
+    nombre: 'Ropa interior',
+    tipo: 'ropa' as const,
+    descripcion: 'Ropa interior de mujer.',
+    orden: 3,
+    padre: 'mujer',
+  },
+  {
+    slug: 'hombre',
+    nombre: 'Hombre',
     tipo: 'ropa' as const,
     descripcion: 'Camisas, pantalones y prendas cómodas para el día a día.',
     orden: 2,
   },
   {
-    slug: 'infantil-y-bebe',
-    nombre: 'Infantil y bebé',
+    slug: 'hombre-ropa',
+    nombre: 'Ropa',
     tipo: 'ropa' as const,
-    descripcion: 'Ropa para los más pequeños, y arreglos si hace falta.',
+    descripcion: 'Camisas, pantalones y punto.',
+    orden: 1,
+    padre: 'hombre',
+  },
+  {
+    slug: 'hombre-ropa-interior',
+    nombre: 'Ropa interior',
+    tipo: 'ropa' as const,
+    descripcion: 'Calzoncillos y camisetas interiores.',
+    orden: 2,
+    padre: 'hombre',
+  },
+  {
+    slug: 'ninos',
+    nombre: 'Niños',
+    tipo: 'ropa' as const,
+    descripcion: 'Ropa para los más pequeños y bebés, y arreglos si hace falta.',
     orden: 3,
   },
   {
@@ -68,7 +108,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'bata-abotonada-manga-larga',
     nombre: 'Bata abotonada de manga larga en algodón, con bolsillos laterales',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-lenceria',
     descripcion:
       'Bata de casa de algodón, abotonada, con bolsillos laterales. Cae suave y cubre bien. Pregunta talla y color en tienda o por WhatsApp.',
     composicion: '100 % algodón',
@@ -78,7 +118,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'camison-manga-corta',
     nombre: 'Camisón de manga corta',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-lenceria',
     descripcion: 'Camisón fresco de manga corta, corte holgado. Ideal para dormir con calor.',
     composicion: '100 % algodón',
     colores: 'Rosa, azul, blanco',
@@ -87,7 +127,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'pijama-algodon-dos-piezas',
     nombre: 'Pijama de algodón dos piezas',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-lenceria',
     descripcion: 'Pijama de chaqueta y pantalón, tejido de algodón que aguanta lavados.',
     composicion: '100 % algodón',
     colores: 'Rayas azul, liso crudo',
@@ -96,7 +136,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'falda-plisada-tejido-fino',
     nombre: 'Falda plisada de tejido fino',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-ropa',
     descripcion: 'Falda plisada ligera, cintura elástica. Cae por debajo de la rodilla.',
     composicion: 'Poliéster',
     colores: 'Negro, marino',
@@ -104,7 +144,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'vestido-camisero-estampado',
     nombre: 'Vestido camisero estampado de media manga',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-ropa',
     descripcion: 'Vestido camisero de media manga, botones delanteros y estampado suave.',
     composicion: 'Algodón y viscosa',
     colores: 'Estampado floral',
@@ -114,7 +154,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'rebeca-punto-botones',
     nombre: 'Rebeca de punto con botones',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-ropa',
     descripcion: 'Rebeca de punto medio, con botones. Para casa o encima de un camisón.',
     composicion: 'Acrílico',
     colores: 'Beige, gris, azul',
@@ -123,7 +163,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'pantalon-cintura-elastica',
     nombre: 'Pantalón de cintura elástica',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-ropa',
     descripcion: 'Pantalón cómodo de cintura elástica, sin pretina dura.',
     composicion: 'Algodón con elastano',
     colores: 'Negro, marino, beige',
@@ -131,7 +171,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'blusa-manga-tres-cuartos',
     nombre: 'Blusa de manga tres cuartos',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-ropa',
     descripcion: 'Blusa lisa de manga tres cuartos, cuello redondo. Corte amplio.',
     composicion: 'Viscosa',
     colores: 'Blanco, azul, granate',
@@ -139,7 +179,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'bata-cruzada-rizo',
     nombre: 'Bata cruzada de rizo',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-lenceria',
     descripcion: 'Bata de rizo cruzada, con cinturón. Absorbe y abriga al salir de la ducha.',
     composicion: '100 % algodón rizo',
     colores: 'Blanco, rosa, azul',
@@ -147,7 +187,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'camison-largo-invierno',
     nombre: 'Camisón largo de invierno',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-lenceria',
     descripcion: 'Camisón largo de tejido de invierno, manga larga.',
     composicion: 'Algodón y poliéster',
     colores: 'Burdeos, azul oscuro',
@@ -156,7 +196,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'pijama-polar',
     nombre: 'Pijama de polar',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-lenceria',
     descripcion: 'Pijama de polar de dos piezas para los meses fríos.',
     composicion: 'Poliéster polar',
     colores: 'Gris, rosa empolvado',
@@ -164,7 +204,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'vestido-punto',
     nombre: 'Vestido de punto',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-ropa',
     descripcion: 'Vestido de punto de corte recto, manga larga.',
     composicion: 'Acrílico y lana',
     colores: 'Negro, camel',
@@ -173,7 +213,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'camiseta-algodon-mujer',
     nombre: 'Camiseta de algodón de manga corta',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-ropa',
     descripcion: 'Camiseta básica de algodón, cuello redondo.',
     composicion: '100 % algodón',
     colores: 'Blanco, negro, crudo',
@@ -182,7 +222,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'leggings-talle-alto',
     nombre: 'Leggings de talle alto',
-    categoria: 'ropa-de-mujer',
+    categoria: 'mujer-ropa',
     descripcion: 'Leggings opacos de talle alto, cintura ancha.',
     composicion: 'Algodón con elastano',
     colores: 'Negro',
@@ -190,7 +230,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'calzon-corto-hombre',
     nombre: 'Calzón corto',
-    categoria: 'ropa-de-hombre',
+    categoria: 'hombre-ropa-interior',
     descripcion: 'Calzoncillo corto de algodón, tejido de punto. Talla amplia; pregunta en tienda.',
     composicion: '100 % algodón',
     colores: 'Blanco, crudo',
@@ -199,7 +239,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'calzon-largo-hombre',
     nombre: 'Calzón largo',
-    categoria: 'ropa-de-hombre',
+    categoria: 'hombre-ropa-interior',
     descripcion: 'Calzoncillo largo de algodón, ajustado. Para el frío, tejido de invierno.',
     composicion: '100 % algodón',
     colores: 'Blanco, crudo',
@@ -207,7 +247,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'body-bebe',
     nombre: 'Body de bebé',
-    categoria: 'infantil-y-bebe',
+    categoria: 'ninos',
     descripcion: 'Body de algodón para bebé, broches en la entrepierna.',
     composicion: '100 % algodón',
     colores: 'Blanco, azul, rosa',
@@ -215,7 +255,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'pelele-algodon',
     nombre: 'Pelele de algodón',
-    categoria: 'infantil-y-bebe',
+    categoria: 'ninos',
     descripcion: 'Pelele de una pieza, tejido suave.',
     composicion: '100 % algodón',
     colores: 'Celeste, rosa, crudo',
@@ -223,7 +263,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'pijama-infantil',
     nombre: 'Pijama infantil de dos piezas',
-    categoria: 'infantil-y-bebe',
+    categoria: 'ninos',
     descripcion: 'Pijama de niño o niña, dos piezas, algodón.',
     composicion: '100 % algodón',
     colores: 'Estampados varios',
@@ -232,7 +272,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'ranita-bebe',
     nombre: 'Ranita de bebé',
-    categoria: 'infantil-y-bebe',
+    categoria: 'ninos',
     descripcion: 'Ranita corta de algodón, con tirantes.',
     composicion: '100 % algodón',
     colores: 'Blanco, rayas',
@@ -240,7 +280,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'camiseta-nina',
     nombre: 'Camiseta de niña',
-    categoria: 'infantil-y-bebe',
+    categoria: 'ninos',
     descripcion: 'Camiseta de manga corta para niña.',
     composicion: '100 % algodón',
     colores: 'Blanco, rosa, estampado',
@@ -248,7 +288,7 @@ export const ROPA: RopaSemilla[] = [
   {
     slug: 'pantalon-chandal-infantil',
     nombre: 'Pantalón de chándal infantil',
-    categoria: 'infantil-y-bebe',
+    categoria: 'ninos',
     descripcion: 'Pantalón de chándal con cintura elástica.',
     composicion: 'Algodón y poliéster',
     colores: 'Gris, marino',
