@@ -10,6 +10,7 @@ export type CategoriaAdmin = {
   slug: string;
   nombre: string;
   tipo: 'ropa' | 'merceria';
+  padreId: number | null;
   orden: number;
   visible: boolean;
 };

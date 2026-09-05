@@ -17,9 +17,9 @@ const ENLACES = [
 ];
 
 const ROPA = [
-  { to: '/catalogo?categoria=ropa-de-mujer', label: 'Ropa de mujer' },
-  { to: '/catalogo?categoria=ropa-de-hombre', label: 'Ropa de hombre' },
-  { to: '/catalogo?categoria=infantil-y-bebe', label: 'Infantil y bebé' },
+  { to: '/catalogo?categoria=mujer', label: 'Mujer' },
+  { to: '/catalogo?categoria=hombre', label: 'Hombre' },
+  { to: '/catalogo?categoria=ninos', label: 'Niños' },
 ];
 
 const OPCION_CAT =
