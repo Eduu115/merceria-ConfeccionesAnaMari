@@ -54,39 +54,45 @@ export function Cuenta() {
     <>
       <CabeceraAdminMovil variante="detalle" titulo={c.titulo} atras="/admin" />
       <CabeceraAdminEscritorio titulo={c.titulo} />
-      <div className="flex max-w-md flex-col gap-8 p-[1.4rem] md:p-7 lg:p-[2.8rem] xl:px-[4.2rem] xl:py-14 2xl:px-28">
-        <form onSubmit={guardar} className="flex flex-col gap-4">
+      <div className="flex justify-center p-[1.4rem] md:p-7 lg:p-[2.8rem] xl:px-[4.2rem] xl:py-14 2xl:px-28">
+      <div className="flex w-full max-w-lg flex-col gap-10 rounded-xl border border-admin-borde bg-white p-6 shadow-sm md:p-8">
+        <section className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <h2 className="text-[0.95rem] font-semibold text-admin-texto">{c.seccionContrasena}</h2>
+            <h2 className="font-cuerpo text-[0.95rem] font-semibold text-admin-texto">{c.seccionContrasena}</h2>
             <p className="text-[0.8rem] text-admin-texto-tenue">{c.ayudaMinimo}</p>
           </div>
-          <CampoTexto
-            etiqueta={c.campoActual}
-            type="password"
-            autoComplete="current-password"
-            required
-            value={actual}
-            onChange={(e) => setActual(e.target.value)}
-          />
-          <CampoTexto
-            etiqueta={c.campoNueva}
-            type="password"
-            autoComplete="new-password"
-            minLength={8}
-            required
-            value={nueva}
-            onChange={(e) => setNueva(e.target.value)}
-          />
-          {mensaje && <p className="text-[0.85rem] text-admin-exito">{mensaje}</p>}
-          {error && <p className="text-[0.85rem] text-admin-error">{error}</p>}
-          <BotonAdmin type="submit" cargando={enviando} className="self-start">
-            {enviando ? c.botonEnviando : c.boton}
-          </BotonAdmin>
-        </form>
+          <form onSubmit={guardar} className="flex flex-col gap-4">
+            <CampoTexto
+              etiqueta={c.campoActual}
+              type="password"
+              autoComplete="current-password"
+              required
+              value={actual}
+              onChange={(e) => setActual(e.target.value)}
+            />
+            <CampoTexto
+              etiqueta={c.campoNueva}
+              type="password"
+              autoComplete="new-password"
+              minLength={8}
+              required
+              value={nueva}
+              onChange={(e) => setNueva(e.target.value)}
+            />
+            {mensaje && <p className="text-[0.85rem] text-admin-exito">{mensaje}</p>}
+            {error && <p className="text-[0.85rem] text-admin-error">{error}</p>}
+            <BotonAdmin type="submit" cargando={enviando} className="self-start">
+              {enviando ? c.botonEnviando : c.boton}
+            </BotonAdmin>
+          </form>
+        </section>
 
-        <BotonAdmin variante="secundario" onClick={() => setConfirmandoSalir(true)} className="self-start">
-          {c.salir}
-        </BotonAdmin>
+        <section className="flex flex-col gap-3 border-t border-admin-borde-2 pt-8">
+          <BotonAdmin variante="peligro" onClick={() => setConfirmandoSalir(true)} className="self-center">
+            {c.salir}
+          </BotonAdmin>
+        </section>
+      </div>
       </div>
 
       <ConfirmarAdmin

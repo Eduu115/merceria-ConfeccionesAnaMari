@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import { eq } from 'drizzle-orm';
-import { puedeAdministrarSitio } from '@anamari/compartido';
+import { puedeAdministrarSitio, puedeGestionarUsuarios } from '@anamari/compartido';
 import { db } from '../db/cliente.js';
 import { sesiones, usuarios } from '../db/esquema.js';
 import { config, esProduccion } from '../config.js';
@@ -104,6 +104,15 @@ export async function exigirSesion(req: Request, res: Response, next: NextFuncti
     return;
   }
   req.usuario = usuario;
+  next();
+}
+
+// Se usa después de exigirSesion: solo admin_web gestiona usuarios y roles.
+export function exigirGestionUsuarios(req: Request, res: Response, next: NextFunction) {
+  if (!req.usuario || !puedeGestionarUsuarios(req.usuario.rol)) {
+    res.status(403).json({ error: 'No tienes acceso a esta área.' });
+    return;
+  }
   next();
 }
 

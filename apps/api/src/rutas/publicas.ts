@@ -66,11 +66,21 @@ publicas.get('/categorias', async (req, res) => {
     .from(categorias)
     .where(
       tipo
-        ? and(eq(categorias.visible, true), isNull(categorias.padreId), eq(categorias.tipo, tipo))
-        : and(eq(categorias.visible, true), isNull(categorias.padreId)),
+        ? and(eq(categorias.visible, true), eq(categorias.tipo, tipo))
+        : eq(categorias.visible, true),
     )
     .orderBy(asc(categorias.orden));
-  res.json(filas.map(catPublica));
+  const porId = new Map(filas.map((f) => [f.id, f.slug]));
+  const padres = filas.filter((f) => !f.padreId).sort((a, b) => a.orden - b.orden);
+  const hijosPorPadre = new Map<number, typeof filas>();
+  for (const f of filas) {
+    if (!f.padreId) continue;
+    const lista = hijosPorPadre.get(f.padreId) ?? [];
+    lista.push(f);
+    hijosPorPadre.set(f.padreId, lista);
+  }
+  const ordenadas = padres.flatMap((p) => [p, ...(hijosPorPadre.get(p.id) ?? []).sort((a, b) => a.orden - b.orden)]);
+  res.json(ordenadas.map((f) => catPublica(f, f.padreId ? (porId.get(f.padreId) ?? null) : null)));
 });
 
 publicas.get('/servicios', async (_req, res) => {
@@ -151,7 +161,7 @@ publicas.get('/inicio', async (_req, res) => {
 
   res.json({
     ajustes: mapearAjustes(filasAjustes),
-    categorias: cats.map(catPublica),
+    categorias: cats.map((c) => catPublica(c)),
     servicios: serv.map((s) => ({
       slug: s.slug,
       nombre: s.nombre,
@@ -381,13 +391,14 @@ async function cargarHorario(): Promise<DiaHorario[]> {
   }));
 }
 
-function catPublica(c: typeof categorias.$inferSelect): CategoriaPublica {
+function catPublica(c: typeof categorias.$inferSelect, padreSlug: string | null = null): CategoriaPublica {
   return {
     slug: c.slug,
     nombre: c.nombre,
     descripcion: c.descripcion,
     tipo: c.tipo,
     orden: c.orden,
+    padreSlug,
   };
 }
 

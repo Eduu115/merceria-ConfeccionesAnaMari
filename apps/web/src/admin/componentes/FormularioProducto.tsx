@@ -215,7 +215,7 @@ export function FormularioProducto(props: Props) {
       >
         <div className="flex flex-col gap-7 lg:order-1">
           <section className="flex flex-col gap-3">
-            <h2 className="text-[0.9rem] font-semibold text-admin-texto">{c.seccionFotos}</h2>
+            <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionFotos}</h2>
             {/* Maqueta sin funcionalidad: cómo se subirán las fotos aún está por decidir. */}
             <div
               aria-disabled="true"
@@ -259,7 +259,14 @@ export function FormularioProducto(props: Props) {
               step="0.01"
               min="0"
               value={precio}
-              onChange={(e) => setPrecio(e.target.value)}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (/^\d*(\.\d{0,2})?$/.test(v)) setPrecio(v);
+              }}
+              onBlur={(e) => {
+                const n = Number(e.target.value);
+                if (e.target.value && !Number.isNaN(n)) setPrecio(n.toFixed(2));
+              }}
             />
             <CampoTexto etiqueta={c.campoCaracteristica} value={caracteristica} onChange={(e) => setCaracteristica(e.target.value)} />
             {tipo === 'ropa' && (
@@ -273,7 +280,7 @@ export function FormularioProducto(props: Props) {
 
         <div className="flex flex-col gap-7 lg:order-2">
           <section className="flex flex-col gap-3">
-            <h2 className="text-[0.9rem] font-semibold text-admin-texto">{c.seccionCatalogo}</h2>
+            <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionCatalogo}</h2>
             <div className="grid grid-cols-2 gap-2">
               {(['ropa', 'merceria'] as const).map((t) => (
                 <button
@@ -298,7 +305,7 @@ export function FormularioProducto(props: Props) {
 
           {tipo === 'ropa' && (
             <section className="flex flex-col gap-2">
-              <h2 className="text-[0.9rem] font-semibold text-admin-texto">{c.seccionCategoria}</h2>
+              <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionCategoria}</h2>
               <div className="flex flex-col gap-2">
                 {categoriasRaiz.map((cat) => {
                   const activa = categoriaPadreId === cat.id;
@@ -348,7 +355,7 @@ export function FormularioProducto(props: Props) {
 
           {tipo === 'ropa' && (
             <section className="flex flex-col gap-2">
-              <h2 className="text-[0.9rem] font-semibold text-admin-texto">{c.seccionTallas}</h2>
+              <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionTallas}</h2>
               <div className="grid grid-cols-3 gap-2">
                 {TALLAS_HABITUALES.map((t) => {
                   const activa = tallas.some((x) => x.talla === t);
@@ -373,7 +380,7 @@ export function FormularioProducto(props: Props) {
 
           {tipo === 'merceria' && (
             <section className="flex flex-col gap-2">
-              <h2 className="text-[0.9rem] font-semibold text-admin-texto">{c.seccionTipoMerceria}</h2>
+              <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionTipoMerceria}</h2>
               <div className="flex flex-col divide-y divide-admin-borde-2 rounded-md border border-admin-borde-campo bg-white">
                 {atributosTipoMerceria.data?.map((a) => {
                   const activo = atributosSel.includes(a.id);
@@ -399,7 +406,7 @@ export function FormularioProducto(props: Props) {
 
           {tipo === 'merceria' && (
             <section className="flex flex-col gap-2">
-              <h2 className="text-[0.9rem] font-semibold text-admin-texto">{c.seccionAtributos}</h2>
+              <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionAtributos}</h2>
               <div className="flex flex-wrap gap-2">
                 {atributosColor.data?.map((a) => {
                   const activo = atributosSel.includes(a.id);
