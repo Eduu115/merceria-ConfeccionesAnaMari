@@ -35,7 +35,7 @@ export function ConfirmarAdmin({
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-[340px] rounded-2xl bg-white p-5 shadow-xl"
       >
-        <h2 id="confirmar-admin-titulo" className="text-[1.05rem] font-bold text-admin-texto">
+        <h2 id="confirmar-admin-titulo" className="font-cuerpo text-[1.05rem] font-bold text-admin-texto">
           {titulo}
         </h2>
         <div className="mt-1.5 text-[0.9rem] leading-snug text-admin-texto-3">{descripcion}</div>

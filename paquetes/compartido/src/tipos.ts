@@ -4,6 +4,7 @@ export type CategoriaPublica = {
   descripcion: string | null;
   tipo: 'ropa' | 'merceria';
   orden: number;
+  padreSlug: string | null;
 };
 
 export type TallaPublica = {

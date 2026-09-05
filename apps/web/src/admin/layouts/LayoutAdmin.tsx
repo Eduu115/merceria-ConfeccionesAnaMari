@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutGrid } from 'lucide-react';
+import { LayoutGrid, Users } from 'lucide-react';
 import { copysAdmin } from '../lib/copys-admin';
 import { apiAdmin } from '../lib/api-admin';
 import { useQueryClient } from '@tanstack/react-query';
@@ -33,12 +33,19 @@ function BarraLateral() {
     cliente.setQueryData(['admin', 'yo'], null);
   }
 
+  const etiquetaRol =
+    sesion?.rol === 'admin_web'
+      ? copysAdmin.usuarios.rolAdminWeb
+      : sesion?.rol === 'propietario'
+        ? copysAdmin.usuarios.rolPropietario
+        : copysAdmin.armazon.marcaSufijo;
+
   return (
     <aside className="hidden w-[240px] flex-none flex-col border-r border-admin-borde bg-white lg:flex xl:w-[280px]">
       <div className="border-b border-admin-borde-2 px-4 py-4 leading-tight">
         <p className="text-[0.95rem] font-bold text-admin-texto">{copysAdmin.armazon.marcaLinea1}</p>
         <p className="text-[0.95rem] font-bold text-admin-texto">{copysAdmin.armazon.marcaLinea2}</p>
-        <p className="mt-1 text-[0.72rem] text-admin-texto-tenue">{copysAdmin.armazon.marcaSufijo}</p>
+        <p className="mt-1 text-[0.72rem] text-admin-texto-tenue">{etiquetaRol}</p>
       </div>
       <nav className="flex-1 space-y-0.5 p-2">
         <NavLink
@@ -53,6 +60,19 @@ function BarraLateral() {
           <LayoutGrid className="h-5 w-5" aria-hidden />
           {copysAdmin.armazon.navProductos}
         </NavLink>
+        {sesion?.rol === 'admin_web' && (
+          <NavLink
+            to="/admin/usuarios"
+            className={({ isActive }) =>
+              `flex min-h-11 items-center gap-2.5 rounded-md px-3 text-[0.95rem] font-bold ${
+                isActive ? 'bg-admin-acento-fondo text-admin-acento' : 'text-admin-texto-2'
+              }`
+            }
+          >
+            <Users className="h-5 w-5" aria-hidden />
+            {copysAdmin.armazon.navUsuarios}
+          </NavLink>
+        )}
       </nav>
       <div className="space-y-2 border-t border-admin-borde-2 px-4 py-4">
         <a
@@ -63,7 +83,6 @@ function BarraLateral() {
         >
           {copysAdmin.armazon.verLaWeb}
         </a>
-        <p className="text-[0.95rem] font-bold text-admin-texto">{sesion?.nombre ?? copysAdmin.armazon.nombreUsuaria}</p>
         <NavLink to="/admin/cuenta" className="block text-[0.88rem] text-admin-texto-3">
           {copysAdmin.armazon.miCuenta}
         </NavLink>

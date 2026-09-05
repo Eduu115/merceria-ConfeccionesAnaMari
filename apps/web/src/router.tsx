@@ -72,6 +72,35 @@ export const router = createBrowserRouter([
                   return { Component: Cuenta };
                 },
               },
+              {
+                lazy: async () => {
+                  const { GuardiaGestionUsuarios } = await import('./admin/GuardiaGestionUsuarios');
+                  return { Component: GuardiaGestionUsuarios };
+                },
+                children: [
+                  {
+                    path: 'usuarios',
+                    lazy: async () => {
+                      const { Usuarios } = await import('./admin/paginas/Usuarios');
+                      return { Component: Usuarios };
+                    },
+                  },
+                  {
+                    path: 'usuarios/nuevo',
+                    lazy: async () => {
+                      const { UsuarioNuevo } = await import('./admin/paginas/UsuarioNuevo');
+                      return { Component: UsuarioNuevo };
+                    },
+                  },
+                  {
+                    path: 'usuarios/:id',
+                    lazy: async () => {
+                      const { UsuarioEditar } = await import('./admin/paginas/UsuarioEditar');
+                      return { Component: UsuarioEditar };
+                    },
+                  },
+                ],
+              },
             ],
           },
         ],

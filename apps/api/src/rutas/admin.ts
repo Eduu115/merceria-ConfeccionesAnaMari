@@ -19,7 +19,8 @@ import {
   servicios,
   usuarios,
 } from '../db/esquema.js';
-import { exigirSesion } from '../middleware/auth.js';
+import { ROLES_USUARIO } from '@anamari/compartido';
+import { exigirGestionUsuarios, exigirSesion } from '../middleware/auth.js';
 import { procesarImagen } from '../servicios/imagenes.js';
 import { avisoProductoActualizado } from '../servicios/sockets.js';
 
@@ -103,23 +104,19 @@ admin.patch('/mensajes/:id', async (req, res) => {
 
 admin.get('/productos', async (req, res) => {
   const tipo = req.query.tipo;
-  const filas = await db
-    .select()
-    .from(productos)
-    .innerJoin(categorias, eq(productos.categoriaId, categorias.id))
-    .orderBy(desc(productos.creadoEn));
+  const filas = await db.select().from(productos).orderBy(desc(productos.creadoEn));
   const lista = filas
-    .filter((f) => (tipo === 'ropa' || tipo === 'merceria' ? f.productos.tipo === tipo : true))
-    .map((f) => ({
-      id: f.productos.id,
-      slug: f.productos.slug,
-      nombre: f.productos.nombre,
-      tipo: f.productos.tipo,
-      categoria: f.categorias.nombre,
-      visible: f.productos.visible,
-      agotado: f.productos.agotado,
-      destacado: f.productos.destacado,
-      precio_centimos: f.productos.precioCentimos,
+    .filter((p) => (tipo === 'ropa' || tipo === 'merceria' ? p.tipo === tipo : true))
+    .map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      nombre: p.nombre,
+      tipo: p.tipo,
+      categoria: p.tipo === 'ropa' ? 'Ropa' : 'Mercería y costura',
+      visible: p.visible,
+      agotado: p.agotado,
+      destacado: p.destacado,
+      precio_centimos: p.precioCentimos,
     }));
   res.json(lista);
 });
@@ -290,6 +287,106 @@ admin.put('/yo/contrasena', async (req, res) => {
   const passwordHash = await argon2.hash(nueva);
   await db.update(usuarios).set({ passwordHash, actualizadoEn: new Date() }).where(eq(usuarios.id, user.id));
   res.json({ ok: true });
+});
+
+const esquemaUsuarioNuevo = z.object({
+  email: z.string().trim().email(),
+  nombre: z.string().trim().min(1),
+  password: z.string().min(8),
+  rol: z.enum(ROLES_USUARIO),
+});
+
+const esquemaUsuarioEditado = z.object({
+  nombre: z.string().trim().min(1),
+  rol: z.enum(ROLES_USUARIO),
+  activo: z.boolean(),
+  password: z.string().min(8).optional().or(z.literal('')),
+});
+
+function usuarioPublico(u: typeof usuarios.$inferSelect) {
+  return {
+    id: u.id,
+    email: u.email,
+    nombre: u.nombre,
+    rol: u.rol,
+    activo: u.activo,
+    creadoEn: u.creadoEn.toISOString(),
+  };
+}
+
+admin.get('/usuarios', exigirGestionUsuarios, async (_req, res) => {
+  const filas = await db.select().from(usuarios).orderBy(asc(usuarios.nombre));
+  res.json(filas.map(usuarioPublico));
+});
+
+admin.get('/usuarios/:id', exigirGestionUsuarios, async (req, res) => {
+  const [fila] = await db.select().from(usuarios).where(eq(usuarios.id, Number(req.params.id))).limit(1);
+  if (!fila) {
+    res.status(404).json({ error: 'Usuario no encontrado' });
+    return;
+  }
+  res.json(usuarioPublico(fila));
+});
+
+admin.post('/usuarios', exigirGestionUsuarios, async (req, res) => {
+  const parsed = esquemaUsuarioNuevo.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(422).json({ error: 'Revisa los datos del usuario.' });
+    return;
+  }
+  const d = parsed.data;
+  const email = d.email.toLowerCase();
+  const [existente] = await db.select({ id: usuarios.id }).from(usuarios).where(eq(usuarios.email, email)).limit(1);
+  if (existente) {
+    res.status(409).json({ error: 'Ya existe un usuario con ese correo.' });
+    return;
+  }
+  const passwordHash = await argon2.hash(d.password);
+  const [creado] = await db
+    .insert(usuarios)
+    .values({ email, nombre: d.nombre, rol: d.rol, passwordHash, activo: true })
+    .returning();
+  res.status(201).json(usuarioPublico(creado));
+});
+
+admin.put('/usuarios/:id', exigirGestionUsuarios, async (req, res) => {
+  const id = Number(req.params.id);
+  const parsed = esquemaUsuarioEditado.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(422).json({ error: 'Revisa los datos del usuario.' });
+    return;
+  }
+  const d = parsed.data;
+  if (id === req.usuario!.id && (d.rol !== req.usuario!.rol || !d.activo)) {
+    res.status(422).json({ error: 'No puedes quitarte tu propio acceso.' });
+    return;
+  }
+  const [existente] = await db.select().from(usuarios).where(eq(usuarios.id, id)).limit(1);
+  if (!existente) {
+    res.status(404).json({ error: 'Usuario no encontrado' });
+    return;
+  }
+  const passwordHash = d.password ? await argon2.hash(d.password) : existente.passwordHash;
+  const [actualizado] = await db
+    .update(usuarios)
+    .set({ nombre: d.nombre, rol: d.rol, activo: d.activo, passwordHash, actualizadoEn: new Date() })
+    .where(eq(usuarios.id, id))
+    .returning();
+  res.json(usuarioPublico(actualizado));
+});
+
+admin.delete('/usuarios/:id', exigirGestionUsuarios, async (req, res) => {
+  const id = Number(req.params.id);
+  if (id === req.usuario!.id) {
+    res.status(422).json({ error: 'No puedes borrar tu propia cuenta.' });
+    return;
+  }
+  const [fila] = await db.delete(usuarios).where(eq(usuarios.id, id)).returning();
+  if (!fila) {
+    res.status(404).json({ error: 'Usuario no encontrado' });
+    return;
+  }
+  res.status(204).end();
 });
 
 admin.get('/categorias', async (req, res) => {

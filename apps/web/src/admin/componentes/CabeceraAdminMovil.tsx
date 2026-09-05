@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, ExternalLink, LogOut, Menu, User } from 'lucide-react';
+import { ArrowLeft, ExternalLink, LogOut, Menu, User, Users } from 'lucide-react';
 import { copysAdmin } from '../lib/copys-admin';
 import { apiAdmin } from '../lib/api-admin';
+import { usarSesionAdmin } from '../hooks/usar-sesion-admin';
 import { ConfirmarAdmin } from './ConfirmarAdmin';
 
 type Props =
@@ -33,6 +34,7 @@ export function CabeceraAdminMovil(props: Props) {
 function CabeceraListado({ titulo }: { titulo: string }) {
   const cliente = useQueryClient();
   const navegar = useNavigate();
+  const { data: sesion } = usarSesionAdmin();
   const [abierto, setAbierto] = useState(false);
   const [confirmandoSalir, setConfirmandoSalir] = useState(false);
 
@@ -42,12 +44,19 @@ function CabeceraListado({ titulo }: { titulo: string }) {
     navegar('/admin/entrar', { replace: true });
   }
 
+  const etiquetaRol =
+    sesion?.rol === 'admin_web'
+      ? copysAdmin.usuarios.rolAdminWeb
+      : sesion?.rol === 'propietario'
+        ? copysAdmin.usuarios.rolPropietario
+        : copysAdmin.armazon.modoAdmin;
+
   return (
     <div className="relative border-b border-admin-borde bg-white lg:hidden">
       <div className="flex items-center justify-between gap-3 px-3.5 py-2.5">
         <div className="flex min-w-0 flex-col leading-tight">
           <span className="truncate text-[0.62rem] font-semibold uppercase tracking-wide text-admin-acento">
-            {copysAdmin.armazon.modoAdmin}
+            {etiquetaRol}
           </span>
           <span className="truncate text-[1.05rem] font-bold text-admin-texto">{titulo}</span>
         </div>
@@ -71,11 +80,17 @@ function CabeceraListado({ titulo }: { titulo: string }) {
             className="fixed inset-0 z-30 cursor-default"
           />
           <div className="absolute right-3.5 top-[calc(100%+6px)] z-40 w-56 overflow-hidden rounded-xl border border-admin-borde bg-white shadow-lg">
+            {sesion?.nombre && (
+              <div className="px-4 py-3 leading-tight">
+                <p className="truncate text-[0.9rem] font-bold text-admin-texto">{sesion.nombre}</p>
+                <p className="text-[0.75rem] text-admin-texto-tenue">{etiquetaRol}</p>
+              </div>
+            )}
             <a
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2.5 px-4 py-3 text-[0.9rem] font-medium text-admin-texto-2"
+              className="flex items-center gap-2.5 border-t border-admin-borde-2 px-4 py-3 text-[0.9rem] font-medium text-admin-texto-2"
             >
               <ExternalLink className="h-4 w-4 text-admin-texto-tenue" aria-hidden />
               {copysAdmin.armazon.verLaWeb}
@@ -88,6 +103,16 @@ function CabeceraListado({ titulo }: { titulo: string }) {
               <User className="h-4 w-4 text-admin-texto-tenue" aria-hidden />
               {copysAdmin.armazon.miCuenta}
             </Link>
+            {sesion?.rol === 'admin_web' && (
+              <Link
+                to="/admin/usuarios"
+                onClick={() => setAbierto(false)}
+                className="flex items-center gap-2.5 border-t border-admin-borde-2 px-4 py-3 text-[0.9rem] font-medium text-admin-texto-2"
+              >
+                <Users className="h-4 w-4 text-admin-texto-tenue" aria-hidden />
+                {copysAdmin.armazon.navUsuarios}
+              </Link>
+            )}
             <button
               type="button"
               onClick={() => {

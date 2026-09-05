@@ -80,6 +80,29 @@ export type ProductoEntrada = {
   atributos?: number[];
 };
 
+export type UsuarioGestionado = {
+  id: number;
+  email: string;
+  nombre: string;
+  rol: 'admin_web' | 'propietario' | 'cliente';
+  activo: boolean;
+  creadoEn: string;
+};
+
+export type UsuarioEntrada = {
+  nombre: string;
+  rol: 'admin_web' | 'propietario' | 'cliente';
+  activo: boolean;
+  password?: string;
+};
+
+export type UsuarioNuevoEntrada = {
+  email: string;
+  nombre: string;
+  rol: 'admin_web' | 'propietario' | 'cliente';
+  password: string;
+};
+
 async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
   const res = await fetch(ruta, {
     credentials: 'include',
@@ -117,5 +140,15 @@ export const apiAdmin = {
     actualizar: (id: number, datos: ProductoEntrada) =>
       pedir<{ id: number; slug: string }>(`/api/admin/productos/${id}`, { method: 'PUT', body: JSON.stringify(datos) }),
     borrar: (id: number) => pedir<void>(`/api/admin/productos/${id}`, { method: 'DELETE' }),
+  },
+
+  usuarios: {
+    listar: () => pedir<UsuarioGestionado[]>('/api/admin/usuarios'),
+    obtener: (id: number) => pedir<UsuarioGestionado>(`/api/admin/usuarios/${id}`),
+    crear: (datos: UsuarioNuevoEntrada) =>
+      pedir<UsuarioGestionado>('/api/admin/usuarios', { method: 'POST', body: JSON.stringify(datos) }),
+    actualizar: (id: number, datos: UsuarioEntrada) =>
+      pedir<UsuarioGestionado>(`/api/admin/usuarios/${id}`, { method: 'PUT', body: JSON.stringify(datos) }),
+    borrar: (id: number) => pedir<void>(`/api/admin/usuarios/${id}`, { method: 'DELETE' }),
   },
 };
