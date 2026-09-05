@@ -41,7 +41,7 @@ export function Acceso() {
 
   return (
     <form onSubmit={enviar} className="flex flex-col gap-5">
-      <h1 className="text-[1.3rem] font-semibold text-admin-texto">{c.titulo}</h1>
+      <h1 className="font-cuerpo text-[1.3rem] font-semibold text-admin-texto">{c.titulo}</h1>
       <CampoTexto
         etiqueta={c.campoEmail}
         type="email"

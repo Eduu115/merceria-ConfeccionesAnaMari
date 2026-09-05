@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
@@ -18,7 +19,12 @@ export function Arreglos() {
       <section className="grid md:min-h-[420px] md:grid-cols-[1.1fr_0.9fr]">
         <div className="order-2 flex flex-col justify-center bg-crema px-5 py-10 md:order-1 md:px-10 lg:px-12">
           <div className="w-full max-w-2xl">
-            <p className="mb-3 text-sm text-tinta-apagada">Inicio · {copys.arreglos.migas}</p>
+            <p className="mb-3 text-sm text-tinta-apagada">
+              <Link to="/" className="hover:text-acento hover:underline">
+                Inicio
+              </Link>{' '}
+              · {copys.arreglos.migas}
+            </p>
             <h1 className="font-titular text-[2.4rem] font-semibold leading-[1.12] text-tinta md:text-[2.75rem]">
               {copys.arreglos.titular}
             </h1>

@@ -21,3 +21,8 @@ export type FamiliaAtributo = (typeof FAMILIAS_ATRIBUTO)[number];
 export function puedeAdministrarSitio(rol: RolUsuario): boolean {
   return rol === 'admin_web' || rol === 'propietario';
 }
+
+// Solo admin_web gestiona usuarios y roles; propietario solo administra productos.
+export function puedeGestionarUsuarios(rol: RolUsuario): boolean {
+  return rol === 'admin_web';
+}

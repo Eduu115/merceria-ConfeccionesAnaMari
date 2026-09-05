@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import { cx } from '../lib/cx';
 import { usarEsMovil } from '../hooks/usar-movil';
 
-export type Opcion = { valor: string; etiqueta: string };
+export type Opcion = { valor: string; etiqueta: string; nivel?: number };
 
 type Props = {
   rotulo: string;
@@ -93,6 +93,7 @@ export function Desplegable({
                     'flex min-h-10 w-full items-center justify-between px-3 text-left text-sm',
                     sel && 'bg-acento-fondo',
                   )}
+                  style={o.nivel ? { paddingLeft: `${12 + o.nivel * 16}px` } : undefined}
                   onClick={() => onCambiar(o.valor)}
                 >
                   <span className="flex items-center gap-2">
@@ -104,6 +105,7 @@ export function Desplegable({
                         )}
                       />
                     )}
+                    
                     {o.etiqueta}
                   </span>
                   {sel && !multiple && <span className="text-acento">✓</span>}
@@ -143,6 +145,7 @@ export function Desplegable({
                         'flex min-h-[46px] w-full items-center justify-between px-4 text-left',
                         sel && 'bg-acento-fondo',
                       )}
+                      style={o.nivel ? { paddingLeft: `${16 + o.nivel * 16}px` } : undefined}
                       onClick={() => onCambiar(o.valor)}
                     >
                       <span className="flex items-center gap-2">
@@ -154,6 +157,7 @@ export function Desplegable({
                             )}
                           />
                         )}
+                        
                         {o.etiqueta}
                       </span>
                       {sel && <span className="text-acento">✓</span>}
