@@ -4,7 +4,8 @@ import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
 import { Boton, BotonesContacto, BotonWhatsApp, EnlaceTexto } from '../componentes/Boton';
-import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
+import { ImagenDemo } from '../componentes/ImagenDemo';
+import { demoCategoria, demoEditorial } from '../lib/demo-imagenes';
 import { RejillaProductos } from '../componentes/TarjetaProducto';
 import { TablaHorario } from '../componentes/TablaHorario';
 import { Mapa } from '../componentes/Mapa';
@@ -36,9 +37,10 @@ export function Inicio() {
           </div>
         </div>
         <div className="order-1 min-h-[240px] md:order-2 md:min-h-[520px]">
-          <MarcadorSinFoto
-            variante="bloque"
-            etiqueta="Foto: máquina de coser / manos trabajando"
+          <ImagenDemo
+            src={demoEditorial.heroCoser}
+            alt="Máquina de coser en el taller"
+            loading="eager"
             className="h-60 min-h-[240px] md:h-full md:min-h-[520px]"
           />
         </div>
@@ -56,7 +58,11 @@ export function Inicio() {
                 to={c.tipo === 'merceria' ? '/catalogo/merceria' : `/catalogo?categoria=${c.slug}`}
                 className="block border border-borde bg-white"
               >
-                <MarcadorSinFoto variante="bloque" etiqueta="" className="aspect-[5/4] w-full" />
+                <ImagenDemo
+                  src={demoCategoria[c.slug] ?? demoCategoria['ropa-de-mujer']!}
+                  alt={c.nombre}
+                  className="aspect-[5/4] w-full"
+                />
                 <div className="p-3">
                   <h3 className="font-cuerpo text-[1.05rem] font-semibold text-tinta">{c.nombre}</h3>
                   <p className="mt-1 text-sm leading-snug text-tinta-apagada">{c.descripcion}</p>
@@ -69,9 +75,9 @@ export function Inicio() {
 
       <section className="grid md:grid-cols-[0.9fr_1.1fr]">
         <div className="hidden md:flex">
-          <MarcadorSinFoto
-            variante="macro"
-            etiqueta="Textura macro · cremallera / hilos"
+          <ImagenDemo
+            src={demoEditorial.macroHilos}
+            alt="Carretes de hilo de colores"
             className="min-h-[320px] flex-1"
           />
         </div>
@@ -138,10 +144,10 @@ export function Inicio() {
           </div>
         </div>
         <div className="order-1 p-5 md:order-2 md:p-8">
-          <MarcadorSinFoto
-            variante="bloque"
-            etiqueta="Foto: Ana y el equipo"
-            className="h-60 min-h-[240px] border border-dashed border-borde-fuerte md:h-[340px]"
+          <ImagenDemo
+            src={demoEditorial.equipo}
+            alt="Ana y el equipo en la tienda"
+            className="h-60 min-h-[240px] border border-borde md:h-[340px]"
           />
         </div>
       </section>
