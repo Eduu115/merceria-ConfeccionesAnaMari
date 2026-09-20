@@ -3,7 +3,8 @@ import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
 import { BotonesContacto } from '../componentes/Boton';
-import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
+import { ImagenDemo } from '../componentes/ImagenDemo';
+import { demoEditorial } from '../lib/demo-imagenes';
 import { enlaceWhatsApp, telHref } from '../lib/whatsapp';
 
 export function Arreglos() {
@@ -26,9 +27,10 @@ export function Arreglos() {
           </div>
         </div>
         <div className="order-1 md:order-2">
-          <MarcadorSinFoto
-            variante="bloque"
-            etiqueta="Foto del taller"
+          <ImagenDemo
+            src={demoEditorial.taller}
+            alt="Taller de arreglos de ropa"
+            loading="eager"
             className="h-52 min-h-[200px] md:h-full md:min-h-[420px]"
           />
         </div>

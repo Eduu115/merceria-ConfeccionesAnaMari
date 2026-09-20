@@ -4,7 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { JsonLd, usarSeo } from '../lib/seo';
-import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
+import { ImagenDemo } from '../componentes/ImagenDemo';
+import { demoImagenProducto } from '../lib/demo-imagenes';
 import { RejillaProductos } from '../componentes/TarjetaProducto';
 import { usarWhatsAppPagina } from '../hooks/whatsapp-pagina';
 import { cx } from '../lib/cx';
@@ -46,7 +47,7 @@ export function FichaProducto() {
         }}
       />
       <article className="envoltorio grid items-stretch gap-8 py-8 md:grid-cols-2">
-        <Galeria fotos={fotos} nombre={data.nombre} />
+        <Galeria fotos={fotos} nombre={data.nombre} slug={data.slug} tipo={data.tipo} />
         <div className="flex h-full flex-col">
           <nav className="mb-4 text-[0.95rem] text-tinta-apagada" aria-label="Migas de pan">
             <Link to="/" className="hover:underline">
@@ -187,13 +188,23 @@ export function FichaProducto() {
 function Galeria({
   fotos,
   nombre,
+  slug,
+  tipo,
 }: {
   fotos: { ruta: string; alt: string }[];
   nombre: string;
+  slug: string;
+  tipo: 'ropa' | 'merceria';
 }) {
   const [i, setI] = useState(0);
   if (fotos.length === 0) {
-    return <MarcadorSinFoto variante="ficha" />;
+    return (
+      <ImagenDemo
+        src={demoImagenProducto(slug, tipo)}
+        alt={nombre}
+        className="aspect-[3/4] w-full border border-borde"
+      />
+    );
   }
   const actual = fotos[i]!;
   return (
