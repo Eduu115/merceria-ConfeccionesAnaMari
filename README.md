@@ -10,16 +10,15 @@ El código de este repositorio corresponde al sitio de producción del negocio.
 
 ## Despliegue (homelab + Cloudflare Tunnel)
 
-Todo corre en el servidor doméstico con Docker Compose. No hace falta Netlify ni puertos abiertos en el router: Cloudflare Tunnel publica el front y la API.
+Todo corre en el servidor doméstico con Docker Compose (`db`, `api`, `web`). El túnel lo gestiona el `cloudflared` instalado en el host, compartido con otras apps; el compose no lleva su propio conector. La web (nginx) se publica solo en `127.0.0.1:3012` y reenvía `/api`, `/subidas` y `/socket.io` a la API.
 
 Al arrancar, la API aplica las migraciones de `apps/api/src/db/migraciones` y, si la base está vacía, la semilla.
 
 ### Primera vez
 
-1. Copia `.env.example` a `.env` y rellena al menos `DB_PASSWORD`, `SESION_SECRETO`, `TUNNEL_TOKEN`, `DOMINIO` y `CORS_ORIGINS` (`https://DOMINIO.com,https://www.DOMINIO.com`).
-2. En Cloudflare Zero Trust → Networks → Tunnels, crea hostnames públicos:
-   - `DOMINIO.com` y `www.DOMINIO.com` → servicio `http://web:80`
-   - (opcional) `api.DOMINIO.com` → `http://api:3001` — no hace falta: nginx ya proxifica `/api` en el dominio principal
+1. Copia `.env.example` a `.env` y rellena al menos `DB_PASSWORD`, `SESION_SECRETO`, `DOMINIO` y `CORS_ORIGINS` (`https://DOMINIO.com,https://www.DOMINIO.com`).
+2. En Cloudflare Zero Trust → Networks → Tunnels, en el túnel del host, las rutas públicas:
+   - `DOMINIO.com` y `www.DOMINIO.com` → `http://localhost:3012`
 3. Lanza el despliegue:
 
 ```bash
@@ -34,7 +33,7 @@ En el servidor, con el repo en `main` y el working tree limpio:
 ./scripts/desplegar.sh
 ```
 
-El script comprueba dependencias y `.env`, hace `git pull --ff-only`, reconstruye `db` / `api` / `web` / `cloudflared` y verifica `/health`.
+El script comprueba dependencias y `.env`, hace `git pull --ff-only`, reconstruye `db` / `api` / `web`, verifica la web, el proxy y la API en `127.0.0.1:3012` y luego el dominio público.
 
 Opciones útiles: `--sin-pull`, `--rama <nombre>`, `--forzar` (working tree sucio).
 

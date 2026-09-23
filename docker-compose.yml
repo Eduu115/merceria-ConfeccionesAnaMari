@@ -1,8 +1,9 @@
-# Homelab: sin puertos publicados. Cloudflare Tunnel enruta al front (nginx).
-# En el panel del túnel (Zero Trust → Networks → Tunnels → Public hostnames):
-#   DOMINIO.com / www.DOMINIO.com  →  http://web:80
-# (nginx hace proxy de /api, /subidas y /socket.io a http://api:3001)
-# Opcional: api.DOMINIO.com → http://api:3001
+# Producción en el homelab.
+# El túnel de Cloudflare lo gestiona el cloudflared instalado en el host (compartido
+# con otras apps), así que aquí NO hay contenedor cloudflared. La web se publica
+# solo en loopback y el túnel apunta a ella:
+#   confemerana.es / www.confemerana.es  →  http://localhost:3012
+# nginx (web) hace de proxy de /api, /subidas y /socket.io hacia la API.
 services:
   db:
     image: postgres:16
@@ -54,24 +55,21 @@ services:
       dockerfile: apps/web/Dockerfile
       target: produccion
       args:
-        # Vacío = misma origen (nginx hace de proxy a la API)
+        # Vacío = misma origen; nginx reenvía /api a la API.
         VITE_API_URL: ""
         VITE_SITE_URL: https://${DOMINIO}
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:${PUERTO_WEB:-3012}:80"
     depends_on:
       api:
         condition: service_healthy
-
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    restart: unless-stopped
-    # http2 evita fallos intermitentes de QUIC en algunos redes domésticas
-    command: tunnel --protocol http2 run
-    environment:
-      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
-    depends_on:
-      - api
-      - web
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
 
 volumes:
   pgdata:

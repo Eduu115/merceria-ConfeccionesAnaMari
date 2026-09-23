@@ -68,7 +68,7 @@ leer_env() {
   printf '%s' "$valor"
 }
 
-vars_obligatorias=(DB_PASSWORD TUNNEL_TOKEN DOMINIO CORS_ORIGINS SESION_SECRETO)
+vars_obligatorias=(DB_PASSWORD DOMINIO CORS_ORIGINS SESION_SECRETO)
 declare -A env_vals=()
 for v in "${vars_obligatorias[@]}"; do
   env_vals["$v"]="$(leer_env "$v")"
@@ -76,10 +76,17 @@ for v in "${vars_obligatorias[@]}"; do
 done
 
 DOMINIO="${env_vals[DOMINIO]}"
-TUNNEL_TOKEN="${env_vals[TUNNEL_TOKEN]}"
+PUERTO_WEB="$(leer_env PUERTO_WEB)"
+PUERTO_WEB="${PUERTO_WEB:-3012}"
 
 if [[ "$DOMINIO" == "DOMINIO.com" ]]; then
   fallar "DOMINIO sigue siendo el placeholder DOMINIO.com; pon el dominio real."
+fi
+
+comando_existe curl || fallar "Falta curl"
+
+if comando_existe systemctl && ! systemctl is-active --quiet cloudflared 2>/dev/null; then
+  aviso "El servicio cloudflared del host no está activo; el túnel no llegará a la web."
 fi
 
 rama_actual="$(git rev-parse --abbrev-ref HEAD)"
@@ -120,33 +127,38 @@ fi
 
 # --- Docker -------------------------------------------------------------------
 
-aviso "Construyendo y levantando servicios (db, api, web, cloudflared)…"
+aviso "Construyendo y levantando servicios (db, api, web)…"
 "${compose[@]}" up -d --build --remove-orphans
 ok "Contenedores en marcha"
 
-aviso "Esperando salud de la API…"
-intentos=30
-hasta_ok=0
-for i in $(seq 1 "$intentos"); do
-  if "${compose[@]}" exec -T api wget -qO- http://127.0.0.1:3001/health >/dev/null 2>&1; then
-    hasta_ok=1
-    break
-  fi
-  sleep 2
+local_url="http://127.0.0.1:${PUERTO_WEB}"
+
+esperar_200() {
+  local url="$1" intentos="$2"
+  for _ in $(seq 1 "$intentos"); do
+    [[ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$url")" == "200" ]] && return 0
+    sleep 2
+  done
+  return 1
+}
+
+aviso "Comprobando la web en ${local_url} (lo que ve el túnel)…"
+esperar_200 "${local_url}/" 45 || fallar "La web no responde en ${local_url}/. Revisa: docker compose logs web"
+esperar_200 "${local_url}/health" 45 || fallar "nginx no llega a la API. Revisa: docker compose logs web api"
+esperar_200 "${local_url}/api/inicio" 10 || fallar "/api/inicio falla. Revisa: docker compose logs api"
+ok "Web, proxy y API responden en local"
+
+aviso "Comprobando https://${DOMINIO} …"
+fallos=0
+for _ in $(seq 1 10); do
+  [[ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 8 "https://${DOMINIO}/health")" == "200" ]] || fallos=$((fallos + 1))
 done
-[[ "$hasta_ok" -eq 1 ]] || fallar "La API no respondió /health a tiempo. Revisa: docker compose logs api"
+if [[ "$fallos" -eq 0 ]]; then
+  ok "https://${DOMINIO} responde 10/10"
+else
+  aviso "https://${DOMINIO} falló ${fallos}/10. En local va bien, así que el problema está en el túnel:"
+  aviso "  - la ruta pública de ${DOMINIO} debe ser http://localhost:${PUERTO_WEB}"
+  aviso "  - el túnel debe tener un solo conector (el cloudflared del host)"
+fi
 
-ok "API sana"
 "${compose[@]}" ps
-
-cat <<EOF
-
-$(verde "Despliegue terminado.")
-  Sitio:  https://${DOMINIO}
-  API:    https://api.${DOMINIO}
-  Salud:  https://api.${DOMINIO}/health
-
-Recuerda en Cloudflare Tunnel:
-  ${DOMINIO} / www.${DOMINIO}  →  http://web:80
-  api.${DOMINIO}               →  http://api:3001
-EOF
