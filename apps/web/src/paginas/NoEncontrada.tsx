@@ -1,4 +1,5 @@
-import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
+import { ImagenDemo } from '../componentes/ImagenDemo';
+import { demoEditorial } from '../lib/demo-imagenes';
 import { Boton } from '../componentes/Boton';
 import { copys } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
@@ -36,9 +37,9 @@ export function NoEncontrada() {
         </div>
       </div>
       <div className="hidden md:block">
-        <MarcadorSinFoto
-          variante="bloque"
-          etiqueta="Foto del taller"
+        <ImagenDemo
+          src={demoEditorial.taller}
+          alt="Taller de arreglos de ropa"
           className="h-full min-h-[340px]"
         />
       </div>

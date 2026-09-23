@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import type { ProductoTarjeta } from '@anamari/compartido';
+
 import { urlApi } from '../lib/api';
 import { MarcadorSinFoto } from './MarcadorSinFoto';
+import { ImagenDemo } from './ImagenDemo';
+import { demoImagenProducto } from '../lib/demo-imagenes';
 import { copys } from '../lib/copys';
 import { cx } from '../lib/cx';
 
@@ -19,7 +22,11 @@ export function TarjetaProducto({ producto }: { producto: ProductoTarjeta }) {
             className="h-full w-full object-cover"
           />
         ) : (
-          <MarcadorSinFoto etiqueta="" className="h-full border-0" />
+          <ImagenDemo
+            src={demoImagenProducto(producto.slug, producto.tipo)}
+            alt={producto.nombre}
+            className="h-full"
+          />
         )}
         {producto.agotado && (
           <span className="absolute left-0 top-0 bg-boton px-2 py-1 text-xs font-semibold text-white">
