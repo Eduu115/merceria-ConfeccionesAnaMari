@@ -18,12 +18,16 @@ export function LayoutPublico() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const origen = typeof window !== 'undefined' ? window.location.origin : '';
   const localBusiness =
     ajustes && horario
       ? {
           '@context': 'https://schema.org',
           '@type': 'LocalBusiness',
           name: 'Confecciones Ana Mari',
+          alternateName: 'Mercería Ana Mari',
+          image: origen ? `${origen}/marca/logo-fondo.png` : '/marca/logo-fondo.png',
+          logo: origen ? `${origen}/marca/logo.png` : '/marca/logo.png',
           telephone: ajustes.telefono,
           email: ajustes.email,
           address: {

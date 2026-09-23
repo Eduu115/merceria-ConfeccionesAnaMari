@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { copys } from '../lib/copys';
 import { cx } from '../lib/cx';
 
@@ -32,14 +31,5 @@ export function MarcadorSinFoto({ variante = 'tarjeta', etiqueta, className }: P
       )}
       {ficha && <p className="mt-1 max-w-[12rem] px-3 text-xs">{copys.sinFotoFicha}</p>}
     </div>
-  );
-}
-
-export function Logo({ className }: { className?: string }) {
-  return (
-    <Link to="/" className={cx('block leading-none text-tinta', className)} aria-label="Inicio">
-      <span className="block font-titular text-[1.4rem] font-semibold leading-none">Confecciones</span>
-      <span className="block font-titular text-[1.75rem] font-semibold leading-none">Ana Mari</span>
-    </Link>
   );
 }
