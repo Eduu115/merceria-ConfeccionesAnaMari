@@ -3,8 +3,7 @@ import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
 import { CabeceraDePagina } from '../componentes/CabeceraDePagina';
-import { ImagenDemo } from '../componentes/ImagenDemo';
-import { demoEditorial, demoLocal } from '../lib/demo-imagenes';
+import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
 import { Boton, BotonTelefono, BotonWhatsApp } from '../componentes/Boton';
 import { enlaceWhatsApp, telHref } from '../lib/whatsapp';
 
@@ -30,10 +29,10 @@ export function Nosotros() {
           </div>
         </div>
         <div className="order-1 md:order-2">
-          <ImagenDemo
-            src={demoEditorial.equipo}
-            alt="Ana y el equipo en la tienda"
-            className="min-h-[230px] border border-borde md:min-h-[280px]"
+          <MarcadorSinFoto
+            variante="bloque"
+            etiqueta="Foto: Ana y el equipo"
+            className="min-h-[230px] border border-dashed border-borde-fuerte md:min-h-[280px]"
           />
         </div>
       </section>
@@ -41,13 +40,9 @@ export function Nosotros() {
       <section className="envoltorio pb-12">
         <h2 className="mb-4 font-titular text-[2.15rem] text-tinta">{copys.nosotros.local}</h2>
         <div className="flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-4 md:overflow-visible">
-          {copys.nosotros.pies.map((pie, idx) => (
+          {copys.nosotros.pies.map((pie) => (
             <figure key={pie} className="w-[130px] shrink-0 md:w-auto">
-              <ImagenDemo
-                src={demoLocal[idx]!}
-                alt={pie}
-                className="aspect-[4/3] min-h-[130px] border border-borde"
-              />
+              <MarcadorSinFoto variante="bloque" className="aspect-[4/3] min-h-[130px]" etiqueta="" />
               <figcaption className="mt-2 font-cuerpo text-sm text-tinta-apagada">{pie}</figcaption>
             </figure>
           ))}

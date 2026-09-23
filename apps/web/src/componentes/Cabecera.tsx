@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Menu, Mail, Phone, X } from 'lucide-react';
+import { ChevronDown, Menu, Mail, Phone, X } from 'lucide-react';
 import { Logo } from './MarcadorSinFoto';
 import { IconoWhatsApp } from './IconoWhatsApp';
 import { BotonTema } from './BotonTema';
@@ -31,19 +31,23 @@ export function Cabecera() {
   const { origen, nombre } = usarWhatsAppPagina();
   const [menu, setMenu] = useState(false);
   const [cat, setCat] = useState(false);
+  const [catMovil, setCatMovil] = useState(false);
   const loc = useLocation();
   const catRef = useRef<HTMLDivElement>(null);
   const catId = useId();
+  const catMovilId = useId();
 
   useEffect(() => {
     setMenu(false);
     setCat(false);
+    setCatMovil(false);
   }, [loc.pathname, loc.search]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setCat(false);
+        setCatMovil(false);
         setMenu(false);
       }
     };
@@ -158,21 +162,54 @@ export function Cabecera() {
                 {copys.menu.inicio}
               </NavLink>
             </li>
-            {ROPA.map((l) => (
-              <li key={l.to}>
-                <NavLink to={l.to} className="block min-h-11 py-2" onClick={() => setMenu(false)}>
-                  {l.label}
-                </NavLink>
-              </li>
-            ))}
             <li>
-              <NavLink
-                to="/catalogo/merceria"
-                className="block min-h-11 py-2"
-                onClick={() => setMenu(false)}
+              <button
+                type="button"
+                className="flex min-h-11 w-full items-center justify-between py-2 text-left text-tinta"
+                aria-expanded={catMovil}
+                aria-controls={catMovilId}
+                onClick={() => setCatMovil((v) => !v)}
               >
-                Mercería y costura
-              </NavLink>
+                {copys.menu.catalogo}
+                <ChevronDown
+                  className={cx('h-5 w-5 transition-transform', catMovil && 'rotate-180')}
+                  aria-hidden
+                />
+              </button>
+              {catMovil && (
+                <ul id={catMovilId} className="mb-1 space-y-1 pl-4">
+                  <li>
+                    <NavLink
+                      to="/catalogo"
+                      end
+                      className="block min-h-11 py-2 text-sm"
+                      onClick={() => setMenu(false)}
+                    >
+                      Ver todo el catálogo
+                    </NavLink>
+                  </li>
+                  {ROPA.map((l) => (
+                    <li key={l.to}>
+                      <NavLink
+                        to={l.to}
+                        className="block min-h-11 py-2 text-sm"
+                        onClick={() => setMenu(false)}
+                      >
+                        {l.label}
+                      </NavLink>
+                    </li>
+                  ))}
+                  <li>
+                    <NavLink
+                      to="/catalogo/merceria"
+                      className="block min-h-11 py-2 text-sm"
+                      onClick={() => setMenu(false)}
+                    >
+                      Mercería y costura
+                    </NavLink>
+                  </li>
+                </ul>
+              )}
             </li>
             {ENLACES.filter((e) => e.to !== '/').map((e) => (
               <li key={e.to}>
