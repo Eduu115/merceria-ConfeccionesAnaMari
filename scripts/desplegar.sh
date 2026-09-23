@@ -52,22 +52,34 @@ docker compose version >/dev/null 2>&1 || fallar "Falta el plugin 'docker compos
 
 [[ -f "$raiz/.env" ]] || fallar "No hay .env en la raíz. Copia .env.example y rellénalo."
 
-# shellcheck disable=SC1091
-set -a
-# shellcheck source=/dev/null
-source "$raiz/.env"
-set +a
+# Lee KEY=valor del .env sin ejecutarlo (evita fallos con espacios, p. ej. ADMIN_NOMBRE=Ana Mari).
+leer_env() {
+  local clave="$1" linea valor
+  linea="$(grep -E "^[[:space:]]*${clave}=" "$raiz/.env" | tail -n1 || true)"
+  [[ -n "$linea" ]] || { printf ''; return; }
+  valor="${linea#*=}"
+  valor="${valor#"${valor%%[![:space:]]*}"}"
+  valor="${valor%"${valor##*[![:space:]]}"}"
+  if [[ "$valor" == \"*\" ]]; then
+    valor="${valor:1:${#valor}-2}"
+  elif [[ "$valor" == \'*\' ]]; then
+    valor="${valor:1:${#valor}-2}"
+  fi
+  printf '%s' "$valor"
+}
 
 vars_obligatorias=(DB_PASSWORD TUNNEL_TOKEN DOMINIO CORS_ORIGINS SESION_SECRETO)
+declare -A env_vals=()
 for v in "${vars_obligatorias[@]}"; do
-  [[ -n "${!v:-}" ]] || fallar "Falta la variable $v en .env"
+  env_vals["$v"]="$(leer_env "$v")"
+  [[ -n "${env_vals[$v]}" ]] || fallar "Falta la variable $v en .env"
 done
+
+DOMINIO="${env_vals[DOMINIO]}"
+TUNNEL_TOKEN="${env_vals[TUNNEL_TOKEN]}"
 
 if [[ "$DOMINIO" == "DOMINIO.com" ]]; then
   fallar "DOMINIO sigue siendo el placeholder DOMINIO.com; pon el dominio real."
-fi
-if [[ "$TUNNEL_TOKEN" == "" ]]; then
-  fallar "TUNNEL_TOKEN vacío."
 fi
 
 rama_actual="$(git rev-parse --abbrev-ref HEAD)"
