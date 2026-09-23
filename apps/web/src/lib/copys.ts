@@ -84,7 +84,7 @@ export const copys = {
   },
   faq: {
     titulo: 'Preguntas frecuentes',
-    grupos: { tienda: 'La tienda', arreglos: 'Arreglos', comprar: 'Comprar' },
+    grupos: { tienda: 'La tienda', arreglos: 'Arreglos', comprar: 'Compra y envíos' },
     cierre: '¿No encuentras tu respuesta?',
   },
   catalogo: {
