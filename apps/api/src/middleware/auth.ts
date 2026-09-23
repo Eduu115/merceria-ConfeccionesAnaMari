@@ -1,6 +1,10 @@
 import type { Request, Response, NextFunction } from 'express';
 import { eq } from 'drizzle-orm';
-import { puedeAdministrarSitio, puedeGestionarUsuarios } from '@anamari/compartido';
+import {
+  puedeAdministrarSitio,
+  puedeGestionarFotos,
+  puedeGestionarUsuarios,
+} from '@anamari/compartido';
 import { db } from '../db/cliente.js';
 import { sesiones, usuarios } from '../db/esquema.js';
 import { config, esProduccion } from '../config.js';
@@ -111,6 +115,15 @@ export async function exigirSesion(req: Request, res: Response, next: NextFuncti
 export function exigirGestionUsuarios(req: Request, res: Response, next: NextFunction) {
   if (!req.usuario || !puedeGestionarUsuarios(req.usuario.rol)) {
     res.status(403).json({ error: 'No tienes acceso a esta área.' });
+    return;
+  }
+  next();
+}
+
+/** Solo la propietaria puede subir o borrar fotos del catálogo. */
+export function exigirPropietaria(req: Request, res: Response, next: NextFunction) {
+  if (!req.usuario || !puedeGestionarFotos(req.usuario.rol)) {
+    res.status(403).json({ error: 'Solo la propietaria puede gestionar las fotos.' });
     return;
   }
   next();

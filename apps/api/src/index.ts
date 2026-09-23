@@ -64,7 +64,19 @@ async function arrancar() {
     }),
   );
   app.use(express.json({ limit: '1mb' }));
-  app.use('/subidas', express.static(config.rutaSubidas, { maxAge: '7d' }));
+  app.use(
+    '/subidas',
+    express.static(config.rutaSubidas, {
+      maxAge: '7d',
+      index: false,
+      fallthrough: false,
+      dotfiles: 'deny',
+      setHeaders(res) {
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
+      },
+    }),
+  );
 
   app.get('/sitemap.xml', async (_req, res) => {
     const { sql: pg } = await import('./db/cliente.js');

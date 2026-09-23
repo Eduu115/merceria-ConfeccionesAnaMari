@@ -26,3 +26,8 @@ export function puedeAdministrarSitio(rol: RolUsuario): boolean {
 export function puedeGestionarUsuarios(rol: RolUsuario): boolean {
   return rol === 'admin_web';
 }
+
+/** Solo la propietaria puede subir o borrar fotos de productos. */
+export function puedeGestionarFotos(rol: RolUsuario): boolean {
+  return rol === 'propietario';
+}
