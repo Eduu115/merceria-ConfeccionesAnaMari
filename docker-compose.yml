@@ -1,4 +1,7 @@
-# Homelab: sin puertos publicados. El túnel de Cloudflare entra a http://api:3001.
+# Homelab: sin puertos publicados. Cloudflare Tunnel enruta al web y a la API.
+# En el panel del túnel (Zero Trust → Networks → Tunnels → Public hostnames):
+#   DOMINIO.com / www.DOMINIO.com  →  http://web:80
+#   api.DOMINIO.com                →  http://api:3001
 services:
   db:
     image: postgres:16
@@ -27,7 +30,7 @@ services:
       PORT: "3001"
       DATABASE_URL: postgres://anamari:${DB_PASSWORD}@db:5432/anamari
       CORS_ORIGINS: ${CORS_ORIGINS}
-      ORIGEN_PUBLICO: https://DOMINIO.com
+      ORIGEN_PUBLICO: https://${DOMINIO}
       SERVIR_ESTATICOS: "false"
       RUTA_SUBIDAS: /app/datos/subidas
       RUTA_COPIAS: /app/datos/copias
@@ -36,6 +39,24 @@ services:
       - copias:/app/datos/copias
     depends_on:
       db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3001/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 6
+      start_period: 40s
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: produccion
+      args:
+        VITE_API_URL: https://api.${DOMINIO}
+    restart: unless-stopped
+    depends_on:
+      api:
         condition: service_healthy
 
   cloudflared:
@@ -46,6 +67,7 @@ services:
       TUNNEL_TOKEN: ${TUNNEL_TOKEN}
     depends_on:
       - api
+      - web
 
 volumes:
   pgdata:

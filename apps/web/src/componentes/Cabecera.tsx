@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, Mail, Phone, X } from 'lucide-react';
-import { Logo } from './MarcadorSinFoto';
+import { Logo } from './LogoMarca';
 import { IconoWhatsApp } from './IconoWhatsApp';
 import { BotonTema } from './BotonTema';
 import { usarAjustes } from '../hooks/usar-ajustes';

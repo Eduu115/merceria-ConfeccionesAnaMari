@@ -6,6 +6,7 @@ import { copysAdmin } from '../lib/copys-admin';
 import { apiAdmin } from '../lib/api-admin';
 import { CampoTexto } from '../componentes/CampoTexto';
 import { BotonAdmin } from '../componentes/BotonAdmin';
+import { LogoMarca } from '../../componentes/LogoMarca';
 
 export function Acceso() {
   usarRobotsNoindex();
@@ -41,6 +42,9 @@ export function Acceso() {
 
   return (
     <form onSubmit={enviar} className="flex flex-col gap-5">
+      <div className="flex justify-center">
+        <LogoMarca tamano="auth" />
+      </div>
       <h1 className="font-cuerpo text-[1.3rem] font-semibold text-admin-texto">{c.titulo}</h1>
       <CampoTexto
         etiqueta={c.campoEmail}
