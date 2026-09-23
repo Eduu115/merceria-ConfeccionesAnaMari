@@ -65,7 +65,8 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    command: tunnel run
+    # http2 evita fallos intermitentes de QUIC en algunos redes domésticas
+    command: tunnel --protocol http2 run
     environment:
       TUNNEL_TOKEN: ${TUNNEL_TOKEN}
     depends_on:
