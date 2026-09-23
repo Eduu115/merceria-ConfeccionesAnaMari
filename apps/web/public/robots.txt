@@ -2,5 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-# El sitemap lo genera la API
-Sitemap: https://api.confemerana.es/sitemap.xml
+Sitemap: https://confemerana.es/sitemap.xml

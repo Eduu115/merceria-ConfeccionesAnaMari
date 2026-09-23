@@ -19,7 +19,7 @@ Al arrancar, la API aplica las migraciones de `apps/api/src/db/migraciones` y, s
 1. Copia `.env.example` a `.env` y rellena al menos `DB_PASSWORD`, `SESION_SECRETO`, `TUNNEL_TOKEN`, `DOMINIO` y `CORS_ORIGINS` (`https://DOMINIO.com,https://www.DOMINIO.com`).
 2. En Cloudflare Zero Trust → Networks → Tunnels, crea hostnames públicos:
    - `DOMINIO.com` y `www.DOMINIO.com` → servicio `http://web:80`
-   - `api.DOMINIO.com` → servicio `http://api:3001`
+   - (opcional) `api.DOMINIO.com` → `http://api:3001` — no hace falta: nginx ya proxifica `/api` en el dominio principal
 3. Lanza el despliegue:
 
 ```bash
