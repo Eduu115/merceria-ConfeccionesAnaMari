@@ -1,7 +1,8 @@
-# Homelab: sin puertos publicados. Cloudflare Tunnel enruta al web y a la API.
+# Homelab: sin puertos publicados. Cloudflare Tunnel enruta al front (nginx).
 # En el panel del túnel (Zero Trust → Networks → Tunnels → Public hostnames):
 #   DOMINIO.com / www.DOMINIO.com  →  http://web:80
-#   api.DOMINIO.com                →  http://api:3001
+# (nginx hace proxy de /api, /subidas y /socket.io a http://api:3001)
+# Opcional: api.DOMINIO.com → http://api:3001
 services:
   db:
     image: postgres:16
@@ -53,7 +54,8 @@ services:
       dockerfile: apps/web/Dockerfile
       target: produccion
       args:
-        VITE_API_URL: https://api.${DOMINIO}
+        # Vacío = misma origen (nginx hace de proxy a la API)
+        VITE_API_URL: ""
         VITE_SITE_URL: https://${DOMINIO}
     restart: unless-stopped
     depends_on:
