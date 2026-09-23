@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import type { ProductoTarjeta } from '@anamari/compartido';
 
 import { urlApi } from '../lib/api';
-import { MarcadorSinFoto } from './MarcadorSinFoto';
 import { ImagenDemo } from './ImagenDemo';
 import { demoImagenProducto } from '../lib/demo-imagenes';
 import { copys } from '../lib/copys';
