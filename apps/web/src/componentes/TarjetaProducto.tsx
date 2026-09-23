@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
 import type { ProductoTarjeta } from '@anamari/compartido';
+
+import { urlApi } from '../lib/api';
+import { MarcadorSinFoto } from './MarcadorSinFoto';
 import { ImagenDemo } from './ImagenDemo';
 import { demoImagenProducto } from '../lib/demo-imagenes';
 import { copys } from '../lib/copys';
@@ -11,7 +14,7 @@ export function TarjetaProducto({ producto }: { producto: ProductoTarjeta }) {
       <div className="relative aspect-[3/4] overflow-hidden border border-borde">
         {producto.imagen ? (
           <img
-            src={producto.imagen.ruta}
+            src={urlApi(producto.imagen.ruta)}
             alt={producto.imagen.alt}
             width={producto.imagen.ancho ?? 600}
             height={producto.imagen.alto ?? 800}

@@ -5,7 +5,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cron from 'node-cron';
-import { config, esProduccion } from './config.js';
+import { config, origenCorsPermitido } from './config.js';
 import { registro } from './registro.js';
 import { migrar } from './db/migrar.js';
 import { sembrar } from './db/semilla.js';
@@ -55,11 +55,18 @@ async function arrancar() {
     helmet({
       contentSecurityPolicy: false,
       crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
     }),
   );
   app.use(
     cors({
-      origin: esProduccion ? config.origenPublico : true,
+      origin(origin, callback) {
+        if (origenCorsPermitido(origin)) {
+          callback(null, true);
+          return;
+        }
+        callback(null, false);
+      },
       credentials: true,
     }),
   );
@@ -73,10 +80,20 @@ async function arrancar() {
       dotfiles: 'deny',
       setHeaders(res) {
         res.setHeader('X-Content-Type-Options', 'nosniff');
-        res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
+        res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
       },
     }),
   );
+
+  app.get('/health', async (_req, res) => {
+    try {
+      const { sql: pg } = await import('./db/cliente.js');
+      await pg`SELECT 1`;
+      res.status(200).json({ ok: true });
+    } catch {
+      res.status(503).json({ ok: false });
+    }
+  });
 
   app.get('/sitemap.xml', async (_req, res) => {
     const { sql: pg } = await import('./db/cliente.js');
@@ -137,7 +154,7 @@ ${urls.map((u) => `  <url><loc>${u}</loc></url>`).join('\n')}
     copiaSeguridad().catch((err) => registro.error({ err }, 'Copia de seguridad'));
   });
 
-  server.listen(config.puerto, () => {
+  server.listen(config.puerto, '0.0.0.0', () => {
     registro.info({ puerto: config.puerto }, 'API en marcha');
   });
 }

@@ -11,8 +11,17 @@ import type {
   ServicioPublico,
 } from '@anamari/compartido';
 
+/** Origen de la API. Vacío = misma origen (proxy de Vite en local). */
+export const API_URL = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
+
+export function urlApi(ruta: string): string {
+  if (!ruta || /^https?:\/\//i.test(ruta)) return ruta;
+  const path = ruta.startsWith('/') ? ruta : `/${ruta}`;
+  return `${API_URL}${path}`;
+}
+
 async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(ruta, {
+  const res = await fetch(urlApi(ruta), {
     ...init,
     headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
   });

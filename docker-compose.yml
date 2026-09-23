@@ -1,18 +1,17 @@
+# Homelab: sin puertos publicados. El túnel de Cloudflare entra a http://api:3001.
 services:
-  postgres:
-    image: postgres:16-alpine
+  db:
+    image: postgres:16
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-anamari}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-anamari}
-      POSTGRES_DB: ${POSTGRES_DB:-anamari}
-    ports:
-      - "5434:5432"
+      POSTGRES_USER: anamari
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: anamari
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-anamari} -d ${POSTGRES_DB:-anamari}"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U anamari -d anamari"]
+      interval: 10s
       timeout: 5s
       retries: 10
 
@@ -20,42 +19,35 @@ services:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
-      target: desarrollo
+      target: produccion
     restart: unless-stopped
     env_file: .env
     environment:
-      DATABASE_URL: postgres://${POSTGRES_USER:-anamari}:${POSTGRES_PASSWORD:-anamari}@postgres:5432/${POSTGRES_DB:-anamari}
-      ORIGEN_PUBLICO: http://localhost:5173
-      PUERTO: "3001"
-      RUTA_SUBIDAS: /app/apps/api/datos/subidas
-      RUTA_COPIAS: /app/apps/api/datos/copias
+      NODO_ENTORNO: produccion
+      PORT: "3001"
+      DATABASE_URL: postgres://anamari:${DB_PASSWORD}@db:5432/anamari
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      ORIGEN_PUBLICO: https://DOMINIO.com
+      SERVIR_ESTATICOS: "false"
+      RUTA_SUBIDAS: /app/datos/subidas
+      RUTA_COPIAS: /app/datos/copias
     volumes:
-      - ./apps/api:/app/apps/api
-      - ./paquetes/compartido:/app/paquetes/compartido
-      - subidas:/app/apps/api/datos/subidas
-    ports:
-      - "3010:3001"
+      - subidas:/app/datos/subidas
+      - copias:/app/datos/copias
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
 
-  web:
-    build:
-      context: .
-      dockerfile: apps/web/Dockerfile
-      target: desarrollo
+  cloudflared:
+    image: cloudflare/cloudflared:latest
     restart: unless-stopped
+    command: tunnel run
     environment:
-      API_INTERNO: http://api:3001
-      CHOKIDAR_USEPOLLING: "true"
-    volumes:
-      - ./apps/web:/app/apps/web
-      - ./paquetes/compartido:/app/paquetes/compartido
-    ports:
-      - "5173:5173"
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
     depends_on:
       - api
 
 volumes:
   pgdata:
   subidas:
+  copias:

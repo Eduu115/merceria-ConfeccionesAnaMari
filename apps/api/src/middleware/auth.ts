@@ -31,22 +31,23 @@ export function ponerCookieSesion(res: Response, id: string): void {
     `${NOMBRE_COOKIE}=${id}`,
     'HttpOnly',
     'Path=/',
-    'SameSite=Lax',
     `Max-Age=${maxAge}`,
   ];
-  if (esProduccion) partes.push('Secure');
+  if (esProduccion) {
+    partes.push('Secure', 'SameSite=None');
+  } else {
+    partes.push('SameSite=Lax');
+  }
   res.setHeader('Set-Cookie', partes.join('; '));
 }
 
 export function borrarCookieSesion(res: Response): void {
-  const partes = [
-    `${NOMBRE_COOKIE}=`,
-    'HttpOnly',
-    'Path=/',
-    'SameSite=Lax',
-    'Max-Age=0',
-  ];
-  if (esProduccion) partes.push('Secure');
+  const partes = [`${NOMBRE_COOKIE}=`, 'HttpOnly', 'Path=/', 'Max-Age=0'];
+  if (esProduccion) {
+    partes.push('Secure', 'SameSite=None');
+  } else {
+    partes.push('SameSite=Lax');
+  }
   res.setHeader('Set-Cookie', partes.join('; '));
 }
 
