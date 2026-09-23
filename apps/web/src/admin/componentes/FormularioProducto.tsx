@@ -10,6 +10,8 @@ import { CampoTexto } from './CampoTexto';
 import { BotonAdmin } from './BotonAdmin';
 import { ToggleAdmin } from './ToggleAdmin';
 import { ConfirmarAdmin } from './ConfirmarAdmin';
+import { SelectorColor } from './SelectorColor';
+import { textoColoresProducto, type ValorColor } from '../lib/colores';
 
 type Props = { modo: 'crear' } | { modo: 'editar'; productoId: number };
 
@@ -35,7 +37,9 @@ export function FormularioProducto(props: Props) {
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
   const [composicion, setComposicion] = useState('');
-  const [colores, setColores] = useState('');
+  const [colorPrimario, setColorPrimario] = useState<ValorColor>(null);
+  const [colorSecundario, setColorSecundario] = useState<ValorColor>(null);
+  const [colorTerciario, setColorTerciario] = useState<ValorColor>(null);
   const [caracteristica, setCaracteristica] = useState('');
   const [tallas, setTallas] = useState<{ talla: string; disponible: boolean }[]>([]);
   const [atributosSel, setAtributosSel] = useState<number[]>([]);
@@ -58,7 +62,9 @@ export function FormularioProducto(props: Props) {
       setDescripcion(d.descripcion ?? '');
       setPrecio(d.precio_centimos != null ? (d.precio_centimos / 100).toFixed(2) : '');
       setComposicion(d.composicion ?? '');
-      setColores(d.colores ?? '');
+      setColorPrimario(d.color_primario);
+      setColorSecundario(d.color_secundario);
+      setColorTerciario(d.color_terciario);
       setCaracteristica(d.caracteristica ?? '');
       setTallas(d.tallas);
       setAtributosSel(d.atributos);
@@ -73,16 +79,16 @@ export function FormularioProducto(props: Props) {
     queryKey: ['admin', 'categorias', tipo],
     queryFn: () => apiAdmin.categorias(tipo),
   });
-  const atributosColor = useQuery({
-    queryKey: ['admin', 'atributos', 'color'],
-    queryFn: () => apiAdmin.atributos('color'),
-    enabled: tipo === 'merceria',
-  });
   const atributosTipoMerceria = useQuery({
     queryKey: ['admin', 'atributos', 'tipo_merceria'],
     queryFn: () => apiAdmin.atributos('tipo_merceria'),
     enabled: tipo === 'merceria',
   });
+
+  const idsTipoMerceria = new Set(atributosTipoMerceria.data?.map((a) => a.id) ?? []);
+  const atributosMerceria = atributosSel.filter((id) =>
+    atributosTipoMerceria.isSuccess ? idsTipoMerceria.has(id) : true,
+  );
 
   useEffect(() => {
     if (tipo === 'merceria' && !categoriaId && categorias.data?.length === 1) {
@@ -133,14 +139,17 @@ export function FormularioProducto(props: Props) {
       categoria_id: Number(categoriaId),
       descripcion: descripcion || null,
       composicion: composicion || null,
-      colores: colores || null,
+      colores: textoColoresProducto(colorPrimario, colorSecundario, colorTerciario),
+      color_primario: colorPrimario,
+      color_secundario: colorSecundario,
+      color_terciario: colorTerciario,
       caracteristica: caracteristica || null,
       precio_centimos: precio ? Math.round(Number(precio) * 100) : null,
       visible,
       agotado,
       destacado,
       tallas,
-      atributos: atributosSel,
+      atributos: tipo === 'merceria' ? atributosMerceria : [],
     };
     try {
       if (productoId) {
@@ -270,12 +279,21 @@ export function FormularioProducto(props: Props) {
             />
             <CampoTexto etiqueta={c.campoCaracteristica} value={caracteristica} onChange={(e) => setCaracteristica(e.target.value)} />
             {tipo === 'ropa' && (
-              <>
-                <CampoTexto etiqueta={c.campoComposicion} value={composicion} onChange={(e) => setComposicion(e.target.value)} />
-                <CampoTexto etiqueta={c.campoColores} value={colores} onChange={(e) => setColores(e.target.value)} />
-              </>
+              <CampoTexto etiqueta={c.campoComposicion} value={composicion} onChange={(e) => setComposicion(e.target.value)} />
             )}
           </div>
+
+          <section className="flex flex-col gap-3">
+            <div>
+              <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionColores}</h2>
+              <p className="mt-0.5 text-[0.8rem] text-admin-texto-tenue">{c.coloresAyuda}</p>
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              <SelectorColor etiqueta={c.colorPrimario} valor={colorPrimario} onChange={setColorPrimario} />
+              <SelectorColor etiqueta={c.colorSecundario} valor={colorSecundario} onChange={setColorSecundario} />
+              <SelectorColor etiqueta={c.colorTerciario} valor={colorTerciario} onChange={setColorTerciario} />
+            </div>
+          </section>
         </div>
 
         <div className="flex flex-col gap-7 lg:order-2">
@@ -383,7 +401,7 @@ export function FormularioProducto(props: Props) {
               <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionTipoMerceria}</h2>
               <div className="flex flex-col divide-y divide-admin-borde-2 rounded-md border border-admin-borde-campo bg-white">
                 {atributosTipoMerceria.data?.map((a) => {
-                  const activo = atributosSel.includes(a.id);
+                  const activo = atributosMerceria.includes(a.id);
                   return (
                     <label
                       key={a.id}
@@ -398,34 +416,6 @@ export function FormularioProducto(props: Props) {
                       />
                       {a.nombre}
                     </label>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-
-          {tipo === 'merceria' && (
-            <section className="flex flex-col gap-2">
-              <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionAtributos}</h2>
-              <div className="flex flex-wrap gap-2">
-                {atributosColor.data?.map((a) => {
-                  const activo = atributosSel.includes(a.id);
-                  return (
-                    <button
-                      key={a.id}
-                      type="button"
-                      onClick={() => alternarAtributo(a.id)}
-                      className={`flex min-h-10 items-center gap-2 rounded-md border px-3 text-[0.85rem] font-medium transition-colors ${
-                        activo
-                          ? 'border-admin-acento bg-admin-acento-fondo text-admin-acento'
-                          : 'border-admin-borde-campo bg-white text-admin-texto-2'
-                      }`}
-                    >
-                      {a.hex && (
-                        <span className="h-3.5 w-3.5 rounded-full border border-admin-borde" style={{ background: a.hex }} />
-                      )}
-                      {a.nombre}
-                    </button>
                   );
                 })}
               </div>

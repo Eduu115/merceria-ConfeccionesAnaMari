@@ -54,6 +54,9 @@ export type ProductoDetalle = {
   tipo: 'ropa' | 'merceria';
   composicion: string | null;
   colores: string | null;
+  color_primario: string | null;
+  color_secundario: string | null;
+  color_terciario: string | null;
   caracteristica: string | null;
   agotado: boolean;
   destacado: boolean;
@@ -71,6 +74,9 @@ export type ProductoEntrada = {
   descripcion?: string | null;
   composicion?: string | null;
   colores?: string | null;
+  color_primario?: string | null;
+  color_secundario?: string | null;
+  color_terciario?: string | null;
   caracteristica?: string | null;
   precio_centimos?: number | null;
   agotado?: boolean;

@@ -46,6 +46,16 @@ async function slugUnico(nombre: string, ignorarId?: number): Promise<string> {
   }
 }
 
+const valorColor = z
+  .union([
+    z.literal('multicolor'),
+    z.literal('transparente'),
+    z.string().regex(/^#[0-9A-Fa-f]{6}$/),
+    z.null(),
+  ])
+  .optional()
+  .nullable();
+
 const esquemaProducto = z.object({
   nombre: z.string().trim().min(1),
   tipo: z.enum(['ropa', 'merceria']),
@@ -53,6 +63,9 @@ const esquemaProducto = z.object({
   descripcion: z.string().trim().optional().nullable(),
   composicion: z.string().trim().optional().nullable(),
   colores: z.string().trim().optional().nullable(),
+  color_primario: valorColor,
+  color_secundario: valorColor,
+  color_terciario: valorColor,
   caracteristica: z.string().trim().optional().nullable(),
   precio_centimos: z.number().int().min(0).optional().nullable(),
   agotado: z.boolean().optional(),
@@ -148,6 +161,9 @@ admin.get('/productos/:id', async (req, res) => {
     tipo: fila.productos.tipo,
     composicion: fila.productos.composicion,
     colores: fila.productos.colores,
+    color_primario: fila.productos.colorPrimario,
+    color_secundario: fila.productos.colorSecundario,
+    color_terciario: fila.productos.colorTerciario,
     caracteristica: fila.productos.caracteristica,
     agotado: fila.productos.agotado,
     destacado: fila.productos.destacado,
@@ -177,6 +193,9 @@ admin.post('/productos', async (req, res) => {
       tipo: d.tipo,
       composicion: d.composicion || null,
       colores: d.colores || null,
+      colorPrimario: d.color_primario || null,
+      colorSecundario: d.color_secundario || null,
+      colorTerciario: d.color_terciario || null,
       caracteristica: d.caracteristica || null,
       precioCentimos: d.precio_centimos ?? null,
       agotado: d.agotado ?? false,
@@ -219,6 +238,9 @@ admin.put('/productos/:id', async (req, res) => {
       tipo: d.tipo,
       composicion: d.composicion || null,
       colores: d.colores || null,
+      colorPrimario: d.color_primario || null,
+      colorSecundario: d.color_secundario || null,
+      colorTerciario: d.color_terciario || null,
       caracteristica: d.caracteristica || null,
       precioCentimos: d.precio_centimos ?? null,
       agotado: d.agotado ?? false,
