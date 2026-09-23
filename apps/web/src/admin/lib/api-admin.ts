@@ -1,3 +1,5 @@
+import { urlApi } from '../../lib/api';
+
 export type UsuarioAdmin = {
   id: number;
   email: string;
@@ -110,7 +112,7 @@ export type UsuarioNuevoEntrada = {
 };
 
 async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(ruta, {
+  const res = await fetch(urlApi(ruta), {
     credentials: 'include',
     ...init,
     headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
@@ -125,7 +127,7 @@ async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
 }
 
 async function pedirFormulario<T>(ruta: string, cuerpo: FormData, metodo = 'POST'): Promise<T> {
-  const res = await fetch(ruta, {
+  const res = await fetch(urlApi(ruta), {
     method: metodo,
     credentials: 'include',
     body: cuerpo,

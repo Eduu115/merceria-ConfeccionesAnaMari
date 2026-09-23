@@ -1,6 +1,6 @@
 import type { Server } from 'node:http';
 import { Server as SocketServer } from 'socket.io';
-import { config } from '../config.js';
+import { origenCorsPermitido } from '../config.js';
 import { leerUsuario } from '../middleware/auth.js';
 import type { IncomingMessage } from 'node:http';
 
@@ -9,7 +9,12 @@ let io: SocketServer | null = null;
 export function montarSockets(httpServer: Server): SocketServer {
   io = new SocketServer(httpServer, {
     path: '/socket.io',
-    cors: { origin: config.origenPublico, credentials: true },
+    cors: {
+      origin(origin, callback) {
+        callback(null, origenCorsPermitido(origin));
+      },
+      credentials: true,
+    },
   });
 
   const admin = io.of('/admin');
