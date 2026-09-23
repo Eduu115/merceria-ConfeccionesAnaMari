@@ -6,6 +6,7 @@ import { copysAdmin } from '../lib/copys-admin';
 import { apiAdmin } from '../lib/api-admin';
 import { usarSesionAdmin } from '../hooks/usar-sesion-admin';
 import { ConfirmarAdmin } from './ConfirmarAdmin';
+import { BotonTema } from '../../componentes/BotonTema';
 
 type Props =
   | { variante: 'listado'; titulo: string }
@@ -21,7 +22,7 @@ export function CabeceraAdminMovil(props: Props) {
   }
 
   return (
-    <div className="flex h-11 items-center justify-between border-b border-admin-borde bg-white px-3.5 lg:hidden">
+    <div className="flex h-11 items-center justify-between border-b border-admin-borde bg-superficie px-3.5 lg:hidden">
       <Link to={props.atras} className="flex h-11 min-w-11 items-center gap-1 text-admin-texto-3" aria-label="Volver">
         <ArrowLeft className="h-5 w-5" aria-hidden />
       </Link>
@@ -52,7 +53,7 @@ function CabeceraListado({ titulo }: { titulo: string }) {
         : copysAdmin.armazon.modoAdmin;
 
   return (
-    <div className="relative border-b border-admin-borde bg-white lg:hidden">
+    <div className="relative border-b border-admin-borde bg-superficie lg:hidden">
       <div className="flex items-center justify-between gap-3 px-3.5 py-2.5">
         <div className="flex min-w-0 flex-col leading-tight">
           <span className="truncate text-[0.62rem] font-semibold uppercase tracking-wide text-admin-acento">
@@ -60,15 +61,18 @@ function CabeceraListado({ titulo }: { titulo: string }) {
           </span>
           <span className="truncate text-[1.05rem] font-bold text-admin-texto">{titulo}</span>
         </div>
-        <button
-          type="button"
-          aria-label="Abrir menú"
-          aria-expanded={abierto}
-          onClick={() => setAbierto((v) => !v)}
-          className="flex h-9 w-9 flex-none items-center justify-center rounded-lg border border-admin-borde-campo bg-white text-admin-texto-2"
-        >
-          <Menu className="h-4 w-4" aria-hidden />
-        </button>
+        <div className="flex flex-none items-center gap-1.5">
+          <BotonTema className="h-9 w-9 text-admin-texto-2 hover:bg-admin-borde-2" />
+          <button
+            type="button"
+            aria-label="Abrir menú"
+            aria-expanded={abierto}
+            onClick={() => setAbierto((v) => !v)}
+            className="flex h-9 w-9 flex-none items-center justify-center rounded-lg border border-admin-borde-campo bg-superficie text-admin-texto-2"
+          >
+            <Menu className="h-4 w-4" aria-hidden />
+          </button>
+        </div>
       </div>
 
       {abierto && (
@@ -79,7 +83,7 @@ function CabeceraListado({ titulo }: { titulo: string }) {
             onClick={() => setAbierto(false)}
             className="fixed inset-0 z-30 cursor-default"
           />
-          <div className="absolute right-3.5 top-[calc(100%+6px)] z-40 w-56 overflow-hidden rounded-xl border border-admin-borde bg-white shadow-lg">
+          <div className="absolute right-3.5 top-[calc(100%+6px)] z-40 w-56 overflow-hidden rounded-xl border border-admin-borde bg-superficie shadow-lg">
             {sesion?.nombre && (
               <div className="px-4 py-3 leading-tight">
                 <p className="truncate text-[0.9rem] font-bold text-admin-texto">{sesion.nombre}</p>

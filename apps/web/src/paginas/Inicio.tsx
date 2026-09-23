@@ -54,7 +54,7 @@ export function Inicio() {
               <Link
                 key={c.slug}
                 to={c.tipo === 'merceria' ? '/catalogo/merceria' : `/catalogo?categoria=${c.slug}`}
-                className="block border border-borde bg-white"
+                className="block border border-borde bg-superficie"
               >
                 <MarcadorSinFoto variante="bloque" etiqueta="" className="aspect-[5/4] w-full" />
                 <div className="p-3">

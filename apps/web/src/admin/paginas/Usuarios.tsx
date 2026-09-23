@@ -55,7 +55,7 @@ export function Usuarios() {
         )}
 
         {!isLoading && data && data.length > 0 && (
-          <div className="overflow-hidden rounded-lg border border-admin-borde bg-white">
+          <div className="overflow-hidden rounded-lg border border-admin-borde bg-superficie">
             <table className="w-full table-fixed text-left text-[0.9rem] xl:text-[0.95rem]">
               <colgroup>
                 <col className="w-1/2" />

@@ -321,7 +321,7 @@ export function SelectorColor({ etiqueta, valor, onChange }: Props) {
           setAbierto((v) => !v);
           setMasColores(false);
         }}
-        className="flex min-h-11 w-full min-w-0 items-center gap-3 rounded-md border border-admin-borde-campo bg-white px-3 text-left transition-colors hover:border-admin-acento"
+        className="flex min-h-11 w-full min-w-0 items-center gap-3 rounded-md border border-admin-borde-campo bg-superficie px-3 text-left transition-colors hover:border-admin-acento"
       >
         <span
           className={`h-7 w-7 shrink-0 rounded-full border border-admin-borde ${!valor ? 'border-dashed bg-admin-fondo' : ''}`}
@@ -357,7 +357,7 @@ export function SelectorColor({ etiqueta, valor, onChange }: Props) {
           role="dialog"
           aria-label={`Elegir ${etiqueta.toLowerCase()}`}
           style={panelEstilo}
-          className="overflow-y-auto rounded-lg border border-admin-borde bg-white p-3 shadow-lg"
+          className="overflow-y-auto rounded-lg border border-admin-borde bg-superficie p-3 shadow-lg"
         >
           {masColores ? (
             <PickerPersonalizado

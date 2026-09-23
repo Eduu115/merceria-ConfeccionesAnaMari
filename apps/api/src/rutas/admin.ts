@@ -14,6 +14,7 @@ import {
   paginas,
   preguntas,
   productoAtributos,
+  productoColores,
   productoTallas,
   productos,
   servicios,
@@ -23,6 +24,7 @@ import { ROLES_USUARIO } from '@anamari/compartido';
 import { exigirGestionUsuarios, exigirSesion } from '../middleware/auth.js';
 import { procesarImagen } from '../servicios/imagenes.js';
 import { avisoProductoActualizado } from '../servicios/sockets.js';
+import { etiquetaValorColor } from '../lib/colores.js';
 
 function generarSlug(texto: string): string {
   return texto
@@ -46,15 +48,11 @@ async function slugUnico(nombre: string, ignorarId?: number): Promise<string> {
   }
 }
 
-const valorColor = z
-  .union([
-    z.literal('multicolor'),
-    z.literal('transparente'),
-    z.string().regex(/^#[0-9A-Fa-f]{6}$/),
-    z.null(),
-  ])
-  .optional()
-  .nullable();
+const valorColor = z.union([
+  z.literal('multicolor'),
+  z.literal('transparente'),
+  z.string().regex(/^#[0-9A-Fa-f]{6}$/),
+]);
 
 const esquemaProducto = z.object({
   nombre: z.string().trim().min(1),
@@ -62,10 +60,15 @@ const esquemaProducto = z.object({
   categoria_id: z.number().int(),
   descripcion: z.string().trim().optional().nullable(),
   composicion: z.string().trim().optional().nullable(),
-  colores: z.string().trim().optional().nullable(),
-  color_primario: valorColor,
-  color_secundario: valorColor,
-  color_terciario: valorColor,
+  colores: z
+    .array(
+      z.object({
+        valor: valorColor,
+        orden: z.number().int().min(0).max(2),
+      }),
+    )
+    .max(3)
+    .optional(),
   caracteristica: z.string().trim().optional().nullable(),
   precio_centimos: z.number().int().min(0).optional().nullable(),
   agotado: z.boolean().optional(),
@@ -74,6 +77,22 @@ const esquemaProducto = z.object({
   tallas: z.array(z.object({ talla: z.string().trim().min(1), disponible: z.boolean().optional() })).optional(),
   atributos: z.array(z.number().int()).optional(),
 });
+
+async function reemplazarColores(productoId: number, colores?: { valor: string; orden: number }[]) {
+  await db.delete(productoColores).where(eq(productoColores.productoId, productoId));
+  const filas = (colores ?? [])
+    .filter((c) => c.valor)
+    .sort((a, b) => a.orden - b.orden)
+    .slice(0, 3);
+  if (!filas.length) return;
+  await db.insert(productoColores).values(
+    filas.map((c, i) => ({
+      productoId,
+      valor: c.valor.toLowerCase().startsWith('#') ? c.valor.toLowerCase() : c.valor,
+      orden: i,
+    })),
+  );
+}
 
 export const admin = Router();
 admin.use(exigirSesion);
@@ -147,10 +166,15 @@ admin.get('/productos/:id', async (req, res) => {
     res.status(404).json({ error: 'Producto no encontrado' });
     return;
   }
-  const [tallas, atrs, imgs] = await Promise.all([
+  const [tallas, atrs, imgs, coloresFilas] = await Promise.all([
     db.select().from(productoTallas).where(eq(productoTallas.productoId, id)).orderBy(asc(productoTallas.orden)),
     db.select({ id: productoAtributos.atributoId }).from(productoAtributos).where(eq(productoAtributos.productoId, id)),
     db.select().from(imagenes).where(eq(imagenes.productoId, id)).orderBy(desc(imagenes.principal), asc(imagenes.orden)),
+    db
+      .select()
+      .from(productoColores)
+      .where(eq(productoColores.productoId, id))
+      .orderBy(asc(productoColores.orden)),
   ]);
   res.json({
     id: fila.productos.id,
@@ -160,10 +184,11 @@ admin.get('/productos/:id', async (req, res) => {
     categoria_id: fila.productos.categoriaId,
     tipo: fila.productos.tipo,
     composicion: fila.productos.composicion,
-    colores: fila.productos.colores,
-    color_primario: fila.productos.colorPrimario,
-    color_secundario: fila.productos.colorSecundario,
-    color_terciario: fila.productos.colorTerciario,
+    colores: coloresFilas.map((c) => ({
+      valor: c.valor,
+      etiqueta: etiquetaValorColor(c.valor),
+      orden: c.orden,
+    })),
     caracteristica: fila.productos.caracteristica,
     agotado: fila.productos.agotado,
     destacado: fila.productos.destacado,
@@ -192,10 +217,6 @@ admin.post('/productos', async (req, res) => {
       categoriaId: d.categoria_id,
       tipo: d.tipo,
       composicion: d.composicion || null,
-      colores: d.colores || null,
-      colorPrimario: d.color_primario || null,
-      colorSecundario: d.color_secundario || null,
-      colorTerciario: d.color_terciario || null,
       caracteristica: d.caracteristica || null,
       precioCentimos: d.precio_centimos ?? null,
       agotado: d.agotado ?? false,
@@ -211,6 +232,7 @@ admin.post('/productos', async (req, res) => {
   if (d.atributos?.length) {
     await db.insert(productoAtributos).values(d.atributos.map((atributoId) => ({ productoId: creado.id, atributoId })));
   }
+  await reemplazarColores(creado.id, d.colores);
   res.status(201).json({ id: creado.id, slug: creado.slug });
 });
 
@@ -237,10 +259,6 @@ admin.put('/productos/:id', async (req, res) => {
       categoriaId: d.categoria_id,
       tipo: d.tipo,
       composicion: d.composicion || null,
-      colores: d.colores || null,
-      colorPrimario: d.color_primario || null,
-      colorSecundario: d.color_secundario || null,
-      colorTerciario: d.color_terciario || null,
       caracteristica: d.caracteristica || null,
       precioCentimos: d.precio_centimos ?? null,
       agotado: d.agotado ?? false,
@@ -260,6 +278,7 @@ admin.put('/productos/:id', async (req, res) => {
   if (d.atributos?.length) {
     await db.insert(productoAtributos).values(d.atributos.map((atributoId) => ({ productoId: id, atributoId })));
   }
+  await reemplazarColores(id, d.colores);
   avisoProductoActualizado({ slug: actualizado.slug });
   res.json({ id: actualizado.id, slug: actualizado.slug });
 });

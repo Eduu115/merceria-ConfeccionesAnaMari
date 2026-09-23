@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#fbf9f4" />
     <title>Confecciones Ana Mari · Mercería y arreglos de ropa en Getafe</title>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('anamari-tema');
+          if (t !== 'oscuro' && t !== 'claro') {
+            t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro';
+          }
+          if (t === 'oscuro') {
+            document.documentElement.classList.add('oscuro');
+            document.documentElement.style.colorScheme = 'dark';
+            var m = document.querySelector('meta[name="theme-color"]');
+            if (m) m.setAttribute('content', '#1a1814');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

@@ -33,7 +33,7 @@ export function ConfirmarAdmin({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[340px] rounded-2xl bg-white p-5 shadow-xl"
+        className="w-full max-w-[340px] rounded-2xl bg-superficie p-5 shadow-xl"
       >
         <h2 id="confirmar-admin-titulo" className="font-cuerpo text-[1.05rem] font-bold text-admin-texto">
           {titulo}
@@ -54,7 +54,7 @@ export function ConfirmarAdmin({
             type="button"
             disabled={cargando}
             onClick={onCancelar}
-            className="min-h-11 rounded-lg border border-admin-borde-campo bg-white text-[0.95rem] font-medium text-admin-texto-2 disabled:pointer-events-none disabled:opacity-60"
+            className="min-h-11 rounded-lg border border-admin-borde-campo bg-superficie text-[0.95rem] font-medium text-admin-texto-2 disabled:pointer-events-none disabled:opacity-60"
           >
             {textoCancelar}
           </button>

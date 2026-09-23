@@ -55,7 +55,7 @@ export function Cuenta() {
       <CabeceraAdminMovil variante="detalle" titulo={c.titulo} atras="/admin" />
       <CabeceraAdminEscritorio titulo={c.titulo} />
       <div className="flex justify-center p-[1.4rem] md:p-7 lg:p-[2.8rem] xl:px-[4.2rem] xl:py-14 2xl:px-28">
-      <div className="flex w-full max-w-lg flex-col gap-10 rounded-xl border border-admin-borde bg-white p-6 shadow-sm md:p-8">
+      <div className="flex w-full max-w-lg flex-col gap-10 rounded-xl border border-admin-borde bg-superficie p-6 shadow-sm md:p-8">
         <section className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <h2 className="font-cuerpo text-[0.95rem] font-semibold text-admin-texto">{c.seccionContrasena}</h2>

@@ -11,7 +11,7 @@ import { BotonAdmin } from './BotonAdmin';
 import { ToggleAdmin } from './ToggleAdmin';
 import { ConfirmarAdmin } from './ConfirmarAdmin';
 import { SelectorColor } from './SelectorColor';
-import { textoColoresProducto, type ValorColor } from '../lib/colores';
+import type { ValorColor } from '../lib/colores';
 
 type Props = { modo: 'crear' } | { modo: 'editar'; productoId: number };
 
@@ -62,9 +62,9 @@ export function FormularioProducto(props: Props) {
       setDescripcion(d.descripcion ?? '');
       setPrecio(d.precio_centimos != null ? (d.precio_centimos / 100).toFixed(2) : '');
       setComposicion(d.composicion ?? '');
-      setColorPrimario(d.color_primario);
-      setColorSecundario(d.color_secundario);
-      setColorTerciario(d.color_terciario);
+      setColorPrimario(d.colores.find((c) => c.orden === 0)?.valor ?? null);
+      setColorSecundario(d.colores.find((c) => c.orden === 1)?.valor ?? null);
+      setColorTerciario(d.colores.find((c) => c.orden === 2)?.valor ?? null);
       setCaracteristica(d.caracteristica ?? '');
       setTallas(d.tallas);
       setAtributosSel(d.atributos);
@@ -133,16 +133,16 @@ export function FormularioProducto(props: Props) {
       return;
     }
     setGuardando(true);
+    const coloresSel = [colorPrimario, colorSecundario, colorTerciario]
+      .map((valor, orden) => (valor ? { valor, orden } : null))
+      .filter((c): c is { valor: string; orden: number } => Boolean(c));
     const datos: ProductoEntrada = {
       nombre,
       tipo,
       categoria_id: Number(categoriaId),
       descripcion: descripcion || null,
       composicion: composicion || null,
-      colores: textoColoresProducto(colorPrimario, colorSecundario, colorTerciario),
-      color_primario: colorPrimario,
-      color_secundario: colorSecundario,
-      color_terciario: colorTerciario,
+      colores: coloresSel,
       caracteristica: caracteristica || null,
       precio_centimos: precio ? Math.round(Number(precio) * 100) : null,
       visible,
@@ -228,7 +228,7 @@ export function FormularioProducto(props: Props) {
             {/* Maqueta sin funcionalidad: cómo se subirán las fotos aún está por decidir. */}
             <div
               aria-disabled="true"
-              className="flex min-h-32 cursor-not-allowed flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-admin-borde-campo-2 bg-white text-center opacity-70"
+              className="flex min-h-32 cursor-not-allowed flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-admin-borde-campo-2 bg-superficie text-center opacity-70"
             >
               <ImagePlus className="h-6 w-6 text-admin-texto-tenue" aria-hidden />
               <span className="text-[0.9rem] font-medium text-admin-texto">{c.fotosArrastra}</span>
@@ -312,7 +312,7 @@ export function FormularioProducto(props: Props) {
                   className={`min-h-16 rounded-md border px-3 text-[0.85rem] font-semibold transition-colors ${
                     tipo === t
                       ? 'border-admin-acento bg-admin-acento text-white'
-                      : 'border-admin-borde-campo bg-white text-admin-texto-2'
+                      : 'border-admin-borde-campo bg-superficie text-admin-texto-2'
                   }`}
                 >
                   {t === 'ropa' ? c.tipoRopa : c.tipoMerceria}
@@ -336,7 +336,7 @@ export function FormularioProducto(props: Props) {
                         className={`flex min-h-11 w-full items-center justify-between rounded-md border px-3.5 text-[0.88rem] font-medium transition-colors ${
                           activa
                             ? 'border-admin-acento bg-admin-acento-fondo text-admin-acento'
-                            : 'border-admin-borde-campo bg-white text-admin-texto-2'
+                            : 'border-admin-borde-campo bg-superficie text-admin-texto-2'
                         }`}
                       >
                         {cat.nombre}
@@ -354,7 +354,7 @@ export function FormularioProducto(props: Props) {
                                 className={`flex min-h-11 items-center justify-between rounded-md border px-3.5 text-[0.88rem] font-medium transition-colors ${
                                   activaHija
                                     ? 'border-admin-acento bg-admin-acento-fondo text-admin-acento'
-                                    : 'border-admin-borde-campo bg-white text-admin-texto-2'
+                                    : 'border-admin-borde-campo bg-superficie text-admin-texto-2'
                                 }`}
                               >
                                 {hija.nombre}
@@ -385,7 +385,7 @@ export function FormularioProducto(props: Props) {
                       className={`min-h-11 rounded-md border text-[0.85rem] font-semibold transition-colors ${
                         activa
                           ? 'border-admin-acento bg-admin-acento text-white'
-                          : 'border-admin-borde-campo bg-white text-admin-texto-2'
+                          : 'border-admin-borde-campo bg-superficie text-admin-texto-2'
                       }`}
                     >
                       {t}
@@ -399,7 +399,7 @@ export function FormularioProducto(props: Props) {
           {tipo === 'merceria' && (
             <section className="flex flex-col gap-2">
               <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionTipoMerceria}</h2>
-              <div className="flex flex-col divide-y divide-admin-borde-2 rounded-md border border-admin-borde-campo bg-white">
+              <div className="flex flex-col divide-y divide-admin-borde-2 rounded-md border border-admin-borde-campo bg-superficie">
                 {atributosTipoMerceria.data?.map((a) => {
                   const activo = atributosMerceria.includes(a.id);
                   return (
@@ -434,7 +434,7 @@ export function FormularioProducto(props: Props) {
         {error && <p className="text-[0.85rem] text-admin-error lg:col-span-2">{error}</p>}
       </form>
 
-      <div className="fixed inset-x-0 bottom-0 flex gap-3 border-t border-admin-borde bg-white p-4 lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 flex gap-3 border-t border-admin-borde bg-superficie p-4 lg:hidden">
         {props.modo === 'editar' && (
           <BotonAdmin variante="peligro" cargando={borrando} onClick={() => setConfirmandoBorrar(true)}>
             {borrando ? c.borrando : c.borrar}

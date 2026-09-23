@@ -12,7 +12,7 @@ export function ToggleAdmin({ etiqueta, ayuda, checked, onChange }: Props) {
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="flex w-full items-center justify-between gap-3 rounded-md border border-admin-borde-campo bg-white px-3.5 py-3 text-left"
+      className="flex w-full items-center justify-between gap-3 rounded-md border border-admin-borde-campo bg-superficie px-3.5 py-3 text-left"
     >
       <span className="flex flex-col">
         <span className="text-[0.9rem] font-medium text-admin-texto">{etiqueta}</span>
@@ -24,7 +24,7 @@ export function ToggleAdmin({ etiqueta, ayuda, checked, onChange }: Props) {
         }`}
       >
         <span
-          className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+          className={`absolute top-0.5 h-5 w-5 rounded-full bg-superficie shadow transition-transform ${
             checked ? 'translate-x-[22px]' : 'translate-x-0.5'
           }`}
         />

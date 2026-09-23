@@ -11,6 +11,7 @@ import {
   paginas,
   preguntas,
   productoAtributos,
+  productoColores,
   productoTallas,
   productos,
   servicios,
@@ -39,7 +40,7 @@ export async function sembrar(forzar = false): Promise<void> {
   }
 
   if (forzar) {
-    await sql`TRUNCATE producto_atributos, producto_tallas, productos, atributos, categorias, servicios, preguntas, horario, ajustes, paginas, imagenes RESTART IDENTITY CASCADE`;
+    await sql`TRUNCATE producto_colores, producto_atributos, producto_tallas, productos, atributos, categorias, servicios, preguntas, horario, ajustes, paginas, imagenes RESTART IDENTITY CASCADE`;
   }
 
   await asegurarPropietario();
@@ -83,7 +84,6 @@ export async function sembrar(forzar = false): Promise<void> {
         categoriaId: cat.id,
         tipo: 'ropa',
         composicion: prenda.composicion,
-        colores: prenda.colores,
         agotado: prenda.agotado ?? false,
         destacado: prenda.destacado ?? false,
         visible: true,
@@ -111,7 +111,6 @@ export async function sembrar(forzar = false): Promise<void> {
         categoriaId: cat.id,
         tipo: 'merceria',
         composicion: art.composicion ?? null,
-        colores: art.colores,
         caracteristica: art.caracteristica,
         agotado: art.agotado ?? false,
         destacado: art.destacado ?? false,
@@ -119,12 +118,16 @@ export async function sembrar(forzar = false): Promise<void> {
       })
       .returning();
     const tipo = tipoPorSlug[art.tipo];
+    if (tipo) {
+      await db.insert(productoAtributos).values({ productoId: fila.id, atributoId: tipo.id });
+    }
     const color = colorPorSlug[art.color];
-    const attrs = [tipo, color].filter(Boolean);
-    if (attrs.length) {
-      await db.insert(productoAtributos).values(
-        attrs.map((a) => ({ productoId: fila.id, atributoId: a!.id })),
-      );
+    if (color) {
+      await db.insert(productoColores).values({
+        productoId: fila.id,
+        valor: color.hex ?? color.slug,
+        orden: 0,
+      });
     }
   }
 
