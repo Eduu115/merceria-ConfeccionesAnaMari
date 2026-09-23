@@ -54,6 +54,7 @@ services:
       target: produccion
       args:
         VITE_API_URL: https://api.${DOMINIO}
+        VITE_SITE_URL: https://${DOMINIO}
     restart: unless-stopped
     depends_on:
       api:

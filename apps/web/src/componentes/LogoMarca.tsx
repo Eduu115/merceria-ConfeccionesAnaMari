@@ -9,11 +9,17 @@ export const LOGO = {
   /** Solo trazo/texto azul, sin el disco blanco — fondos oscuros. */
   sinFondoWebp: '/marca/logo-sin-fondo.webp',
   sinFondoPng: '/marca/logo-sin-fondo.png',
-  /** Cuadrado opaco con fondo blanco — favicon/email. */
+  /** Cuadrado opaco con fondo blanco — favicon/email/PWA. */
   fondoWebp: '/marca/logo-fondo.webp',
   fondoPng: '/marca/logo-fondo.png',
+  icon192: '/marca/logo-fondo-192.png',
+  icon512: '/marca/icon-512.png',
+  /** Preview al compartir (1200×630). */
   og: '/og.png',
+  /** Preview cuadrada (WhatsApp / algunos clientes). */
+  ogCuadrado: '/og-cuadrado.png',
   apple: '/apple-touch-icon.png',
+  favicon: '/favicon.ico',
 } as const;
 
 type Tamano = 'cabecera' | 'pie' | 'hero' | 'auth';
