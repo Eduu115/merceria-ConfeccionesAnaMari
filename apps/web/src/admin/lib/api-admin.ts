@@ -124,6 +124,21 @@ async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+async function pedirFormulario<T>(ruta: string, cuerpo: FormData, metodo = 'POST'): Promise<T> {
+  const res = await fetch(ruta, {
+    method: metodo,
+    credentials: 'include',
+    body: cuerpo,
+  });
+  if (!res.ok) {
+    const datos = await res.json().catch(() => ({}));
+    const error = Object.assign(new Error('Error de red'), { status: res.status, cuerpo: datos });
+    throw error;
+  }
+  if (res.status === 204) return undefined as T;
+  return res.json() as Promise<T>;
+}
+
 export const apiAdmin = {
   yo: () => pedir<UsuarioAdmin>('/api/admin/yo'),
   entrar: (cuerpo: { email: string; password: string }) =>
@@ -146,6 +161,20 @@ export const apiAdmin = {
     actualizar: (id: number, datos: ProductoEntrada) =>
       pedir<{ id: number; slug: string }>(`/api/admin/productos/${id}`, { method: 'PUT', body: JSON.stringify(datos) }),
     borrar: (id: number) => pedir<void>(`/api/admin/productos/${id}`, { method: 'DELETE' }),
+  },
+
+  imagenes: {
+    subir: (productoId: number, archivo: File, opts?: { alt?: string; principal?: boolean }) => {
+      const datos = new FormData();
+      datos.append('archivo', archivo);
+      datos.append('producto_id', String(productoId));
+      if (opts?.alt) datos.append('alt', opts.alt);
+      if (opts?.principal) datos.append('principal', 'true');
+      return pedirFormulario<ImagenAdmin>('/api/admin/imagenes', datos);
+    },
+    borrar: (id: number) => pedir<void>(`/api/admin/imagenes/${id}`, { method: 'DELETE' }),
+    marcarPrincipal: (id: number) =>
+      pedir<{ ok: true }>(`/api/admin/imagenes/${id}/principal`, { method: 'PATCH', body: JSON.stringify({}) }),
   },
 
   usuarios: {

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Check, ImagePlus } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { copysAdmin } from '../lib/copys-admin';
-import { apiAdmin, type ProductoDetalle, type ProductoEntrada } from '../lib/api-admin';
+import { apiAdmin, type ImagenAdmin, type ProductoDetalle, type ProductoEntrada } from '../lib/api-admin';
 import { CabeceraAdminEscritorio } from './CabeceraAdminEscritorio';
 import { CabeceraAdminMovil } from './CabeceraAdminMovil';
 import { CampoTexto } from './CampoTexto';
@@ -11,8 +11,8 @@ import { BotonAdmin } from './BotonAdmin';
 import { ToggleAdmin } from './ToggleAdmin';
 import { ConfirmarAdmin } from './ConfirmarAdmin';
 import { SelectorColor } from './SelectorColor';
+import { GaleriaFotosProducto } from './GaleriaFotosProducto';
 import type { ValorColor } from '../lib/colores';
-
 type Props = { modo: 'crear' } | { modo: 'editar'; productoId: number };
 
 const TALLAS_HABITUALES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -52,6 +52,7 @@ export function FormularioProducto(props: Props) {
   const [borrando, setBorrando] = useState(false);
   const [confirmandoBorrar, setConfirmandoBorrar] = useState(false);
   const [error, setError] = useState('');
+  const [fotos, setFotos] = useState<ImagenAdmin[]>([]);
 
   useEffect(() => {
     if (props.modo === 'editar' && detalle.data && !cargado) {
@@ -71,9 +72,16 @@ export function FormularioProducto(props: Props) {
       setVisible(d.visible);
       setAgotado(d.agotado);
       setDestacado(d.destacado);
+      setFotos(d.imagenes);
       setCargado(true);
     }
   }, [detalle.data, props.modo, cargado]);
+
+  useEffect(() => {
+    if (props.modo === 'editar' && detalle.data) {
+      setFotos(detalle.data.imagenes);
+    }
+  }, [detalle.data, props.modo]);
 
   const categorias = useQuery({
     queryKey: ['admin', 'categorias', tipo],
@@ -155,11 +163,13 @@ export function FormularioProducto(props: Props) {
       if (productoId) {
         await apiAdmin.productos.actualizar(productoId, datos);
         await cliente.invalidateQueries({ queryKey: ['admin', 'producto', productoId] });
+        await cliente.invalidateQueries({ queryKey: ['admin', 'productos'] });
+        navegar('/admin', { replace: true });
       } else {
-        await apiAdmin.productos.crear(datos);
+        const creado = await apiAdmin.productos.crear(datos);
+        await cliente.invalidateQueries({ queryKey: ['admin', 'productos'] });
+        navegar(`/admin/productos/${creado.id}`, { replace: true });
       }
-      await cliente.invalidateQueries({ queryKey: ['admin', 'productos'] });
-      navegar('/admin', { replace: true });
     } catch {
       setError(c.errorGenerico);
     } finally {
@@ -223,19 +233,7 @@ export function FormularioProducto(props: Props) {
         className="grid grid-cols-1 gap-8 p-[1.4rem] pb-28 md:p-7 lg:grid-cols-[1fr_320px] lg:p-[2.8rem] xl:grid-cols-[1fr_360px] xl:gap-10 xl:px-[4.2rem] xl:py-14 2xl:px-28"
       >
         <div className="flex flex-col gap-7 lg:order-1">
-          <section className="flex flex-col gap-3">
-            <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionFotos}</h2>
-            {/* Maqueta sin funcionalidad: cómo se subirán las fotos aún está por decidir. */}
-            <div
-              aria-disabled="true"
-              className="flex min-h-32 cursor-not-allowed flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-admin-borde-campo-2 bg-superficie text-center opacity-70"
-            >
-              <ImagePlus className="h-6 w-6 text-admin-texto-tenue" aria-hidden />
-              <span className="text-[0.9rem] font-medium text-admin-texto">{c.fotosArrastra}</span>
-              <span className="text-[0.82rem] text-admin-texto-tenue">{c.fotosPulsa}</span>
-            </div>
-            <p className="text-[0.78rem] italic text-admin-texto-tenue">{c.fotosPendiente}</p>
-          </section>
+          <GaleriaFotosProducto productoId={productoId} imagenes={fotos} />
 
           <label className="flex flex-col gap-1.5">
             <span className="text-[0.9rem] font-semibold text-admin-texto">{c.campoNombre}</span>

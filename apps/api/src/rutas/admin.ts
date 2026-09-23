@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import argon2 from 'argon2';
-import { asc, desc, eq } from 'drizzle-orm';
-import multer from 'multer';
+import { asc, count, desc, eq } from 'drizzle-orm';
+import multer, { MulterError } from 'multer';
 import { z } from 'zod';
 import { db } from '../db/cliente.js';
 import {
@@ -21,8 +21,15 @@ import {
   usuarios,
 } from '../db/esquema.js';
 import { ROLES_USUARIO } from '@anamari/compartido';
-import { exigirGestionUsuarios, exigirSesion } from '../middleware/auth.js';
-import { procesarImagen } from '../servicios/imagenes.js';
+import { exigirGestionUsuarios, exigirPropietaria, exigirSesion } from '../middleware/auth.js';
+import { ipCliente, limiteIntentos } from '../middleware/limites.js';
+import {
+  MAX_BYTES_IMAGEN,
+  MAX_IMAGENES_POR_PRODUCTO,
+  borrarArchivosImagen,
+  mimeDeclaradoValido,
+  procesarImagen,
+} from '../servicios/imagenes.js';
 import { avisoProductoActualizado } from '../servicios/sockets.js';
 import { etiquetaValorColor } from '../lib/colores.js';
 
@@ -99,12 +106,43 @@ admin.use(exigirSesion);
 
 const subida = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 8 * 1024 * 1024 },
+  limits: { fileSize: MAX_BYTES_IMAGEN, files: 1 },
   fileFilter: (_req, file, cb) => {
-    const ok = ['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype);
-    cb(null, ok);
+    if (!mimeDeclaradoValido(file.mimetype)) {
+      cb(new Error('FORMATO_NO_PERMITIDO'));
+      return;
+    }
+    cb(null, true);
   },
 });
+
+function manejarSubida(req: import('express').Request, res: import('express').Response, next: import('express').NextFunction) {
+  subida.single('archivo')(req, res, (err: unknown) => {
+    if (!err) {
+      next();
+      return;
+    }
+    if (err instanceof MulterError) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        res.status(413).json({ error: 'La imagen supera el tamaño máximo (5 MB).' });
+        return;
+      }
+      res.status(422).json({ error: 'No se ha podido recibir el archivo.' });
+      return;
+    }
+    if (err instanceof Error && err.message === 'FORMATO_NO_PERMITIDO') {
+      res.status(415).json({ error: 'Formato no permitido. Usa JPG, PNG o WebP.' });
+      return;
+    }
+    next(err);
+  });
+}
+
+const limiteSubidaFotos = limiteIntentos(
+  (req) => `foto:${req.usuario?.id ?? '0'}:${ipCliente(req)}`,
+  20,
+  60 * 60 * 1000,
+);
 
 admin.get('/mensajes', async (_req, res) => {
   const filas = await db.select().from(mensajes).orderBy(desc(mensajes.creadoEn));
@@ -290,17 +328,24 @@ admin.delete('/productos/:id', async (req, res) => {
     res.status(404).json({ error: 'Producto no encontrado' });
     return;
   }
+  const fotos = await db.select({ ruta: imagenes.ruta }).from(imagenes).where(eq(imagenes.productoId, id));
   await db.delete(productos).where(eq(productos.id, id));
+  await Promise.all(fotos.map((f) => borrarArchivosImagen(f.ruta)));
   res.status(204).end();
 });
 
-admin.delete('/imagenes/:id', async (req, res) => {
+admin.delete('/imagenes/:id', exigirPropietaria, async (req, res) => {
   const id = Number(req.params.id);
+  if (!Number.isFinite(id) || id <= 0) {
+    res.status(422).json({ error: 'Imagen no válida.' });
+    return;
+  }
   const [fila] = await db.delete(imagenes).where(eq(imagenes.id, id)).returning();
   if (!fila) {
     res.status(404).json({ error: 'Imagen no encontrada' });
     return;
   }
+  await borrarArchivosImagen(fila.ruta);
   if (fila.productoId) {
     const [p] = await db.select({ slug: productos.slug }).from(productos).where(eq(productos.id, fila.productoId));
     if (p) avisoProductoActualizado({ slug: p.slug });
@@ -442,29 +487,97 @@ admin.get('/atributos', async (req, res) => {
   res.json(filas);
 });
 
-admin.post('/imagenes', subida.single('archivo'), async (req, res) => {
-  if (!req.file) {
-    res.status(422).json({ error: 'Falta el archivo.' });
+admin.post(
+  '/imagenes',
+  exigirPropietaria,
+  limiteSubidaFotos,
+  manejarSubida,
+  async (req, res) => {
+    if (!req.file) {
+      res.status(422).json({ error: 'Falta el archivo.' });
+      return;
+    }
+    const productoId = Number(req.body?.producto_id);
+    if (!Number.isFinite(productoId) || productoId <= 0) {
+      res.status(422).json({ error: 'Indica el producto al que pertenece la foto.' });
+      return;
+    }
+    const [producto] = await db.select().from(productos).where(eq(productos.id, productoId)).limit(1);
+    if (!producto) {
+      res.status(404).json({ error: 'Producto no encontrado.' });
+      return;
+    }
+    const [{ total }] = await db
+      .select({ total: count() })
+      .from(imagenes)
+      .where(eq(imagenes.productoId, productoId));
+    if (Number(total) >= MAX_IMAGENES_POR_PRODUCTO) {
+      res.status(422).json({
+        error: `Este producto ya tiene el máximo de ${MAX_IMAGENES_POR_PRODUCTO} fotos.`,
+      });
+      return;
+    }
+
+    let procesada: Awaited<ReturnType<typeof procesarImagen>>;
+    try {
+      procesada = await procesarImagen(req.file, producto.slug);
+    } catch (err) {
+      const codigo = err && typeof err === 'object' && 'codigo' in err ? String((err as { codigo: string }).codigo) : '';
+      const mensaje = err instanceof Error ? err.message : 'No se ha podido procesar la imagen.';
+      const status = codigo === 'DEMASIADO_GRANDE' ? 413 : codigo === 'TIPO_INVALIDO' ? 415 : 422;
+      res.status(status).json({ error: mensaje });
+      return;
+    }
+
+    const cuantas = Number(total);
+    const quierePrincipal = req.body?.principal === 'true' || cuantas === 0;
+    if (quierePrincipal) {
+      await db.update(imagenes).set({ principal: false }).where(eq(imagenes.productoId, productoId));
+    }
+    const alt =
+      typeof req.body?.alt === 'string' && req.body.alt.trim()
+        ? req.body.alt.trim().slice(0, 120)
+        : procesada.alt;
+
+    const [fila] = await db
+      .insert(imagenes)
+      .values({
+        productoId,
+        ruta: procesada.ruta,
+        alt,
+        ancho: procesada.ancho,
+        alto: procesada.alto,
+        principal: quierePrincipal,
+        orden: cuantas,
+      })
+      .returning();
+    avisoProductoActualizado({ slug: producto.slug });
+    res.status(201).json({
+      id: fila.id,
+      productoId: fila.productoId,
+      ruta: fila.ruta,
+      alt: fila.alt,
+      principal: fila.principal,
+      orden: fila.orden,
+    });
+  },
+);
+admin.patch('/imagenes/:id/principal', exigirPropietaria, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id) || id <= 0) {
+    res.status(422).json({ error: 'Imagen no válida.' });
     return;
   }
-  const productoId = req.body.producto_id ? Number(req.body.producto_id) : null;
-  const procesada = await procesarImagen(req.file, 'img');
-  const [fila] = await db
-    .insert(imagenes)
-    .values({
-      productoId,
-      ruta: procesada.ruta,
-      alt: typeof req.body.alt === 'string' && req.body.alt ? req.body.alt : procesada.alt,
-      ancho: procesada.ancho,
-      alto: procesada.alto,
-      principal: req.body.principal === 'true',
-    })
-    .returning();
-  if (productoId) {
-    const [p] = await db.select({ slug: productos.slug }).from(productos).where(eq(productos.id, productoId));
-    if (p) avisoProductoActualizado({ slug: p.slug });
+  const [fila] = await db.select().from(imagenes).where(eq(imagenes.id, id)).limit(1);
+  if (!fila || !fila.productoId) {
+    res.status(404).json({ error: 'Imagen no encontrada' });
+    return;
   }
-  res.status(201).json(fila);
+  await db.update(imagenes).set({ principal: false }).where(eq(imagenes.productoId, fila.productoId));
+  await db.update(imagenes).set({ principal: true }).where(eq(imagenes.id, id));
+  const [p] = await db.select({ slug: productos.slug }).from(productos).where(eq(productos.id, fila.productoId));
+  if (p) avisoProductoActualizado({ slug: p.slug });
+  res.json({ ok: true });
 });
 
 admin.get('/ajustes', async (_req, res) => {
