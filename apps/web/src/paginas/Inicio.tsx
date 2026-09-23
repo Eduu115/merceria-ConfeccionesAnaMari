@@ -56,7 +56,7 @@ export function Inicio() {
               <Link
                 key={c.slug}
                 to={c.tipo === 'merceria' ? '/catalogo/merceria' : `/catalogo?categoria=${c.slug}`}
-                className="block border border-borde bg-white"
+                className="block border border-borde bg-superficie"
               >
                 <ImagenDemo
                   src={demoCategoria[c.slug] ?? demoCategoria['ropa-de-mujer']!}

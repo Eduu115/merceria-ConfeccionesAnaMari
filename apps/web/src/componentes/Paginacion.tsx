@@ -63,7 +63,7 @@ function BotonPagina({
       className={cx(
         'grid h-11 w-11 place-items-center border text-sm md:h-[34px] md:w-[34px]',
         actual && 'border-acento bg-acento text-white',
-        !actual && 'border-borde bg-white text-tinta',
+        !actual && 'border-borde bg-superficie text-tinta',
         disabled && 'opacity-40',
       )}
     >

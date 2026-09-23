@@ -3,6 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, Mail, Phone, X } from 'lucide-react';
 import { Logo } from './MarcadorSinFoto';
 import { IconoWhatsApp } from './IconoWhatsApp';
+import { BotonTema } from './BotonTema';
 import { usarAjustes } from '../hooks/usar-ajustes';
 import { usarWhatsAppPagina } from '../hooks/whatsapp-pagina';
 import { copys } from '../lib/copys';
@@ -119,6 +120,7 @@ export function Cabecera() {
           ))}
         </nav>
         <div className="ml-auto hidden items-center gap-0.5 lg:flex">
+          <BotonTema />
           {data?.telefono && (
             <IconoContacto href={telHref(data.telefono)} etiqueta="Llamar a la tienda">
               <Phone className="h-5 w-5" strokeWidth={1.75} />
@@ -135,15 +137,18 @@ export function Cabecera() {
             </IconoContacto>
           )}
         </div>
-        <button
-          type="button"
-          className="ml-auto grid h-11 w-11 place-items-center lg:hidden"
-          aria-label={menu ? 'Cerrar menú' : 'Abrir menú'}
-          aria-expanded={menu}
-          onClick={() => setMenu((v) => !v)}
-        >
-          {menu ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
-        </button>
+        <div className="ml-auto flex items-center gap-0.5 lg:hidden">
+          <BotonTema />
+          <button
+            type="button"
+            className="grid h-11 w-11 place-items-center"
+            aria-label={menu ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={menu}
+            onClick={() => setMenu((v) => !v)}
+          >
+            {menu ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
+          </button>
+        </div>
       </div>
       {menu && (
         <nav className="border-t border-borde bg-crema px-4 py-4 lg:hidden" aria-label="Móvil">

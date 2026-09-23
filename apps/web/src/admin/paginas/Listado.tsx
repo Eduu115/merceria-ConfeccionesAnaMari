@@ -59,7 +59,7 @@ export function Listado() {
               placeholder={c.buscar}
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
-              className="min-h-11 w-full rounded-md border border-admin-borde-campo bg-white pl-9 pr-3 text-[0.9rem] outline-none focus:border-admin-acento xl:min-h-12 xl:text-base"
+              className="min-h-11 w-full rounded-md border border-admin-borde-campo bg-superficie pl-9 pr-3 text-[0.9rem] outline-none focus:border-admin-acento xl:min-h-12 xl:text-base"
             />
           </div>
           <div className="flex gap-2">
@@ -91,7 +91,7 @@ export function Listado() {
         )}
 
         {!isLoading && productos.length > 0 && (
-          <div className="overflow-hidden rounded-lg border border-admin-borde bg-white">
+          <div className="overflow-hidden rounded-lg border border-admin-borde bg-superficie">
             <table className="w-full table-fixed text-left text-[0.9rem] xl:text-[0.95rem]">
               <colgroup>
                 <col className="w-1/2" />

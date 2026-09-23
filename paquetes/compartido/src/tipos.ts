@@ -39,10 +39,16 @@ export type ProductoTarjeta = {
   imagen: ImagenPublica | null;
 };
 
+export type ColorProducto = {
+  valor: string;
+  etiqueta: string;
+  orden: number;
+};
+
 export type ProductoFicha = ProductoTarjeta & {
   descripcion: string | null;
   composicion: string | null;
-  colores: string | null;
+  colores: ColorProducto[];
   atributos: AtributoPublico[];
   imagenes: ImagenPublica[];
   relacionados: ProductoTarjeta[];

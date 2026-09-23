@@ -173,7 +173,7 @@ function Campo({
 
 function inputCls(error: boolean) {
   return cx(
-    'w-full border bg-white px-3 py-2.5',
+    'w-full border bg-superficie px-3 py-2.5',
     error ? 'border-[1.5px] border-error' : 'border-borde-fuerte',
   );
 }

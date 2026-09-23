@@ -34,7 +34,7 @@ export function FichaProducto() {
 
   const fotos = data.imagenes;
   const tipos = data.atributos.filter((a) => a.familia === 'tipo_merceria');
-  const coloresAttr = data.atributos.filter((a) => a.familia === 'color' && a.hex);
+  const coloresProducto = data.colores;
 
   return (
     <>
@@ -116,28 +116,37 @@ export function FichaProducto() {
                   ))}
                 </tbody>
               </table>
-              {coloresAttr.length > 0 && (
-                <div className="mt-4">
-                  <p className="mb-2.5 text-[0.8rem] font-semibold uppercase tracking-[0.06em] text-tinta-apagada">
-                    {copys.ficha.carta}
-                  </p>
-                  <ul className="flex flex-wrap gap-1.5">
-                    {coloresAttr.slice(0, 12).map((c) => (
-                      <li
-                        key={c.slug}
-                        title={c.nombre}
-                        className="h-6 w-6 border border-borde"
-                        style={{ background: c.hex ?? '#ccc' }}
-                      />
-                    ))}
-                    {coloresAttr.length > 12 && (
-                      <li className="grid h-6 w-6 place-items-center border border-dashed border-borde-fuerte text-[11px] text-tinta-apagada">
-                        +{coloresAttr.length - 12}
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
+            </div>
+          )}
+          {coloresProducto.length > 0 && (
+            <div className="mt-4">
+              <p className="mb-2.5 text-[0.8rem] font-semibold uppercase tracking-[0.06em] text-tinta-apagada">
+                {copys.ficha.carta}
+              </p>
+              <ul className="flex flex-wrap gap-1.5">
+                {coloresProducto.slice(0, 12).map((c) => (
+                  <li
+                    key={`${c.orden}-${c.valor}`}
+                    title={c.etiqueta}
+                    className="h-6 w-6 border border-borde"
+                    style={{
+                      background:
+                        c.valor === 'multicolor'
+                          ? 'conic-gradient(red, yellow, lime, aqua, blue, magenta, red)'
+                          : c.valor === 'transparente'
+                            ? '#fff'
+                            : c.valor.startsWith('#')
+                              ? c.valor
+                              : '#ccc',
+                    }}
+                  />
+                ))}
+                {coloresProducto.length > 12 && (
+                  <li className="grid h-6 w-6 place-items-center border border-dashed border-borde-fuerte text-[11px] text-tinta-apagada">
+                    +{coloresProducto.length - 12}
+                  </li>
+                )}
+              </ul>
             </div>
           )}
           {data.descripcion && (
@@ -161,10 +170,10 @@ export function FichaProducto() {
                     <td>{data.composicion}</td>
                   </tr>
                 )}
-                {data.colores && (
+                {coloresProducto.length > 0 && (
                   <tr className="border-b border-borde">
                     <th className="py-2.5 pr-6 text-left font-medium">{copys.ficha.colores}</th>
-                    <td>{data.colores}</td>
+                    <td>{coloresProducto.map((c) => c.etiqueta).join(', ')}</td>
                   </tr>
                 )}
               </tbody>

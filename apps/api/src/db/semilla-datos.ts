@@ -531,74 +531,59 @@ export const PREGUNTAS: { grupo: GrupoPregunta; pregunta: string; respuesta: str
   [
     {
       grupo: 'tienda',
-      pregunta: '¿Dónde estáis y cuál es el horario?',
+      pregunta: '¿Qué tipo de productos venden?',
       respuesta:
-        'Calle Almagro 15, Getafe. L–V 10:15–14:00 y 17:30–20:00; sábados de 10:15 a 14:00. Domingo cerrado.',
+        'En Confecciones Ana Mari nos especializamos en lencería femenina, incluyendo brasieres, panties, conjuntos, bodys, pijamas sensuales y más. Trabajamos con materiales de calidad que garantizan comodidad y estilo.',
       orden: 1,
     },
     {
       grupo: 'tienda',
-      pregunta: '¿Qué tipo de ropa vendéis?',
+      pregunta: '¿Cómo puedo contactar al equipo de atención al cliente?',
       respuesta:
-        'Ropa cómoda de mujer, interior e infantil: batas, camisones, pijamas y prendas de diario en todas las tallas.',
+        'Puedes escribirnos al correo anamariconfecciones@gmail.com o al teléfono 615 644 940. Horario: lunes a viernes de 10:15 a 14:00 y de 17:30 a 20:00; sábados de 10:15 a 14:00.',
       orden: 2,
     },
     {
-      grupo: 'tienda',
-      pregunta: '¿Hasta qué talla trabajáis?',
+      grupo: 'comprar',
+      pregunta: '¿Cómo sé cuál es mi talla?',
       respuesta:
-        'Trabajamos de la S a la 3XL. Si no ves tu talla en la web, pregúntanos: en tienda hay más.',
-      orden: 3,
-    },
-    {
-      grupo: 'tienda',
-      pregunta: '¿Vendéis también material de costura?',
-      respuesta: 'Sí: hilos, lanas, cremalleras, cintas, botones, agujas y el resto de mercería.',
-      orden: 4,
-    },
-    {
-      grupo: 'arreglos',
-      pregunta: '¿Hace falta pedir cita?',
-      respuesta: 'No hace falta. Trae la prenda en horario de tienda y te atendemos.',
+        'Contamos con una guía de tallas en cada producto para ayudarte a elegir la talla adecuada. Si aún tienes dudas, puedes escribirnos y con gusto te orientamos.',
       orden: 1,
     },
     {
-      grupo: 'arreglos',
-      pregunta: '¿Cuánto tarda un arreglo?',
-      respuesta: 'Entre 24 y 72 horas según la prenda y la carga de trabajo.',
+      grupo: 'comprar',
+      pregunta: '¿Hacen envíos a todo el país?',
+      respuesta:
+        'Realizamos envíos únicamente a la Península. Los tiempos de entrega varían según tu ubicación, pero normalmente tardan entre 2 y 5 días hábiles.',
       orden: 2,
     },
     {
-      grupo: 'arreglos',
-      pregunta: '¿Puedo saber el precio antes de dejar la prenda?',
-      respuesta: 'Sí: el diagnóstico es gratuito y te damos el presupuesto en el momento.',
+      grupo: 'comprar',
+      pregunta: '¿Puedo cambiar o devolver un producto?',
+      respuesta:
+        'Sí, aceptamos cambios y devoluciones dentro de los 7 días posteriores a la recepción, siempre que el producto esté en su empaque original, sin uso y con etiquetas. Consulta nuestra política de cambios para más detalles.',
       orden: 3,
     },
     {
-      grupo: 'arreglos',
-      pregunta: '¿Arregláis prendas compradas en otro sitio?',
-      respuesta: 'Sí. Da igual dónde la compraras: si se puede arreglar, lo hacemos.',
+      grupo: 'comprar',
+      pregunta: '¿Cuáles son los métodos de pago aceptados?',
+      respuesta:
+        'Aceptamos pagos con tarjetas de crédito, débito, transferencias bancarias y pagos a través de plataformas como Stripe o PayPal.',
       orden: 4,
     },
     {
       grupo: 'comprar',
-      pregunta: '¿Puedo comprar por la web?',
+      pregunta: '¿Es seguro comprar en su sitio?',
       respuesta:
-        'No: la web es un escaparate. Pregúntanos por WhatsApp o pásate por la tienda.',
-      orden: 1,
+        'Sí. Utilizamos conexiones cifradas (SSL) y plataformas de pago seguras para proteger tus datos personales y bancarios.',
+      orden: 5,
     },
     {
       grupo: 'comprar',
-      pregunta: '¿Cómo sé si tenéis mi talla disponible?',
+      pregunta: '¿Puedo hacer un pedido personalizado?',
       respuesta:
-        'En la ficha verás las tallas que hay. Las tachadas están agotadas. Si dudas, escríbenos o ven a la tienda.',
-      orden: 2,
-    },
-    {
-      grupo: 'comprar',
-      pregunta: '¿Hacéis encargos o pedidos especiales?',
-      respuesta: 'Sí, para algunas prendas. Pregúntanos por WhatsApp o en el mostrador.',
-      orden: 3,
+        'Sí, dependiendo del producto. Escríbenos por WhatsApp o correo electrónico y revisaremos la disponibilidad y los tiempos de entrega.',
+      orden: 6,
     },
   ];
 

@@ -141,7 +141,7 @@ export function FormularioUsuario(props: Props) {
       <form
         id={ID_FORMULARIO}
         onSubmit={guardar}
-        className="flex w-full max-w-lg flex-col gap-10 rounded-xl border border-admin-borde bg-white p-6 shadow-sm md:p-8"
+        className="flex w-full max-w-lg flex-col gap-10 rounded-xl border border-admin-borde bg-superficie p-6 shadow-sm md:p-8"
       >
         <section className="flex max-w-sm flex-col gap-4">
           <h2 className="font-cuerpo text-[0.95rem] font-semibold text-admin-texto">Datos de la cuenta</h2>
@@ -216,7 +216,7 @@ export function FormularioUsuario(props: Props) {
       </form>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 flex gap-3 border-t border-admin-borde bg-white p-4 lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 flex gap-3 border-t border-admin-borde bg-superficie p-4 lg:hidden">
         {props.modo === 'editar' && !esUnoMismo && (
           <BotonAdmin variante="peligro" cargando={borrando} onClick={() => setConfirmandoBorrar(true)}>
             {borrando ? c.borrando : c.borrar}

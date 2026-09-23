@@ -23,7 +23,7 @@ export function BotonAdmin({
     'inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4 text-[0.9rem] font-medium transition-colors disabled:pointer-events-none disabled:opacity-60';
   const variantes = {
     primario: 'bg-admin-acento text-white hover:bg-[#264c73]',
-    secundario: 'border border-admin-borde-campo bg-white text-admin-texto-2 hover:bg-admin-fondo',
+    secundario: 'border border-admin-borde-campo bg-superficie text-admin-texto-2 hover:bg-admin-fondo',
     peligro: 'border border-admin-error text-admin-error hover:bg-admin-error-fondo',
   };
   return (

@@ -41,7 +41,7 @@ function BarraLateral() {
         : copysAdmin.armazon.marcaSufijo;
 
   return (
-    <aside className="hidden w-[240px] flex-none flex-col border-r border-admin-borde bg-white lg:flex xl:w-[280px]">
+    <aside className="hidden w-[240px] flex-none flex-col border-r border-admin-borde bg-superficie lg:flex xl:w-[280px]">
       <div className="border-b border-admin-borde-2 px-4 py-4 leading-tight">
         <p className="text-[0.95rem] font-bold text-admin-texto">{copysAdmin.armazon.marcaLinea1}</p>
         <p className="text-[0.95rem] font-bold text-admin-texto">{copysAdmin.armazon.marcaLinea2}</p>

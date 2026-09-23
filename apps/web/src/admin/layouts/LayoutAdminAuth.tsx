@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 export function LayoutAdminAuth() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-admin-fondo px-4.5 py-11 font-cuerpo text-admin-texto-2">
-      <div className="w-full max-w-[380px] md:rounded-xl md:border md:border-admin-borde md:bg-white md:p-6">
+      <div className="w-full max-w-[380px] md:rounded-xl md:border md:border-admin-borde md:bg-superficie md:p-6">
         <Outlet />
       </div>
     </div>

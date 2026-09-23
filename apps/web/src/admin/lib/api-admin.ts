@@ -45,6 +45,12 @@ export type ProductoListado = {
   precio_centimos: number | null;
 };
 
+export type ColorProductoAdmin = {
+  valor: string;
+  etiqueta: string;
+  orden: number;
+};
+
 export type ProductoDetalle = {
   id: number;
   slug: string;
@@ -53,7 +59,7 @@ export type ProductoDetalle = {
   categoria_id: number;
   tipo: 'ropa' | 'merceria';
   composicion: string | null;
-  colores: string | null;
+  colores: ColorProductoAdmin[];
   caracteristica: string | null;
   agotado: boolean;
   destacado: boolean;
@@ -70,7 +76,7 @@ export type ProductoEntrada = {
   categoria_id: number;
   descripcion?: string | null;
   composicion?: string | null;
-  colores?: string | null;
+  colores?: { valor: string; orden: number }[];
   caracteristica?: string | null;
   precio_centimos?: number | null;
   agotado?: boolean;

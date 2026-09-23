@@ -13,6 +13,7 @@ import {
   esquemaConsultaProductos,
   type AtributoPublico,
   type CategoriaPublica,
+  type ColorProducto,
   type DiaHorario,
   type ImagenPublica,
   type ProductoFicha,
@@ -29,11 +30,13 @@ import {
   paginas,
   preguntas,
   productoAtributos,
+  productoColores,
   productoTallas,
   productos,
   servicios,
 } from '../db/esquema.js';
 import { horarioPublico } from '../lib/horario.js';
+import { etiquetaValorColor } from '../lib/colores.js';
 import { imagenPublica, mapearAjustes, tarjetaProducto } from '../serializadores/publico.js';
 
 export const publicas = Router();
@@ -328,7 +331,7 @@ publicas.get('/productos/:slug', async (req, res) => {
     }),
     descripcion: fila.productos.descripcion,
     composicion: fila.productos.composicion,
-    colores: fila.productos.colores,
+    colores: extras.colores.get(fila.productos.id) ?? [],
     atributos: attrs,
     imagenes: imgs,
     relacionados: relacionadosFilas.map((r) =>
@@ -371,6 +374,19 @@ async function productosConAtributos(
   familia: 'tipo_merceria' | 'color',
   slugs: string[],
 ): Promise<number[]> {
+  if (familia === 'color') {
+    const catalogo = await db
+      .select()
+      .from(atributos)
+      .where(and(eq(atributos.familia, 'color'), inArray(atributos.slug, slugs)));
+    const valores = catalogo.flatMap((a) => [a.slug, a.hex].filter((v): v is string => Boolean(v)));
+    if (!valores.length) return [];
+    const filas = await db
+      .select({ productoId: productoColores.productoId })
+      .from(productoColores)
+      .where(inArray(productoColores.valor, valores));
+    return [...new Set(filas.map((f) => f.productoId))];
+  }
   const filas = await db
     .select({ productoId: productoAtributos.productoId })
     .from(productoAtributos)
@@ -407,8 +423,9 @@ async function cargarExtras(ids: number[], conTodo = false) {
   const imagenPrincipal = new Map<number, ImagenPublica>();
   const todasImagenes = new Map<number, ImagenPublica[]>();
   const attrs = new Map<number, AtributoPublico[]>();
+  const colores = new Map<number, ColorProducto[]>();
   if (ids.length === 0) {
-    return { tallas, imagenes: imagenPrincipal, todasImagenes, atributos: attrs };
+    return { tallas, imagenes: imagenPrincipal, todasImagenes, atributos: attrs, colores };
   }
 
   const tFilas = await db
@@ -458,9 +475,24 @@ async function cargarExtras(ids: number[], conTodo = false) {
       lista.push({ familia: a.familia, slug: a.slug, nombre: a.nombre, hex: a.hex });
       attrs.set(a.productoId, lista);
     }
+
+    const cFilas = await db
+      .select()
+      .from(productoColores)
+      .where(inArray(productoColores.productoId, ids))
+      .orderBy(asc(productoColores.orden));
+    for (const c of cFilas) {
+      const lista = colores.get(c.productoId) ?? [];
+      lista.push({
+        valor: c.valor,
+        etiqueta: etiquetaValorColor(c.valor),
+        orden: c.orden,
+      });
+      colores.set(c.productoId, lista);
+    }
   }
 
-  return { tallas, imagenes: imagenPrincipal, todasImagenes, atributos: attrs };
+  return { tallas, imagenes: imagenPrincipal, todasImagenes, atributos: attrs, colores };
 }
 
 export async function existeProductoVisible(slug: string): Promise<boolean> {

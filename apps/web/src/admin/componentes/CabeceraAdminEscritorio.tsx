@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { UserRound } from 'lucide-react';
 import { usarSesionAdmin } from '../hooks/usar-sesion-admin';
+import { BotonTema } from '../../componentes/BotonTema';
 
 type Props = {
   migas?: string;
@@ -14,13 +15,14 @@ export function CabeceraAdminEscritorio({ migas, titulo, acciones }: Props) {
   const { data: sesion } = usarSesionAdmin();
 
   return (
-    <div className="hidden items-center justify-between gap-4 border-b border-admin-borde bg-white px-[2.8rem] py-[1.4rem] lg:flex xl:px-[4.2rem] xl:py-7 2xl:px-28">
+    <div className="hidden items-center justify-between gap-4 border-b border-admin-borde bg-superficie px-[2.8rem] py-[1.4rem] lg:flex xl:px-[4.2rem] xl:py-7 2xl:px-28">
       <div>
         {migas && <p className="text-[0.8rem] text-admin-texto-tenue xl:text-[0.85rem]">{migas}</p>}
         <p className="text-[1.375rem] font-bold text-admin-texto xl:text-[1.5rem]">{titulo}</p>
       </div>
       <div className="flex items-center gap-4">
         {acciones && <div className="flex items-center gap-3">{acciones}</div>}
+        <BotonTema className="text-admin-texto hover:bg-admin-borde-2" />
         {sesion?.nombre && (
           <Link
             to="/admin/cuenta"

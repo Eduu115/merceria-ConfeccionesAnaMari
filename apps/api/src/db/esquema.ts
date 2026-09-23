@@ -93,7 +93,6 @@ export const productos = pgTable('productos', {
     .references(() => categorias.id),
   tipo: tipoCatalogo('tipo').notNull(),
   composicion: text('composicion'),
-  colores: text('colores'),
   caracteristica: text('caracteristica'),
   agotado: boolean('agotado').notNull().default(false),
   destacado: boolean('destacado').notNull().default(false),
@@ -105,6 +104,19 @@ export const productos = pgTable('productos', {
     .notNull()
     .defaultNow(),
 });
+
+export const productoColores = pgTable(
+  'producto_colores',
+  {
+    id: serial('id').primaryKey(),
+    productoId: integer('producto_id')
+      .notNull()
+      .references(() => productos.id, { onDelete: 'cascade' }),
+    valor: text('valor').notNull(),
+    orden: integer('orden').notNull().default(0),
+  },
+  (t) => [unique().on(t.productoId, t.orden)],
+);
 
 export const productoTallas = pgTable(
   'producto_tallas',
