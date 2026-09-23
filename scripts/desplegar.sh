@@ -134,11 +134,14 @@ ok "Contenedores en marcha"
 local_url="http://127.0.0.1:${PUERTO_WEB}"
 
 esperar_200() {
-  local url="$1" intentos="$2"
-  for _ in $(seq 1 "$intentos"); do
-    [[ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$url")" == "200" ]] && return 0
+  local url="$1" intentos="$2" codigo
+  for i in $(seq 1 "$intentos"); do
+    codigo="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$url" || true)"
+    [[ "$codigo" == "200" ]] && { printf '\n'; return 0; }
+    printf '\r  %s → %s (intento %s/%s)' "$url" "${codigo:-sin respuesta}" "$i" "$intentos"
     sleep 2
   done
+  printf '\n'
   return 1
 }
 
