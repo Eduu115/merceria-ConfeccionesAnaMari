@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../lib/api';
+import { api, urlApi } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { JsonLd, usarSeo } from '../lib/seo';
 import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
@@ -209,7 +209,7 @@ function Galeria({
     <div>
       <div className="relative">
         <img
-          src={actual.ruta}
+          src={urlApi(actual.ruta)}
           alt={actual.alt || nombre}
           className="aspect-[3/4] w-full object-cover"
           width={800}
@@ -242,7 +242,7 @@ function Galeria({
                   onClick={() => setI(idx)}
                   className={cx('block w-full', idx === i && 'ring-2 ring-acento')}
                 >
-                  <img src={f.ruta} alt="" className="aspect-[3/4] w-full object-cover" />
+                  <img src={urlApi(f.ruta)} alt="" className="aspect-[3/4] w-full object-cover" />
                 </button>
               </li>
             ))}

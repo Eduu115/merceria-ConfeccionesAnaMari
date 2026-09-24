@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { copys } from '../lib/copys';
 import { telHref } from '../lib/whatsapp';
+import { LogoMarca } from './LogoMarca';
 
 export function PieDePagina() {
   const { data: ajustes } = usarAjustes();
@@ -23,7 +24,10 @@ export function PieDePagina() {
     <footer className="mt-auto bg-arena-2">
       <div className="envoltorio grid gap-10 py-10 md:grid-cols-[1.4fr_1fr]">
         <div>
-          <p className="font-titular text-2xl text-tinta">{copys.negocio}</p>
+          <Link to="/" className="inline-flex items-center gap-3" aria-label={copys.negocio}>
+            <LogoMarca tamano="pie" />
+            <span className="font-titular text-2xl text-tinta">{copys.negocio}</span>
+          </Link>
           <p className="mt-2 max-w-md text-tinta-3">{ajustes.negocio_descripcion}</p>
           <p className="mt-4 text-tinta-2">
             {ajustes.direccion} · {ajustes.poblacion}

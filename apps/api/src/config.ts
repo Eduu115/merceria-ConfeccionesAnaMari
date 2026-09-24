@@ -22,8 +22,12 @@ function numero(nombre: string, defecto: number): number {
 
 export const config = {
   entorno: opcional('NODO_ENTORNO', 'desarrollo'),
-  puerto: numero('PUERTO', 3010),
+  puerto: process.env.PORT ? numero('PORT', 3001) : numero('PUERTO', 3010),
   origenPublico: opcional('ORIGEN_PUBLICO', 'http://localhost:5173'),
+  corsOrigins: opcional('CORS_ORIGINS', '')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean),
   servirEstaticos: opcional('SERVIR_ESTATICOS', 'false') === 'true',
   databaseUrl: opcional(
     'DATABASE_URL',
@@ -49,3 +53,9 @@ export const config = {
 };
 
 export const esProduccion = config.entorno === 'produccion';
+
+export function origenCorsPermitido(origin: string | undefined): boolean {
+  if (!origin) return true;
+  if (config.corsOrigins.length === 0) return !esProduccion;
+  return config.corsOrigins.includes(origin);
+}
