@@ -92,7 +92,7 @@ export function Legal() {
             <section key={a.id} id={a.id} className="mb-10 scroll-mt-28">
               <h2 className="mb-3 font-titular text-xl text-tinta">{a.titulo}</h2>
               <div
-                className="space-y-3 text-tinta-3 [&_ul]:list-disc [&_ul]:pl-5"
+                className="space-y-3 text-tinta-3 [&_h3]:mt-4 [&_h3]:font-titular [&_h3]:text-base [&_h3]:text-tinta [&_ul]:list-disc [&_ul]:pl-5 [&_.desborde-x]:-mx-1 [&_.desborde-x]:overflow-x-auto [&_table]:w-full [&_table]:min-w-[28rem] [&_table]:border-collapse [&_table]:text-sm [&_th]:border [&_th]:border-borde [&_th]:bg-fondo-2 [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-medium [&_th]:text-tinta [&_td]:border [&_td]:border-borde [&_td]:px-3 [&_td]:py-2"
                 dangerouslySetInnerHTML={{ __html: a.html }}
               />
             </section>

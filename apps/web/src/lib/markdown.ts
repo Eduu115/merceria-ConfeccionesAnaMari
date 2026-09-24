@@ -23,12 +23,50 @@ export function markdownAHtml(texto: string): string {
   const lineas = texto.split('\n');
   const out: string[] = [];
   let lista: string[] = [];
+  let tabla: string[][] = [];
+
   const vaciarLista = () => {
     if (!lista.length) return;
     out.push(`<ul>${lista.map((li) => `<li>${li}</li>`).join('')}</ul>`);
     lista = [];
   };
+
+  const vaciarTabla = () => {
+    if (!tabla.length) return;
+    const [cabecera, ...filas] = tabla;
+    const thead = `<thead><tr>${cabecera.map((c) => `<th>${enriquecer(escapar(c))}</th>`).join('')}</tr></thead>`;
+    const tbody = `<tbody>${filas
+      .map((fila) => `<tr>${fila.map((c) => `<td>${enriquecer(escapar(c))}</td>`).join('')}</tr>`)
+      .join('')}</tbody>`;
+    out.push(`<div class="desborde-x"><table>${thead}${tbody}</table></div>`);
+    tabla = [];
+  };
+
+  const celdas = (linea: string) =>
+    linea
+      .replace(/^\|/, '')
+      .replace(/\|$/, '')
+      .split('|')
+      .map((c) => c.trim());
+
+  const esSeparador = (linea: string) => /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$/.test(linea.trim());
+
   for (const linea of lineas) {
+    if (linea.trim().startsWith('|')) {
+      vaciarLista();
+      if (esSeparador(linea)) continue;
+      tabla.push(celdas(linea));
+      continue;
+    }
+    vaciarTabla();
+
+    const h3 = linea.match(/^###\s+(.+)/);
+    if (h3) {
+      vaciarLista();
+      out.push(`<h3>${enriquecer(escapar(h3[1]))}</h3>`);
+      continue;
+    }
+
     const item = linea.match(/^[-*]\s+(.+)/);
     if (item) {
       lista.push(enriquecer(escapar(item[1])));
@@ -39,6 +77,7 @@ export function markdownAHtml(texto: string): string {
     out.push(`<p>${enriquecer(escapar(linea))}</p>`);
   }
   vaciarLista();
+  vaciarTabla();
   return out.join('');
 }
 
