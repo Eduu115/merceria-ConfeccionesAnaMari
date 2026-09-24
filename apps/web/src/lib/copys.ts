@@ -19,6 +19,8 @@ export const copys = {
     privacidad: 'Política de privacidad',
     cookies: 'Política de cookies',
     copyright: '© 2026 Confecciones Ana Mari',
+    desarrolladoPor: 'Desarrollado por',
+    yPor: 'y por',
   },
   botones: {
     contactaWas: 'Contacta por WhatsApp',
