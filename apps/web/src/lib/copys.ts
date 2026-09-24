@@ -179,14 +179,17 @@ export const metas: Record<string, { title: string; description: string }> = {
   },
   '/aviso-legal': {
     title: 'Aviso legal · Confecciones Ana Mari',
-    description: 'Aviso legal de Confecciones Ana Mari.',
+    description:
+      'Datos identificativos, condiciones de uso y responsabilidad del sitio confemerana.es.',
   },
   '/privacidad': {
     title: 'Política de privacidad · Confecciones Ana Mari',
-    description: 'Política de privacidad de Confecciones Ana Mari.',
+    description:
+      'Cómo tratamos los datos del formulario de contacto, WhatsApp y el área de administración.',
   },
   '/cookies': {
     title: 'Política de cookies · Confecciones Ana Mari',
-    description: 'Política de cookies de Confecciones Ana Mari.',
+    description:
+      'Cookies técnicas, almacenamiento local y servicios de terceros (mapa, fuentes, Cloudflare).',
   },
 };
