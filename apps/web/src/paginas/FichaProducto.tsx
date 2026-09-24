@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { api, urlApi } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { JsonLd, usarSeo } from '../lib/seo';
-import { ImagenDemo } from '../componentes/ImagenDemo';
-import { demoImagenProducto } from '../lib/demo-imagenes';
+import { Imagen } from '../componentes/Imagen';
+import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
 import { RejillaProductos } from '../componentes/TarjetaProducto';
 import { usarWhatsAppPagina } from '../hooks/whatsapp-pagina';
 import { cx } from '../lib/cx';
@@ -47,7 +47,7 @@ export function FichaProducto() {
         }}
       />
       <article className="envoltorio grid items-stretch gap-8 py-8 md:grid-cols-2">
-        <Galeria fotos={fotos} nombre={data.nombre} slug={data.slug} tipo={data.tipo} />
+        <Galeria fotos={fotos} nombre={data.nombre} />
         <div className="flex h-full flex-col">
           <nav className="mb-4 text-[0.95rem] text-tinta-apagada" aria-label="Migas de pan">
             <Link to="/" className="hover:underline">
@@ -197,34 +197,23 @@ export function FichaProducto() {
 function Galeria({
   fotos,
   nombre,
-  slug,
-  tipo,
 }: {
   fotos: { ruta: string; alt: string }[];
   nombre: string;
-  slug: string;
-  tipo: 'ropa' | 'merceria';
 }) {
   const [i, setI] = useState(0);
   if (fotos.length === 0) {
-    return (
-      <ImagenDemo
-        src={demoImagenProducto(slug, tipo)}
-        alt={nombre}
-        className="aspect-[3/4] w-full border border-borde"
-      />
-    );
+    return <MarcadorSinFoto variante="ficha" />;
   }
   const actual = fotos[i]!;
   return (
     <div>
       <div className="relative">
-        <img
+        <Imagen
           src={urlApi(actual.ruta)}
           alt={actual.alt || nombre}
-          className="aspect-[3/4] w-full object-cover"
-          width={800}
-          height={1067}
+          loading="eager"
+          className="aspect-[3/4] w-full"
         />
         {fotos.length > 1 && (
           <p className="absolute bottom-2 right-2 bg-black/55 px-2 py-0.5 text-xs text-white md:hidden">
@@ -253,7 +242,7 @@ function Galeria({
                   onClick={() => setI(idx)}
                   className={cx('block w-full', idx === i && 'ring-2 ring-acento')}
                 >
-                  <img src={urlApi(f.ruta)} alt="" className="aspect-[3/4] w-full object-cover" />
+                  <Imagen src={urlApi(f.ruta)} alt="" className="aspect-[3/4] w-full" />
                 </button>
               </li>
             ))}

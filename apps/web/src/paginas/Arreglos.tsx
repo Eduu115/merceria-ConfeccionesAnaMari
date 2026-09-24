@@ -4,7 +4,7 @@ import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
 import { BotonesContacto } from '../componentes/Boton';
-import { ImagenDemo } from '../componentes/ImagenDemo';
+import { Imagen } from '../componentes/Imagen';
 import { demoEditorial } from '../lib/demo-imagenes';
 import { enlaceWhatsApp, telHref } from '../lib/whatsapp';
 
@@ -33,7 +33,7 @@ export function Arreglos() {
           </div>
         </div>
         <div className="order-1 md:order-2">
-          <ImagenDemo
+          <Imagen
             src={demoEditorial.taller}
             alt="Taller de arreglos de ropa"
             loading="eager"

@@ -40,6 +40,8 @@ export const copysAdmin = {
     etiquetaDestacado: 'Destacado',
     vacioTitulo: 'Todavía no hay productos',
     vacioTexto: 'Añade el primero para que aparezca en el catálogo público.',
+    conteo: (n: number) => `${n} ${n === 1 ? 'producto' : 'productos'}`,
+    conteoFiltrado: (n: number, total: number) => `${n} de ${total} productos`,
     cargando: 'Cargando productos…',
     errorCarga: 'No se ha podido cargar el listado.',
   },

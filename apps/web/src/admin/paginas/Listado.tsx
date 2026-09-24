@@ -36,6 +36,10 @@ export function Listado() {
     });
   }, [data, filtro, busqueda]);
 
+  const total = data?.length ?? 0;
+  const hayFiltro = filtro !== 'todos' || busqueda.trim() !== '';
+  const conteo = hayFiltro ? c.conteoFiltrado(productos.length, total) : c.conteo(total);
+
   return (
     <>
       <CabeceraAdminMovil variante="listado" titulo={c.titulo} />
@@ -62,21 +66,28 @@ export function Listado() {
               className="min-h-11 w-full rounded-md border border-admin-borde-campo bg-superficie pl-9 pr-3 text-[0.9rem] outline-none focus:border-admin-acento xl:min-h-12 xl:text-base"
             />
           </div>
-          <div className="flex gap-2">
-            {(['todos', 'ropa', 'merceria'] as const).map((f) => (
-              <button
-                key={f}
-                type="button"
-                onClick={() => setFiltro(f)}
-                className={`min-h-9 rounded-md px-3 text-[0.85rem] font-medium transition-colors xl:min-h-11 xl:px-4 xl:text-[0.95rem] ${
-                  filtro === f
-                    ? 'bg-admin-acento-fondo text-admin-acento'
-                    : 'text-admin-texto-3 hover:bg-admin-fondo'
-                }`}
-              >
-                {f === 'todos' ? c.filtroTodos : f === 'ropa' ? c.filtroRopa : c.filtroMerceria}
-              </button>
-            ))}
+          <div className="flex items-center gap-3 xl:gap-4">
+            {!isLoading && !isError && (
+              <p className="shrink-0 whitespace-nowrap text-[0.85rem] text-admin-texto-3 xl:text-[0.95rem]">
+                {conteo}
+              </p>
+            )}
+            <div className="flex gap-2">
+              {(['todos', 'ropa', 'merceria'] as const).map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setFiltro(f)}
+                  className={`min-h-9 rounded-md px-3 text-[0.85rem] font-medium transition-colors xl:min-h-11 xl:px-4 xl:text-[0.95rem] ${
+                    filtro === f
+                      ? 'bg-admin-acento-fondo text-admin-acento'
+                      : 'text-admin-texto-3 hover:bg-admin-fondo'
+                  }`}
+                >
+                  {f === 'todos' ? c.filtroTodos : f === 'ropa' ? c.filtroRopa : c.filtroMerceria}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

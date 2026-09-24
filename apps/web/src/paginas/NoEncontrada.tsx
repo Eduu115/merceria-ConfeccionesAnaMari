@@ -1,4 +1,4 @@
-import { ImagenDemo } from '../componentes/ImagenDemo';
+import { Imagen } from '../componentes/Imagen';
 import { demoEditorial } from '../lib/demo-imagenes';
 import { Boton } from '../componentes/Boton';
 import { copys } from '../lib/copys';
@@ -37,7 +37,7 @@ export function NoEncontrada() {
         </div>
       </div>
       <div className="hidden md:block">
-        <ImagenDemo
+        <Imagen
           src={demoEditorial.taller}
           alt="Taller de arreglos de ropa"
           className="h-full min-h-[340px]"

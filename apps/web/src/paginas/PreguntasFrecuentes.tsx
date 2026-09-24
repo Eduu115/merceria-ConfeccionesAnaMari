@@ -41,7 +41,7 @@ export function PreguntasFrecuentes() {
       <section className="envoltorio py-10 md:py-14">
         <Acordeon grupos={grupos} />
       </section>
-      <section className="bg-arena-2">
+      <section className="bg-arena">
         <div className="envoltorio flex flex-col items-start gap-4 py-10 md:flex-row md:items-center md:justify-between">
           <p className="font-titular text-[1.85rem] text-tinta">{copys.faq.cierre}</p>
           <BotonesContacto

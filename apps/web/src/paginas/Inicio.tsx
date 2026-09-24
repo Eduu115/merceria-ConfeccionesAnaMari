@@ -4,8 +4,10 @@ import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
 import { Boton, BotonesContacto, BotonWhatsApp, EnlaceTexto } from '../componentes/Boton';
-import { ImagenDemo } from '../componentes/ImagenDemo';
+import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
+import { Imagen } from '../componentes/Imagen';
 import { demoCategoria, demoEditorial } from '../lib/demo-imagenes';
+import { fotoEntrada } from '../lib/fotos-tienda';
 import { RejillaProductos } from '../componentes/TarjetaProducto';
 import { TablaHorario } from '../componentes/TablaHorario';
 import { Mapa } from '../componentes/Mapa';
@@ -37,7 +39,7 @@ export function Inicio() {
           </div>
         </div>
         <div className="order-1 min-h-[240px] md:order-2 md:min-h-[520px]">
-          <ImagenDemo
+          <Imagen
             src={demoEditorial.heroCoser}
             alt="Máquina de coser en el taller"
             loading="eager"
@@ -51,21 +53,25 @@ export function Inicio() {
           <h2 className="mb-6 font-titular text-[2rem] text-tinta md:text-[2.35rem]">
             {copys.inicio.queEncontraras}
           </h2>
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-3">
             {data.categorias.map((c) => (
               <Link
                 key={c.slug}
                 to={c.tipo === 'merceria' ? '/catalogo/merceria' : `/catalogo?categoria=${c.slug}`}
                 className="block border border-borde bg-superficie"
               >
-                <ImagenDemo
-                  src={demoCategoria[c.slug] ?? demoCategoria['ropa-de-mujer']!}
-                  alt={c.nombre}
-                  className="aspect-[5/4] w-full"
-                />
-                <div className="p-3">
-                  <h3 className="font-cuerpo text-[1.05rem] font-semibold text-tinta">{c.nombre}</h3>
-                  <p className="mt-1 text-sm leading-snug text-tinta-apagada">{c.descripcion}</p>
+                {demoCategoria[c.slug] ? (
+                  <Imagen
+                    src={demoCategoria[c.slug]!}
+                    alt={c.nombre}
+                    className="aspect-[5/4] w-full"
+                  />
+                ) : (
+                  <MarcadorSinFoto variante="bloque" etiqueta="" className="aspect-[5/4] w-full" />
+                )}
+                <div className="p-4">
+                  <h3 className="font-cuerpo text-[1.3rem] font-semibold text-tinta">{c.nombre}</h3>
+                  <p className="mt-1.5 text-[1rem] leading-snug text-tinta-apagada">{c.descripcion}</p>
                 </div>
               </Link>
             ))}
@@ -75,27 +81,27 @@ export function Inicio() {
 
       <section className="grid md:grid-cols-[0.9fr_1.1fr]">
         <div className="hidden md:flex">
-          <ImagenDemo
+          <Imagen
             src={demoEditorial.macroHilos}
             alt="Carretes de hilo de colores"
-            className="min-h-[320px] flex-1"
+            className="h-full min-h-[320px] flex-1"
           />
         </div>
-        <div className="bg-arena px-5 py-12 md:px-10 lg:px-12">
+        <div className="bg-arena px-5 py-16 md:px-10 lg:px-12">
           <h2 className="font-titular text-[2.15rem] leading-[1.15] text-tinta md:text-[2.5rem]">
             {copys.inicio.arreglosTitular}
           </h2>
           <p className="mt-3 max-w-lg text-tinta-3">{a.arreglos_intro}</p>
-          <ol className="mt-5 space-y-2">
+          <ol className="mt-6 space-y-2.5">
             {copys.inicio.pasos.map((p) => (
               <li
                 key={p.n}
-                className="flex items-center gap-3 border border-[#ccc6b9] bg-crema px-3 py-2.5"
+                className="flex items-center gap-4 border border-[#ccc6b9] bg-crema px-4 py-3"
               >
-                <span className="w-6 shrink-0 font-cuerpo text-lg font-bold leading-none text-acento">
+                <span className="w-7 shrink-0 font-cuerpo text-xl font-bold leading-none text-acento">
                   {p.n}
                 </span>
-                <span className="font-cuerpo text-[0.95rem] font-semibold text-tinta-2">{p.titulo}</span>
+                <span className="font-cuerpo text-[1.02rem] font-semibold text-tinta-2">{p.titulo}</span>
               </li>
             ))}
           </ol>
@@ -144,10 +150,10 @@ export function Inicio() {
           </div>
         </div>
         <div className="order-1 p-5 md:order-2 md:p-8">
-          <ImagenDemo
-            src={demoEditorial.equipo}
-            alt="Ana y el equipo en la tienda"
-            className="h-60 min-h-[240px] border border-borde md:h-[340px]"
+          <Imagen
+            src={fotoEntrada.src}
+            alt={fotoEntrada.alt}
+            className="h-60 min-h-[240px] w-full border border-borde object-top md:h-[340px] 2xl:h-[420px]"
           />
         </div>
       </section>
@@ -164,7 +170,7 @@ export function Inicio() {
           />
         </div>
         <div className="flex flex-col justify-center px-5 py-12 md:px-10 lg:px-12">
-          <div className="flex w-full max-w-2xl flex-col md:ml-auto">
+          <div className="flex w-full max-w-2xl flex-col md:mx-auto">
             <h2 className="hidden font-titular text-[2.15rem] leading-[1.15] text-tinta md:block md:text-[2.5rem]">
               {copys.inicio.donde}
             </h2>

@@ -14,9 +14,9 @@ export function BurbujaWhatsApp() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escríbenos por WhatsApp"
-      className="fixed bottom-3 right-3 z-40 grid h-[52px] w-[52px] place-items-center rounded-full bg-whatsapp text-white shadow-panel hover:bg-whatsapp-oscuro"
+      className="fixed bottom-3 right-3 z-40 grid h-[62px] w-[62px] place-items-center rounded-full bg-whatsapp text-white shadow-panel hover:bg-whatsapp-oscuro"
     >
-      <IconoWhatsApp className="h-7 w-7" />
+      <IconoWhatsApp className="h-[34px] w-[34px]" />
     </a>
   );
 }

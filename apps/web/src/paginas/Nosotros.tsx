@@ -1,15 +1,18 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { usarSeo } from '../lib/seo';
 import { CabeceraDePagina } from '../componentes/CabeceraDePagina';
-import { ImagenDemo } from '../componentes/ImagenDemo';
-import { demoEditorial, demoLocal } from '../lib/demo-imagenes';
+import { Imagen } from '../componentes/Imagen';
+import { VisorFotos } from '../componentes/VisorFotos';
+import { fotoFrente, fotosTienda } from '../lib/fotos-tienda';
 import { Boton, BotonTelefono, BotonWhatsApp } from '../componentes/Boton';
 import { enlaceWhatsApp, telHref } from '../lib/whatsapp';
 
 export function Nosotros() {
   usarSeo(metas['/nosotros'].title, metas['/nosotros'].description);
+  const [visor, setVisor] = useState<number | null>(null);
   const { data: a } = useQuery({ queryKey: ['ajustes'], queryFn: api.ajustes });
   if (!a) return <div className="envoltorio py-16">Cargando…</div>;
   const wa = enlaceWhatsApp(a.whatsapp_telefono, 'cabecera');
@@ -30,10 +33,10 @@ export function Nosotros() {
           </div>
         </div>
         <div className="order-1 md:order-2">
-          <ImagenDemo
-            src={demoEditorial.equipo}
-            alt="Ana y el equipo en la tienda"
-            className="min-h-[230px] border border-borde md:min-h-[280px]"
+          <Imagen
+            src={fotoFrente.src}
+            alt={fotoFrente.alt}
+            className="min-h-[230px] w-full border border-borde object-top md:min-h-[280px]"
           />
         </div>
       </section>
@@ -41,20 +44,33 @@ export function Nosotros() {
       <section className="envoltorio pb-12">
         <h2 className="mb-4 font-titular text-[2.15rem] text-tinta">{copys.nosotros.local}</h2>
         <div className="flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-4 md:overflow-visible">
-          {copys.nosotros.pies.map((pie, idx) => (
-            <figure key={pie} className="w-[130px] shrink-0 md:w-auto">
-              <ImagenDemo
-                src={demoLocal[idx]!}
-                alt={pie}
-                className="aspect-[4/3] min-h-[130px] border border-borde"
-              />
-              <figcaption className="mt-2 font-cuerpo text-sm text-tinta-apagada">{pie}</figcaption>
+          {fotosTienda.map((foto, i) => (
+            <figure key={foto.pie} className="w-[156px] shrink-0 md:w-auto">
+              <button
+                type="button"
+                className="block w-full cursor-zoom-in"
+                aria-label={`Ampliar foto: ${foto.pie}`}
+                onClick={() => setVisor(i)}
+              >
+                <Imagen
+                  src={foto.src}
+                  alt={foto.alt}
+                  className="aspect-[4/3] min-h-[156px] w-full border border-borde"
+                />
+              </button>
+              <figcaption className="mt-2 font-cuerpo text-sm text-tinta-apagada">{foto.pie}</figcaption>
             </figure>
           ))}
         </div>
+        <VisorFotos
+          fotos={fotosTienda}
+          indice={visor}
+          onCerrar={() => setVisor(null)}
+          onIr={setVisor}
+        />
       </section>
 
-      <section className="bg-arena-2">
+      <section className="bg-arena">
         <div className="envoltorio py-10">
           <p className="font-titular text-[1.85rem] leading-[1.2] text-tinta md:text-[2.1rem]">{copys.nosotros.cierre}</p>
           <div className="mt-6 flex flex-col gap-3 md:flex-row">

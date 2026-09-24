@@ -1,52 +1,24 @@
 /**
- * Imágenes demo (Unsplash / Pexels License — uso libre).
- * Rama temporal `demo/fotos-placeholder`. Sustituir por fotos reales de la tienda.
+ * Imágenes de relleno genéricas (Unsplash / Pexels License — uso libre).
+ * Son decorativas: costura, tejidos y prendas sin identificar a nadie.
+ *
+ * Las fotos que afirman algo sobre el negocio real (Ana y el equipo, el local)
+ * NO se rellenan con stock: usan MarcadorSinFoto hasta tener las de la tienda.
+ * Las de producto tampoco: llegan por el panel de administración.
  */
 
 const base = '/demo';
 
 export const demoEditorial = {
-  heroCoser: `${base}/hero-coser.jpg`,
-  equipo: `${base}/equipo.jpg`,
+  heroCoser: `${base}/hero-coser.webp`,
+  macroHilos: `${base}/macro-hilos.webp`,
   taller: `${base}/taller.jpg`,
-  macroHilos: `${base}/macro-hilos.jpg`,
 } as const;
 
-export const demoCategoria: Record<string, string> = {
-  'ropa-de-mujer': `${base}/categoria-mujer.jpg`,
-  'ropa-de-hombre': `${base}/categoria-hombre.jpg`,
-  'infantil-y-bebe': `${base}/categoria-infantil.jpg`,
-  'merceria-y-costura': `${base}/categoria-merceria.jpg`,
+/** Claves = slug de la categoría raíz en la BD. Si no hay entrada, se cae al marcador. */
+export const demoCategoria: Record<string, string | undefined> = {
+  mujer: `${base}/categoria-mujer.jpg`,
+  hombre: `${base}/categoria-hombre.webp`,
+  ninos: `${base}/categoria-infantil.webp`,
+  'merceria-y-costura': `${base}/categoria-merceria.webp`,
 };
-
-export const demoLocal = [
-  `${base}/local-fachada.jpg`,
-  `${base}/local-interior.jpg`,
-  `${base}/local-mostrador.jpg`,
-  `${base}/local-hilos.jpg`,
-];
-
-const ropa = [
-  `${base}/producto-ropa-1.jpg`,
-  `${base}/producto-ropa-2.jpg`,
-  `${base}/producto-ropa-3.jpg`,
-  `${base}/producto-ropa-4.jpg`,
-];
-
-const merceria = [
-  `${base}/producto-merceria-1.jpg`,
-  `${base}/producto-merceria-2.jpg`,
-  `${base}/producto-merceria-3.jpg`,
-  `${base}/producto-merceria-4.jpg`,
-];
-
-function hashSlug(slug: string): number {
-  let h = 0;
-  for (const c of slug) h = (h * 31 + c.charCodeAt(0)) | 0;
-  return Math.abs(h);
-}
-
-export function demoImagenProducto(slug: string, tipo: 'ropa' | 'merceria'): string {
-  const pool = tipo === 'ropa' ? ropa : merceria;
-  return pool[hashSlug(slug) % pool.length]!;
-}
