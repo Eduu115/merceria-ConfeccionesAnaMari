@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api, urlApi } from '../lib/api';
 import { copys, metas } from '../lib/copys';
 import { JsonLd, usarSeo } from '../lib/seo';
+import { Imagen } from '../componentes/Imagen';
 import { MarcadorSinFoto } from '../componentes/MarcadorSinFoto';
 import { RejillaProductos } from '../componentes/TarjetaProducto';
 import { usarWhatsAppPagina } from '../hooks/whatsapp-pagina';
@@ -208,12 +209,11 @@ function Galeria({
   return (
     <div>
       <div className="relative">
-        <img
+        <Imagen
           src={urlApi(actual.ruta)}
           alt={actual.alt || nombre}
-          className="aspect-[3/4] w-full object-cover"
-          width={800}
-          height={1067}
+          loading="eager"
+          className="aspect-[3/4] w-full"
         />
         {fotos.length > 1 && (
           <p className="absolute bottom-2 right-2 bg-black/55 px-2 py-0.5 text-xs text-white md:hidden">
@@ -242,7 +242,7 @@ function Galeria({
                   onClick={() => setI(idx)}
                   className={cx('block w-full', idx === i && 'ring-2 ring-acento')}
                 >
-                  <img src={urlApi(f.ruta)} alt="" className="aspect-[3/4] w-full object-cover" />
+                  <Imagen src={urlApi(f.ruta)} alt="" className="aspect-[3/4] w-full" />
                 </button>
               </li>
             ))}

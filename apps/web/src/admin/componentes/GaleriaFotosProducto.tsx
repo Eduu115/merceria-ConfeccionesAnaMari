@@ -6,6 +6,7 @@ import { copysAdmin } from '../lib/copys-admin';
 import { urlApi } from '../../lib/api';
 import { apiAdmin, type ImagenAdmin } from '../lib/api-admin';
 import { usarSesionAdmin } from '../hooks/usar-sesion-admin';
+import { Imagen } from '../../componentes/Imagen';
 
 const MAX = 8;
 const TIPOS = ['image/jpeg', 'image/png', 'image/webp'];
@@ -114,7 +115,7 @@ export function GaleriaFotosProducto({ productoId, imagenes }: Props) {
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {imagenes.map((img) => (
             <li key={img.id} className="relative overflow-hidden rounded-md border border-admin-borde bg-admin-fondo">
-              <img src={urlApi(img.ruta)} alt={img.alt} className="aspect-[3/4] w-full object-cover" loading="lazy" />
+              <Imagen src={urlApi(img.ruta)} alt={img.alt} className="aspect-[3/4] w-full" />
               {img.principal && (
                 <span className="absolute left-2 top-2 rounded bg-admin-acento px-1.5 py-0.5 text-[0.7rem] font-semibold text-white">
                   {c.fotosPrincipal}

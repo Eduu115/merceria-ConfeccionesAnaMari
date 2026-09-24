@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import type { ProductoTarjeta } from '@anamari/compartido';
 import { urlApi } from '../lib/api';
+import { Imagen } from './Imagen';
 import { MarcadorSinFoto } from './MarcadorSinFoto';
 import { copys } from '../lib/copys';
 import { cx } from '../lib/cx';
@@ -10,13 +11,10 @@ export function TarjetaProducto({ producto }: { producto: ProductoTarjeta }) {
     <Link to={`/producto/${producto.slug}`} className="group flex flex-col">
       <div className="relative aspect-[3/4] overflow-hidden border border-borde">
         {producto.imagen ? (
-          <img
+          <Imagen
             src={urlApi(producto.imagen.ruta)}
             alt={producto.imagen.alt}
-            width={producto.imagen.ancho ?? 600}
-            height={producto.imagen.alto ?? 800}
-            loading="lazy"
-            className="h-full w-full object-cover"
+            className="h-full w-full"
           />
         ) : (
           <MarcadorSinFoto etiqueta="" className="h-full border-0" />

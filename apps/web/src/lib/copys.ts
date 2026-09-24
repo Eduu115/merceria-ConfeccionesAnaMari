@@ -67,7 +67,6 @@ export const copys = {
   nosotros: {
     titulo: 'Sobre nosotros',
     local: 'El local',
-    pies: ['Fachada', 'Interior', 'Mostrador', 'Hilos'],
     cierre: 'Pásate por la tienda o escríbenos: te atendemos nosotras mismas.',
   },
   contacto: {
