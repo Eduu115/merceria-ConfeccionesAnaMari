@@ -13,7 +13,9 @@ CMD ["npm", "run", "dev", "-w", "apps/web", "--", "--host", "0.0.0.0"]
 
 FROM deps AS build
 ARG VITE_API_URL=
+ARG VITE_SITE_URL=https://confemerana.es
 ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_SITE_URL=$VITE_SITE_URL
 COPY paquetes/compartido ./paquetes/compartido
 COPY apps/web ./apps/web
 RUN npm run build -w apps/web

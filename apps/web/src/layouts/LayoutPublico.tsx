@@ -18,7 +18,9 @@ export function LayoutPublico() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const origen = typeof window !== 'undefined' ? window.location.origin : '';
+  const origen =
+    (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, '') ||
+    (typeof window !== 'undefined' ? window.location.origin : '');
   const localBusiness =
     ajustes && horario
       ? {
@@ -26,8 +28,9 @@ export function LayoutPublico() {
           '@type': 'LocalBusiness',
           name: 'Confecciones Ana Mari',
           alternateName: 'Mercería Ana Mari',
-          image: origen ? `${origen}/marca/logo-fondo.png` : '/marca/logo-fondo.png',
-          logo: origen ? `${origen}/marca/logo.png` : '/marca/logo.png',
+          url: origen || undefined,
+          image: origen ? `${origen}/og-cuadrado.png` : '/og-cuadrado.png',
+          logo: origen ? `${origen}/marca/logo-fondo.png` : '/marca/logo-fondo.png',
           telephone: ajustes.telefono,
           email: ajustes.email,
           address: {
