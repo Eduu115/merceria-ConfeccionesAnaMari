@@ -16,7 +16,18 @@ import { enlaceWhatsApp, mapsDir, telHref } from '../lib/whatsapp';
 export function Inicio() {
   usarSeo(metas['/'].title, metas['/'].description);
   const { data } = useQuery({ queryKey: ['inicio'], queryFn: api.inicio });
-  if (!data) return <div className="envoltorio py-16">Cargando…</div>;
+  if (!data) {
+    return (
+      <div className="min-h-[100dvh]" aria-busy="true">
+        <div className="grid md:min-h-[520px] md:grid-cols-2">
+          <div className="order-1 min-h-[240px] bg-arena md:order-2 md:min-h-[520px]" />
+          <div className="order-2 flex flex-col justify-center bg-crema px-5 py-12 md:order-1 md:px-10">
+            <p className="text-tinta-apagada">Cargando…</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   const a = data.ajustes;
   const wa = enlaceWhatsApp(a.whatsapp_telefono, 'hero');
   const waArr = enlaceWhatsApp(a.whatsapp_telefono, 'arreglos');
@@ -91,6 +102,9 @@ export function Inicio() {
           <Imagen
             src={demoEditorial.macroHilos}
             alt="Carretes de hilo de colores"
+            sizes="(max-width: 768px) 100vw, 45vw"
+            width={900}
+            height={1200}
             className="h-full min-h-[320px] flex-1"
           />
         </div>
@@ -160,6 +174,9 @@ export function Inicio() {
           <Imagen
             src={fotoEntrada.src}
             alt={fotoEntrada.alt}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            width={1000}
+            height={750}
             className="h-60 min-h-[240px] w-full border border-borde object-top md:h-[340px] 2xl:h-[420px]"
           />
         </div>

@@ -75,7 +75,9 @@ export function PieDePagina() {
     queryFn: api.horario,
     staleTime: 5 * 60 * 1000,
   });
-  if (!ajustes) return null;
+  if (!ajustes) {
+    return <footer className="mt-auto min-h-[18rem] bg-arena-2" aria-hidden />;
+  }
 
   const redes = [
     ajustes.redes_facebook && { href: ajustes.redes_facebook, label: 'Facebook' },

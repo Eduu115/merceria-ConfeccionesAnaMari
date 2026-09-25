@@ -63,7 +63,7 @@ export function LayoutPublico() {
     <ProveedorWhatsApp>
       <div className="flex min-h-screen flex-col">
         <Cabecera />
-        <main className="flex-1">
+        <main className="flex-1 min-h-[100dvh]">
           <Outlet />
         </main>
         <PieDePagina />
