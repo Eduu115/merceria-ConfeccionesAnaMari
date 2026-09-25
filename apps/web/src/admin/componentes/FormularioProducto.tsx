@@ -15,7 +15,22 @@ import { GaleriaFotosProducto } from './GaleriaFotosProducto';
 import type { ValorColor } from '../lib/colores';
 type Props = { modo: 'crear' } | { modo: 'editar'; productoId: number };
 
-const TALLAS_HABITUALES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+const TALLAS_HABITUALES = [
+  'S',
+  'M',
+  'L',
+  'XL',
+  '2XL',
+  '3XL',
+  '2 años',
+  '4 años',
+  '6 años',
+  '8 años',
+  '10 años',
+  '12 años',
+  '14 años',
+  'Sin talla',
+];
 const ID_FORMULARIO = 'formulario-producto';
 
 export function FormularioProducto(props: Props) {
@@ -383,7 +398,7 @@ export function FormularioProducto(props: Props) {
           {tipo === 'ropa' && (
             <section className="flex flex-col gap-2">
               <h2 className="font-cuerpo text-[0.9rem] font-semibold text-admin-texto">{c.seccionTallas}</h2>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                 {TALLAS_HABITUALES.map((t) => {
                   const activa = tallas.some((x) => x.talla === t);
                   return (
