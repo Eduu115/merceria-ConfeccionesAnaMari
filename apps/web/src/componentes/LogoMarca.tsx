@@ -6,6 +6,9 @@ export const LOGO = {
   /** Círculo con fondo blanco y esquinas transparentes — uso general. */
   webp: '/marca/logo.webp',
   png: '/marca/logo.png',
+  /** Versión compacta para cabecera / pie (evita bajar 512px). */
+  cabeceraWebp: '/marca/logo-128.webp',
+  cabeceraPng: '/marca/logo-128.png',
   /** Solo trazo/texto azul, sin el disco blanco — fondos oscuros. */
   sinFondoWebp: '/marca/logo-sin-fondo.webp',
   sinFondoPng: '/marca/logo-sin-fondo.png',
@@ -31,6 +34,13 @@ const TAMANOS: Record<Tamano, string> = {
   auth: 'h-20 w-20',
 };
 
+const PX: Record<Tamano, number> = {
+  cabecera: 128,
+  pie: 128,
+  hero: 512,
+  auth: 256,
+};
+
 type Props = {
   tamano?: Tamano;
   className?: string;
@@ -41,8 +51,10 @@ type Props = {
 };
 
 export function LogoMarca({ tamano = 'cabecera', className, enlace = false, sinFondo = false }: Props) {
-  const webp = sinFondo ? LOGO.sinFondoWebp : LOGO.webp;
-  const png = sinFondo ? LOGO.sinFondoPng : LOGO.png;
+  const compacto = tamano === 'cabecera' || tamano === 'pie';
+  const webp = sinFondo ? LOGO.sinFondoWebp : compacto ? LOGO.cabeceraWebp : LOGO.webp;
+  const png = sinFondo ? LOGO.sinFondoPng : compacto ? LOGO.cabeceraPng : LOGO.png;
+  const lado = PX[tamano];
 
   const img = (
     <picture>
@@ -50,8 +62,8 @@ export function LogoMarca({ tamano = 'cabecera', className, enlace = false, sinF
       <img
         src={png}
         alt="Mercería Ana Mari · Confort para todos los talles"
-        width={512}
-        height={512}
+        width={lado}
+        height={lado}
         decoding="async"
         className={cx(TAMANOS[tamano], 'object-contain', className)}
       />

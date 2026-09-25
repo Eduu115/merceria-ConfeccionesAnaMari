@@ -74,7 +74,8 @@ async function arrancar() {
   app.use(
     '/subidas',
     express.static(config.rutaSubidas, {
-      maxAge: '7d',
+      maxAge: '30d',
+      immutable: true,
       index: false,
       fallthrough: false,
       dotfiles: 'deny',

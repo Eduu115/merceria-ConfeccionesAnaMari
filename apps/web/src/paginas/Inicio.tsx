@@ -43,6 +43,10 @@ export function Inicio() {
             src={demoEditorial.heroCoser}
             alt="Máquina de coser en el taller"
             loading="eager"
+            fetchPriority="high"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            width={900}
+            height={600}
             className="h-60 min-h-[240px] md:h-full md:min-h-[520px]"
           />
         </div>
@@ -64,6 +68,9 @@ export function Inicio() {
                   <Imagen
                     src={demoCategoria[c.slug]!}
                     alt={c.nombre}
+                    sizes="(max-width: 1024px) 50vw, 25vw"
+                    width={640}
+                    height={512}
                     className="aspect-[5/4] w-full"
                   />
                 ) : (

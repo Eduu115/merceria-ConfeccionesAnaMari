@@ -213,6 +213,8 @@ function Galeria({
           src={urlApi(actual.ruta)}
           alt={actual.alt || nombre}
           loading="eager"
+          fetchPriority="high"
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="aspect-[3/4] w-full"
         />
         {fotos.length > 1 && (
