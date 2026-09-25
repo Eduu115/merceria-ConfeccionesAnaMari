@@ -1,14 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { LayoutPublico } from './layouts/LayoutPublico';
 import { Inicio } from './paginas/Inicio';
-import { Arreglos } from './paginas/Arreglos';
-import { Nosotros } from './paginas/Nosotros';
-import { Contacto } from './paginas/Contacto';
-import { PreguntasFrecuentes } from './paginas/PreguntasFrecuentes';
-import { Legal } from './paginas/Legal';
-import { CatalogoRopa } from './paginas/CatalogoRopa';
-import { CatalogoMerceria } from './paginas/CatalogoMerceria';
-import { FichaProducto } from './paginas/FichaProducto';
 import { NoEncontrada } from './paginas/NoEncontrada';
 
 export const router = createBrowserRouter([
@@ -16,16 +8,79 @@ export const router = createBrowserRouter([
     element: <LayoutPublico />,
     children: [
       { path: '/', element: <Inicio /> },
-      { path: '/arreglos', element: <Arreglos /> },
-      { path: '/nosotros', element: <Nosotros /> },
-      { path: '/contacto', element: <Contacto /> },
-      { path: '/preguntas-frecuentes', element: <PreguntasFrecuentes /> },
-      { path: '/catalogo', element: <CatalogoRopa /> },
-      { path: '/catalogo/merceria', element: <CatalogoMerceria /> },
-      { path: '/producto/:slug', element: <FichaProducto /> },
-      { path: '/aviso-legal', element: <Legal />, handle: { legal: true } },
-      { path: '/privacidad', element: <Legal />, handle: { legal: true } },
-      { path: '/cookies', element: <Legal />, handle: { legal: true } },
+      {
+        path: '/arreglos',
+        lazy: async () => {
+          const { Arreglos } = await import('./paginas/Arreglos');
+          return { Component: Arreglos };
+        },
+      },
+      {
+        path: '/nosotros',
+        lazy: async () => {
+          const { Nosotros } = await import('./paginas/Nosotros');
+          return { Component: Nosotros };
+        },
+      },
+      {
+        path: '/contacto',
+        lazy: async () => {
+          const { Contacto } = await import('./paginas/Contacto');
+          return { Component: Contacto };
+        },
+      },
+      {
+        path: '/preguntas-frecuentes',
+        lazy: async () => {
+          const { PreguntasFrecuentes } = await import('./paginas/PreguntasFrecuentes');
+          return { Component: PreguntasFrecuentes };
+        },
+      },
+      {
+        path: '/catalogo',
+        lazy: async () => {
+          const { CatalogoRopa } = await import('./paginas/CatalogoRopa');
+          return { Component: CatalogoRopa };
+        },
+      },
+      {
+        path: '/catalogo/merceria',
+        lazy: async () => {
+          const { CatalogoMerceria } = await import('./paginas/CatalogoMerceria');
+          return { Component: CatalogoMerceria };
+        },
+      },
+      {
+        path: '/producto/:slug',
+        lazy: async () => {
+          const { FichaProducto } = await import('./paginas/FichaProducto');
+          return { Component: FichaProducto };
+        },
+      },
+      {
+        path: '/aviso-legal',
+        lazy: async () => {
+          const { Legal } = await import('./paginas/Legal');
+          return { Component: Legal };
+        },
+        handle: { legal: true },
+      },
+      {
+        path: '/privacidad',
+        lazy: async () => {
+          const { Legal } = await import('./paginas/Legal');
+          return { Component: Legal };
+        },
+        handle: { legal: true },
+      },
+      {
+        path: '/cookies',
+        lazy: async () => {
+          const { Legal } = await import('./paginas/Legal');
+          return { Component: Legal };
+        },
+        handle: { legal: true },
+      },
       { path: '*', element: <NoEncontrada /> },
     ],
   },
