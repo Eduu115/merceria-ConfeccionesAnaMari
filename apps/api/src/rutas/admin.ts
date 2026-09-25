@@ -331,6 +331,7 @@ admin.delete('/productos/:id', async (req, res) => {
   const fotos = await db.select({ ruta: imagenes.ruta }).from(imagenes).where(eq(imagenes.productoId, id));
   await db.delete(productos).where(eq(productos.id, id));
   await Promise.all(fotos.map((f) => borrarArchivosImagen(f.ruta)));
+  avisoProductoActualizado({ slug: existente.slug });
   res.status(204).end();
 });
 
