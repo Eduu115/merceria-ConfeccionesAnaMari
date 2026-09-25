@@ -85,7 +85,7 @@ export const copys = {
   },
   faq: {
     titulo: 'Preguntas frecuentes',
-    grupos: { tienda: 'La tienda', arreglos: 'Arreglos', comprar: 'Compra y envíos' },
+    grupos: { tienda: 'La tienda', arreglos: 'Arreglos', comprar: 'Catálogo' },
     cierre: '¿No encuentras tu respuesta?',
   },
   catalogo: {
@@ -167,7 +167,7 @@ export const metas: Record<string, { title: string; description: string }> = {
   },
   '/preguntas-frecuentes': {
     title: 'Preguntas frecuentes · Confecciones Ana Mari',
-    description: 'Dudas sobre la tienda, los arreglos y cómo comprar.',
+    description: 'Dudas sobre la tienda, los arreglos y el catálogo.',
   },
   '/catalogo': {
     title: 'Catálogo de ropa · Confecciones Ana Mari',
