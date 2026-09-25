@@ -23,6 +23,14 @@ export function FormularioProducto(props: Props) {
   const navegar = useNavigate();
   const cliente = useQueryClient();
 
+  async function invalidarCatalogoPublico() {
+    await Promise.all([
+      cliente.invalidateQueries({ queryKey: ['productos'] }),
+      cliente.invalidateQueries({ queryKey: ['producto'] }),
+      cliente.invalidateQueries({ queryKey: ['inicio'] }),
+    ]);
+  }
+
   const detalle = useQuery({
     queryKey: ['admin', 'producto', props.modo === 'editar' ? props.productoId : null],
     queryFn: () => apiAdmin.productos.obtener((props as { productoId: number }).productoId),
@@ -164,10 +172,12 @@ export function FormularioProducto(props: Props) {
         await apiAdmin.productos.actualizar(productoId, datos);
         await cliente.invalidateQueries({ queryKey: ['admin', 'producto', productoId] });
         await cliente.invalidateQueries({ queryKey: ['admin', 'productos'] });
+        await invalidarCatalogoPublico();
         navegar('/admin', { replace: true });
       } else {
         const creado = await apiAdmin.productos.crear(datos);
         await cliente.invalidateQueries({ queryKey: ['admin', 'productos'] });
+        await invalidarCatalogoPublico();
         navegar(`/admin/productos/${creado.id}`, { replace: true });
       }
     } catch {
@@ -183,6 +193,7 @@ export function FormularioProducto(props: Props) {
     try {
       await apiAdmin.productos.borrar(productoId);
       await cliente.invalidateQueries({ queryKey: ['admin', 'productos'] });
+      await invalidarCatalogoPublico();
       navegar('/admin', { replace: true });
     } finally {
       setBorrando(false);

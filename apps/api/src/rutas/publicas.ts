@@ -45,6 +45,11 @@ function cacheCorta(res: import('express').Response) {
   res.setHeader('Cache-Control', 'public, max-age=300');
 }
 
+/** Catálogo: no cachear en CDN/navegador; si no, un borrado en admin sigue saliendo minutos. */
+function sinCacheCatalogo(res: import('express').Response) {
+  res.setHeader('Cache-Control', 'private, no-store');
+}
+
 publicas.get('/salud', (_req, res) => {
   res.json({ ok: true });
 });
@@ -136,7 +141,7 @@ publicas.get('/paginas/:slug', async (req, res) => {
 });
 
 publicas.get('/inicio', async (_req, res) => {
-  cacheCorta(res);
+  sinCacheCatalogo(res);
   const [filasAjustes, cats, serv, dias, dest] = await Promise.all([
     db.select().from(ajustes),
     db
@@ -195,7 +200,7 @@ publicas.get('/productos', async (req, res) => {
     return;
   }
   const q = parsed.data;
-  cacheCorta(res);
+  sinCacheCatalogo(res);
 
   const filtros = [eq(productos.visible, true), eq(productos.tipo, q.tipo)];
 
@@ -285,7 +290,7 @@ publicas.get('/productos', async (req, res) => {
 });
 
 publicas.get('/productos/:slug', async (req, res) => {
-  cacheCorta(res);
+  sinCacheCatalogo(res);
   const filas = await db
     .select()
     .from(productos)

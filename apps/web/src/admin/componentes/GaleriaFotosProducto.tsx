@@ -30,7 +30,12 @@ export function GaleriaFotosProducto({ productoId, imagenes }: Props) {
 
   async function refrescar() {
     if (!productoId) return;
-    await cliente.invalidateQueries({ queryKey: ['admin', 'producto', productoId] });
+    await Promise.all([
+      cliente.invalidateQueries({ queryKey: ['admin', 'producto', productoId] }),
+      cliente.invalidateQueries({ queryKey: ['productos'] }),
+      cliente.invalidateQueries({ queryKey: ['producto'] }),
+      cliente.invalidateQueries({ queryKey: ['inicio'] }),
+    ]);
   }
 
   async function subirArchivos(lista: FileList | File[]) {
