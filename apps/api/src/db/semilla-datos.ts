@@ -531,9 +531,9 @@ export const PREGUNTAS: { grupo: GrupoPregunta; pregunta: string; respuesta: str
   [
     {
       grupo: 'tienda',
-      pregunta: '¿Qué tipo de productos venden?',
+      pregunta: '¿Dónde estáis y cuál es el horario?',
       respuesta:
-        'En Confecciones Ana Mari nos especializamos en lencería femenina, incluyendo brasieres, panties, conjuntos, bodys, pijamas sensuales y más. Trabajamos con materiales de calidad que garantizan comodidad y estilo.',
+        'Calle Almagro 15, Getafe. L–V 10:15–14:00 y 17:30–20:00; sábados de 10:15 a 14:00. Domingo cerrado.',
       orden: 1,
     },
     {
@@ -544,46 +544,36 @@ export const PREGUNTAS: { grupo: GrupoPregunta; pregunta: string; respuesta: str
       orden: 2,
     },
     {
-      grupo: 'comprar',
-      pregunta: '¿Cómo sé cuál es mi talla?',
+      grupo: 'tienda',
+      pregunta: '¿Qué vendéis?',
       respuesta:
-        'Contamos con una guía de tallas en cada producto para ayudarte a elegir la talla adecuada. Si aún tienes dudas, puedes escribirnos y con gusto te orientamos.',
+        'Ropa cómoda de mujer, interior e infantil (batas, camisones, pijamas…), de la S a la 3XL, y mercería: hilos, lanas, cremalleras, cintas, botones y más.',
+      orden: 3,
+    },
+    {
+      grupo: 'arreglos',
+      pregunta: '¿Hace falta pedir cita?',
+      respuesta: 'No hace falta. Trae la prenda en horario de tienda y te atendemos.',
       orden: 1,
     },
     {
-      grupo: 'comprar',
-      pregunta: '¿Hacen envíos a todo el país?',
-      respuesta:
-        'Realizamos envíos únicamente a la Península. Los tiempos de entrega varían según tu ubicación, pero normalmente tardan entre 2 y 5 días hábiles.',
+      grupo: 'arreglos',
+      pregunta: '¿Cuánto tarda un arreglo?',
+      respuesta: 'Entre 24 y 72 horas según la prenda y la carga de trabajo.',
       orden: 2,
     },
     {
-      grupo: 'comprar',
-      pregunta: '¿Puedo cambiar o devolver un producto?',
-      respuesta:
-        'Sí, aceptamos cambios y devoluciones dentro de los 7 días posteriores a la recepción, siempre que el producto esté en su empaque original, sin uso y con etiquetas. Consulta nuestra política de cambios para más detalles.',
+      grupo: 'arreglos',
+      pregunta: '¿Puedo saber el precio antes de dejar la prenda?',
+      respuesta: 'Sí: el diagnóstico es gratuito y te damos el presupuesto en el momento.',
       orden: 3,
     },
     {
       grupo: 'comprar',
-      pregunta: '¿Cuáles son los métodos de pago aceptados?',
+      pregunta: '¿Puedo comprar por la web?',
       respuesta:
-        'Aceptamos pagos con tarjetas de crédito, débito, transferencias bancarias y pagos a través de plataformas como Stripe o PayPal.',
-      orden: 4,
-    },
-    {
-      grupo: 'comprar',
-      pregunta: '¿Es seguro comprar en su sitio?',
-      respuesta:
-        'Sí. Utilizamos conexiones cifradas (SSL) y plataformas de pago seguras para proteger tus datos personales y bancarios.',
-      orden: 5,
-    },
-    {
-      grupo: 'comprar',
-      pregunta: '¿Puedo hacer un pedido personalizado?',
-      respuesta:
-        'Sí, dependiendo del producto. Escríbenos por WhatsApp o correo electrónico y revisaremos la disponibilidad y los tiempos de entrega.',
-      orden: 6,
+        'No: la web es un escaparate. Pregúntanos por WhatsApp o pásate por la tienda.',
+      orden: 1,
     },
   ];
 
