@@ -17,7 +17,7 @@ export const demoEditorial = {
 
 /** Claves = slug de la categoría raíz en la BD. Si no hay entrada, se cae al marcador. */
 export const demoCategoria: Record<string, string | undefined> = {
-  mujer: `${base}/categoria-mujer.jpg`,
+  mujer: `${base}/categoria-mujer.webp`,
   hombre: `${base}/categoria-hombre.webp`,
   ninos: `${base}/categoria-infantil.webp`,
   'merceria-y-costura': `${base}/categoria-merceria.webp`,

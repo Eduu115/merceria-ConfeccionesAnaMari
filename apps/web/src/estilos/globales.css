@@ -1,3 +1,12 @@
+@import '@fontsource/archivo/latin-400.css';
+@import '@fontsource/archivo/latin-500.css';
+@import '@fontsource/archivo/latin-600.css';
+@import '@fontsource/archivo/latin-700.css';
+@import '@fontsource/archivo/latin-400-italic.css';
+@import '@fontsource/caveat/latin-500.css';
+@import '@fontsource/caveat/latin-600.css';
+@import '@fontsource/caveat/latin-700.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -52,10 +61,10 @@
     --color-tinta-2: #e4dfd5;
     --color-tinta-3: #c2bdb2;
     --color-tinta-apagada: #a39e93;
-    --color-tinta-tenue: #8a857a;
+    --color-tinta-tenue: #b0aa9e;
     --color-acento: #7aabdb;
     --color-acento-fondo: #243447;
-    --color-boton: #e4dfd5;
+    --color-boton: #3a3a3a;
     --color-error: #e07a66;
     --color-superficie: #221f1b;
     --color-trama-a: #2a2722;

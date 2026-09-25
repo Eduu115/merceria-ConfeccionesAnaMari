@@ -14,6 +14,7 @@ export function TarjetaProducto({ producto }: { producto: ProductoTarjeta }) {
           <Imagen
             src={urlApi(producto.imagen.ruta)}
             alt={producto.imagen.alt}
+            sizes="(max-width: 1024px) 50vw, 25vw"
             className="h-full w-full"
           />
         ) : (
