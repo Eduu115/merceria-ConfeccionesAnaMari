@@ -629,7 +629,7 @@ export const PAGINAS = [
 Titular del sitio web: Confecciones Ana Mari (nombre comercial), con establecimiento abierto al público en Calle Almagro, 15, 28904 Getafe (Madrid), España.
 
 - Teléfono: 615 644 940
-- Correo electrónico: hola@confeccionesanamari.es
+- Correo electrónico: anamariconfecciones@gmail.com
 - Dominio: confemerana.es (y www.confemerana.es)
 
 Los datos de identificación fiscal del titular están disponibles en el establecimiento o se facilitarán bajo petición razonable al correo indicado.
@@ -667,7 +667,7 @@ Este aviso se rige por la legislación española. Para controversias con consumi
     titulo: 'Política de privacidad',
     contenido: `## 1. Responsable del tratamiento
 
-Responsable: Confecciones Ana Mari, Calle Almagro, 15, 28904 Getafe (Madrid). Correo de contacto en materia de privacidad: hola@confeccionesanamari.es. Teléfono: 615 644 940.
+Responsable: Confecciones Ana Mari, Calle Almagro, 15, 28904 Getafe (Madrid). Correo de contacto en materia de privacidad: anamariconfecciones@gmail.com. Teléfono: 615 644 940.
 
 ## 2. Alcance
 
@@ -695,7 +695,7 @@ No elaboramos perfiles comerciales ni tomamos decisiones automatizadas con efect
 
 Los mensajes del formulario se conservan el tiempo necesario para responderte y, en su caso, el exigido por obligaciones legales o posibles reclamaciones. Las conversaciones de WhatsApp dependen de tu dispositivo y de la política de Meta. Los registros técnicos de seguridad se guardan de forma limitada. Las sesiones del área privada caducan (del orden de días) y puedes cerrarlas.
 
-Puedes pedir la supresión de tus datos de contacto cuando ya no sean necesarios, escribiendo a hola@confeccionesanamari.es.
+Puedes pedir la supresión de tus datos de contacto cuando ya no sean necesarios, escribiendo a anamariconfecciones@gmail.com.
 
 ## 6. Destinatarios y encargados
 
@@ -710,7 +710,7 @@ No están previstas transferencias internacionales de tus datos de contacto por 
 
 ## 7. Derechos
 
-Puedes ejercer acceso, rectificación, supresión, oposición, limitación y portabilidad (cuando proceda) escribiendo a hola@confeccionesanamari.es, indicando «Protección de datos» y acreditando tu identidad si hace falta. También puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).
+Puedes ejercer acceso, rectificación, supresión, oposición, limitación y portabilidad (cuando proceda) escribiendo a anamariconfecciones@gmail.com, indicando «Protección de datos» y acreditando tu identidad si hace falta. También puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).
 
 ## 8. Seguridad
 
@@ -729,7 +729,7 @@ Las cookies son pequeños ficheros que el navegador guarda al visitar un sitio. 
 
 ## 2. Quién es el responsable
 
-Confecciones Ana Mari, Calle Almagro, 15, 28904 Getafe (Madrid). Correo: hola@confeccionesanamari.es. Más detalle en la política de privacidad.
+Confecciones Ana Mari, Calle Almagro, 15, 28904 Getafe (Madrid). Correo: anamariconfecciones@gmail.com. Más detalle en la política de privacidad.
 
 ## 3. Qué utilizamos en este sitio
 

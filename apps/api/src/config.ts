@@ -41,7 +41,7 @@ export const config = {
   smtpPuerto: numero('SMTP_PUERTO', 587),
   smtpUsuario: opcional('SMTP_USUARIO', ''),
   smtpPassword: opcional('SMTP_PASSWORD', ''),
-  correoDestino: opcional('CORREO_DESTINO', 'hola@confeccionesanamari.es'),
+  correoDestino: opcional('CORREO_DESTINO', 'anamariconfecciones@gmail.com'),
   whatsappTelefono: opcional('WHATSAPP_TELEFONO', '34615644940'),
   mapaEmbedUrl: opcional(
     'MAPA_EMBED_URL',
