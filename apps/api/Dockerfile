@@ -22,7 +22,10 @@ COPY paquetes/compartido/package.json ./paquetes/compartido/
 RUN npm ci --omit=dev
 
 FROM node:20-alpine AS produccion
-RUN apk add --no-cache wget
+# postgresql16-client trae pg_dump para la copia diaria de servicios/copias.ts.
+# Sin él la copia fallaba cada noche con "spawn pg_dump ENOENT". La versión
+# tiene que ser al menos la del servidor (postgres:16).
+RUN apk add --no-cache wget postgresql16-client
 WORKDIR /app
 RUN addgroup -S app && adduser -S app -G app
 COPY --from=deps-prod /app /app
