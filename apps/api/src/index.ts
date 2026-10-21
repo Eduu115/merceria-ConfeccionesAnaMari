@@ -50,7 +50,8 @@ async function arrancar() {
   await sembrar(false);
 
   const app = express();
-  app.set('trust proxy', 1);
+  // nginx-proxy y el nginx de web: los dos en redes privadas de Docker.
+  app.set('trust proxy', 'loopback, linklocal, uniquelocal');
   app.use(
     helmet({
       contentSecurityPolicy: false,

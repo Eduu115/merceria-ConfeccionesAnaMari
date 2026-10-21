@@ -17,8 +17,10 @@ export function limiteIntentos(clave: (req: Request) => string, maximo: number, 
   };
 }
 
+// La primera IP de X-Forwarded-For la escribe el cliente: con ella, cambiar la
+// cabecera en cada peticion se saltaba los limites. req.ip recorre la cadena
+// desde la derecha y se para en el primer salto que no es un proxy de confianza
+// ('trust proxy' en index.ts).
 export function ipCliente(req: Request): string {
-  const xf = req.headers['x-forwarded-for'];
-  if (typeof xf === 'string' && xf.length) return xf.split(',')[0]!.trim();
-  return req.socket.remoteAddress ?? '0.0.0.0';
+  return req.ip ?? req.socket.remoteAddress ?? '0.0.0.0';
 }
