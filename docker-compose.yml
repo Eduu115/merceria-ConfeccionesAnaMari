@@ -8,6 +8,7 @@ services:
   db:
     image: postgres:16
     restart: unless-stopped
+    mem_limit: 512m
     environment:
       POSTGRES_USER: anamari
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -26,6 +27,7 @@ services:
       dockerfile: apps/api/Dockerfile
       target: produccion
     restart: unless-stopped
+    mem_limit: 512m
     env_file: .env
     environment:
       NODO_ENTORNO: produccion
@@ -59,6 +61,7 @@ services:
         VITE_API_URL: ""
         VITE_SITE_URL: https://${DOMINIO}
     restart: unless-stopped
+    mem_limit: 128m
     ports:
       - "127.0.0.1:${PUERTO_WEB:-3012}:80"
     depends_on:
